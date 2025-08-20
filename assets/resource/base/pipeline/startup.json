@@ -1,0 +1,24 @@
+{
+    "Start1999": {
+        "action": {
+            "type": "StartApp",
+            "param": {
+                "package": "com.shenlan.m.reverse1999/com.ssgame.mobile.gamesdk.frame.AppStartUpActivity"
+            }
+        },
+        "next": [
+            "DisableStart1999"
+        ]
+    },
+    "DisableStart1999": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "DisableNode",
+                "custom_action_param": {
+                    "node_name": "Start1999"
+                }
+            }
+        }
+    }
+}

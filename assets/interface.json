@@ -1,0 +1,95 @@
+{
+    "name": "MAAProjectTemplateFromM9A",
+    "url": "https://github.com/vividcab/MAAProjectTemplateFromM9A",
+    "mirrorchyan_rid": "",
+    "mirrorchyan_multiplatform": false,
+    "mfa_max_version": "v1.6.5",
+    "controller": [
+        {
+            "name": "ADB 默认方式",
+            "type": "Adb"
+        }
+    ],
+    "resource": [
+        {
+            "name": "官服",
+            "path": [
+                "{PROJECT_DIR}/resource/base"
+            ]
+        },
+        {
+            "name": "B 服",
+            "path": [
+                "{PROJECT_DIR}/resource/base",
+                "{PROJECT_DIR}/resource/bilibili"
+            ]
+        }
+    ],
+    "agent": {
+        "child_exec": "python",
+        "child_args": [
+            "-u",
+            "{PROJECT_DIR}/../agent/main.py"
+        ]
+    },
+    "task": [
+        {
+            "name": "截图测试",
+            "entry": "Screenshot",
+            "option": [
+                "是否输出 focus 信息"
+            ],
+            "advanced": [
+                "focus 输出内容"
+            ],
+            "doc": "图看不清可以拉伸下这个小窗口\n![bydjl](https://mojing.org/tjb)"
+        }
+    ],
+    "advanced": {
+        "focus 输出内容": {
+            "field": [
+                "用户输入"
+            ],
+            "type": [
+                "string"
+            ],
+            "default": [
+                "用户在此处输入信息"
+            ],
+            "pipeline_override": {
+                "Screenshot": {
+                    "focus": {
+                        "start": "{作战次数}"
+                    }
+                }
+            },
+            "doc": "用户在此处输入的内容将在任务节点执行时打印输出"
+        }
+    },
+    "option": {
+        "是否输出 focus 信息": {
+            "cases": [
+                {
+                    "name": "是",
+                    "pipeline_override": {
+                        "Screenshot": {
+                            "focus": {
+                                "start": "[color:red]任务超时，可能未按预期进行[/color]"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "否",
+                    "pipeline_override": {
+                        "Screenshot": {
+                            "focus": {}
+                        }
+                    }
+                }
+            ],
+            "default_case": "否",
+            "doc": "若选择否，则不在右侧日志栏打印输出信息"
+        }
+    }
+}
