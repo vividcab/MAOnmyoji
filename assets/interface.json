@@ -5,10 +5,7 @@
 	"mirrorchyan_multiplatform": false,
 	"mfa_max_version": "v1.6.5",
 	"controller": [{"name": "ADB 默认方式", "type": "Adb"}],
-	"resource": [
-		{"name": "官服", "path": ["{PROJECT_DIR}/resource/base"]},
-		{"name": "B 服", "path": ["{PROJECT_DIR}/resource/base", "{PROJECT_DIR}/resource/bilibili"]}
-	],
+	"resource": [{"name": "官服", "path": ["{PROJECT_DIR}/resource/base"]}],
 	"agent": {"child_exec": "python", "child_args": ["-u", "{PROJECT_DIR}/../agent/main.py"]},
 	"task": [
 		{

@@ -1,9 +1,7 @@
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"  
-    branches:
-      - "**"
+      - "v[0-9]+.[0-9]+.[0-9]+*"
     paths:
       - ".github/workflows/install.yml"
       - "assets/**"
@@ -112,7 +110,7 @@ jobs:
         shell: bash
         run: |
           python tools/ci/setup_embed_python.py
-          
+
       - name: Download Python dependencies
         shell: bash
         run: |
