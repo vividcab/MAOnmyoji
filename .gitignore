@@ -454,7 +454,13 @@ tools/ImageCropper/**/*.png
 .DS_Store
 .nicegui/storage-general.json
 
-# M9A
+# MAO DEV
 python/
 .venv/
 config/
+*.bak
+
+
+# PRIV
+assets/user_data/account_info.csv
+assets/user_data/*.png

@@ -1,6 +1,4 @@
-# MAAProjectTemplateFromM9A 长期公告
-
-基于 [@MAA1999/M9A](https://github.com/MAA1999/M9A) 的 MaaFramework 社区项目开发模板。
+# MAOnmyoji 长期公告
 
 > **重要提示**：
 >
@@ -17,6 +15,6 @@
 
 ## 鸣谢
 
-本项目为 MaaFramework 社区项目开发模板，从出色的 [M9A](https://github.com/MAA1999/M9A) 项目 Fork 修改而来！
-本项目由 **[MaaFramework](https://github.com/MaaXYZ/MaaFramework)** 强力驱动！  
+感谢 [M9A](https://github.com/MAA1999/M9A) 项目提供优秀的开发实践！
+本项目由 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 强力驱动！  
 UI 由 [MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia) 大力支持！

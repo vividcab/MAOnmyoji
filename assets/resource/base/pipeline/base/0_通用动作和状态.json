@@ -1,0 +1,101 @@
+{
+	"ACT-检测各类左上角返回按钮并点一下": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 100, 100],
+		"template": [
+			"通用界面按钮/左上角返回键1-白底黄色折线.png",
+			"通用界面按钮/左上角返回键2-蓝底白色折线.png",
+			"通用界面按钮/左上角返回键3-黑底黄色折线.png",
+			"通用界面按钮/左上角U形退出按钮.png"
+		],
+		"action": "Click",
+		"post_delay": 2000
+	},
+	"ACT-检测各类右上部分叉号并点一下": {
+		"recognition": "TemplateMatch",
+		"roi": [730, 0, 540, 250],
+		"template": [
+			"通用界面按钮/弹窗叉号1-红底白色.png",
+			"通用界面按钮/弹窗叉号2-红底白色半透明.png",
+			"通用界面按钮/阴阳寮大厅会出现的弹窗叉号.png",
+			"通用界面按钮/关闭同心队集结叉号.png"
+		],
+		"threshold": [0.9, 0.65, 0.9, 0.9],
+		"action": "Click",
+		"post_delay": 1200
+	},
+
+	"ACT-检测带确定按钮的弹窗并点击确定": {
+		"_doc": "有时候会有连续两层弹窗，后弹出来的窗口更小，确定按钮位置更靠上，所以用 Vertical 排序",
+		"recognition": "OCR",
+		"roi": [580, 350, 280, 250],
+		"expected": ["确定", "确认"],
+		"order_by": "Vertical",
+		"action": "Click",
+		"post_delay": 800
+	},
+	"ACT-检测带取消按钮的弹窗并点击取消": {
+		"recognition": "OCR",
+		"roi": [430, 350, 200, 250],
+		"expected": "取消",
+		"action": "Click",
+		"post_delay": 800
+	},
+
+	"ACT-检测带不再提示勾选框的弹窗并点击确定": {
+		"_doc": "用于以下情况：1. 逢魔点集结挑战 Boss 之后，提示一天只能挑战一次的弹窗",
+		"recognition": "OCR",
+		"roi": [500, 300, 280, 140],
+		"expected": "不再提示",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["ACT-检测带确定按钮的弹窗并点击确定"],
+		"rate_limit": 300,
+		"timeout": 1000
+	},
+	"ACT-检测带不再提示勾选框的弹窗并点击取消": {
+		"doc": "用于以下情况：1. 刚登录后出现的下载插画的弹窗",
+		"recognition": "OCR",
+		"roi": [500, 300, 280, 140],
+		"expected": "不再提示",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["ACT-检测带取消按钮的弹窗并点击取消"],
+		"rate_limit": 300,
+		"timeout": 1000
+	},
+	"ACT-检测到退出游戏弹窗并点一下取消": {
+		"recognition": "OCR",
+		"roi": [399, 266, 140, 44],
+		"expected": "退出游戏",
+		"only_rec": true,
+		"action": "Click",
+		"target": [780, 424, 49, 30],
+		"post_delay": 600
+	},
+	"ACT-无条件按一下Esc": {
+		"action": "Key",
+		"key": 111,
+		"post_delay": 500
+	},
+
+	"STATUS-处于庭院初始状态": {
+		"_doc": "一般用于某任务执行完成后，回到庭院的检测，是任务的最后一个节点。例如：登录角色、",
+		"recognition": "TemplateMatch",
+		"roi": [680, 220, 240, 100],
+		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+		"threshold": [0.9, 0.9]
+	},
+
+	"ACT-从组队状态回到庭院": {
+		"_doc": "注意 Interrupt 队列中，需要先检测处理优先级高的弹窗",
+		"next": ["STATUS-处于庭院初始状态"],
+		"interrupt": [
+			"ACT-检测带确定按钮的弹窗并点击确定",
+			"ACT-检测各类右上部分叉号并点一下",
+			"ACT-检测各类左上角返回按钮并点一下"
+		],
+		"rate_limit": 1000,
+		"timeout": 5000
+	}
+}

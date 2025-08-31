@@ -29,11 +29,9 @@
     "files.associations": {
         "**/assets/**/*.json": "jsonc"
     },
-    "[json][jsonc]": {
+    "[json][jsonc][yaml]": {
         "editor.formatOnSave": true,
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "editor.indentSize": "tabSize"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[python]": {
         "editor.formatOnSave": true,
