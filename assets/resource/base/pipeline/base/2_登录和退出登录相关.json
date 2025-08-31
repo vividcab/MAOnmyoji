@@ -320,6 +320,13 @@
 		"focus": {"succeeded": "[color:red]可能出错：按下4次Esc键了还没到庭院初始状态[/color]"}
 	},
 
+	"ENTRY-退出登录某角色": {
+		"next": ["TASK-B-0从庭院退出到登录界面"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"],
+		"rate_limit": 1500,
+		"timeout": 10000,
+		"on_error": ["TASK-重新启动游戏"]
+	},
 	"TASK-B-0从庭院退出到登录界面": {
 		"recognition": "TemplateMatch",
 		"roi": [680, 220, 240, 100],

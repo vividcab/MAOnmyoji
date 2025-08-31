@@ -9,6 +9,11 @@
 	"agent": {"child_exec": "python", "child_args": ["-u", "{PROJECT_DIR}/../agent/main.py"]},
 	"task": [
 		{
+			"name": "多角色-每日签到领商店",
+			"entry": "ENTRY-多角色每日签到领商店",
+			"advanced": ["每日签到领商店任务-指定角色名列表"]
+		},
+		{
 			"name": "启动游戏",
 			"entry": "TASK-启动游戏到登录界面"
 		},
@@ -21,11 +26,23 @@
 		}
 	],
 	"advanced": {
+		"每日签到领商店任务-指定角色名列表": {
+			"field": "每日签到领商店任务-指定角色名列表",
+			"type": "string",
+			"default": "ALL",
+			"pipeline_override": {
+				"ENTRY-多角色每日签到领商店": {
+					"custom_action_param": {
+						"rolenames": "{每日签到领商店任务-指定角色名列表}"
+					}
+				}
+			}
+		},
 		"focus 输出内容": {
 			"field": ["用户输入"],
 			"type": ["string"],
 			"default": ["用户在此处输入信息"],
-			"pipeline_override": {"Screenshot": {"focus": {"start": "AAA"}}},
+			"pipeline_override": {"Screenshot": {"focus": {"start": "{用户输入}"}}},
 			"doc": "用户在此处输入的内容将在任务节点执行时打印输出"
 		}
 	},
