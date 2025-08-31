@@ -317,7 +317,7 @@
 				}
 			}
 		},
-		"focus": {"succeeded": "[color:red]登录游戏到庭院可能出错，按下4次Esc键了还没到庭院初始状态[/color]"}
+		"focus": {"succeeded": "[color:red]可能出错：按下4次Esc键了还没到庭院初始状态[/color]"}
 	},
 
 	"TASK-B-0从庭院退出到登录界面": {

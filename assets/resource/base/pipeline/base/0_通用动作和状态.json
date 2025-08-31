@@ -9,7 +9,7 @@
 			"通用界面按钮/左上角U形退出按钮.png"
 		],
 		"action": "Click",
-		"post_delay": 2000
+		"post_delay": 3000
 	},
 	"ACT-检测各类右上部分叉号并点一下": {
 		"recognition": "TemplateMatch",

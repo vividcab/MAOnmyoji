@@ -1,0 +1,321 @@
+{
+	"ENTRY-领取庭院中的日常奖励": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"next": ["TASK-领取日常奖励"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-领取日常奖励": {
+		"_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的",
+		"recognition": "TemplateMatch",
+		"roi": [680, 220, 240, 100],
+		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+		"threshold": [0.9, 0.9],
+		"action": "Custom",
+		"custom_action": "RunTaskList",
+		"custom_action_param": {
+			"tasks": [
+				{"taskname": "1-每日签到", "wait": 0.3},
+				{"taskname": "2-领取御魂加成", "wait": 0.3},
+				{"taskname": "3-领取寮包", "wait": 0.3},
+				{"taskname": "4-领取体力", "wait": 0.3},
+				{"taskname": "5-领取勾玉", "wait": 0.3},
+				{"taskname": "6-领邮件", "wait": 0.3},
+				{"taskname": "7-查看悬赏", "wait": 0.3},
+				{"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
+				{"taskname": "9-读未读邮件", "wait": 0.3},
+				{"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
+			]
+		}
+	},
+
+	"1-每日签到": {
+		"recognition": "TemplateMatch",
+		"roi": [290, 508, 36, 42],
+		"roi_offset": [-60, -20, 80, 40],
+		"template": "签到/签到.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["1-1检测已经打开了抽签"],
+		"interrupt": ["1-ACT-检测点击签到小纸人"],
+		"timeout": 2000,
+		"on_error": []
+	},
+	"1-ACT-检测点击签到小纸人": {
+		"recognition": "TemplateMatch",
+		"roi": [290, 508, 36, 42],
+		"roi_offset": [-60, -20, 80, 40],
+		"template": "签到/签到.png",
+		"action": "Click",
+		"post_delay": 1500
+	},
+	"1-1检测已经打开了抽签": {
+		"recognition": "OCR",
+		"roi": [606, 186, 62, 85],
+		"expected": "每",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["1-2检测到已经解签然后截图记录"],
+		"interrupt": ["1-ACT-检测到没签到的每日一签并点击", "1-ACT-检测到解签按钮并点击"],
+		"timeout": 5000,
+		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+	"1-ACT-检测到没签到的每日一签并点击": {
+		"recognition": "OCR",
+		"roi": [606, 186, 62, 85],
+		"expected": "每",
+		"action": "Click",
+		"post_delay": 1500
+	},
+	"1-ACT-检测到解签按钮并点击": {
+		"recognition": "OCR",
+		"roi": [866, 449, 67, 41],
+		"expected": "解签",
+		"only_rec": true,
+		"action": "Click",
+		"post_delay": 1500
+	},
+	"1-2检测到已经解签然后截图记录": {
+		"recognition": "OCR",
+		"roi": [866, 449, 67, 41],
+		"expected": "分享",
+		"only_rec": true,
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/签到记录"},
+		"next": ["ACT-检测各类右上部分叉号并点一下"]
+	},
+
+	"2-领取御魂加成": {
+		"recognition": "TemplateMatch",
+		"roi": [279, 501, 53, 48],
+		"roi_offset": [-60, -60, 120, 120],
+		"template": "签到/御魂加成.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["ACT-无条件按一下Esc"],
+		"timeout": 300,
+		"on_error": []
+	},
+
+	"3-领取寮包": {
+		"recognition": "TemplateMatch",
+		"roi": [279, 501, 53, 48],
+		"roi_offset": [-60, -60, 120, 120],
+		"template": "签到/寮包.png",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["3-1领取寮包截图"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"3-1领取寮包截图": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/寮包记录"},
+		"next": ["ACT-无条件按一下Esc"]
+	},
+
+	"4-领取体力": {
+		"recognition": "TemplateMatch",
+		"roi": [903, 504, 43, 46],
+		"roi_offset": [-200, -50, 300, 100],
+		"template": "签到/领体力.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["ACT-无条件按一下Esc"],
+		"timeout": 300,
+		"on_error": []
+	},
+
+	"5-领取勾玉": {
+		"recognition": "TemplateMatch",
+		"roi": [897, 500, 51, 54],
+		"roi_offset": [-200, -50, 300, 100],
+		"template": "签到/领勾玉.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["ACT-无条件按一下Esc"],
+		"timeout": 300,
+		"on_error": []
+	},
+
+	"6-领邮件": {
+		"recognition": "TemplateMatch",
+		"roi": [1132, 26, 44, 38],
+		"template": "签到/邮件图标.png",
+		"action": "Click",
+		"next": ["全部领取"],
+		"timeout": 500,
+		"on_error": ["ACT-无条件按一下Esc"]
+	},
+	"全部领取": {
+		"recognition": "TemplateMatch",
+		"roi": [84, 613, 71, 59],
+		"template": "签到/全部领取.png",
+		"action": "Click",
+		"next": ["确定领取"]
+	},
+	"确定领取": {
+		"recognition": "TemplateMatch",
+		"roi": [730, 548, 85, 51],
+		"template": "签到/确定领取全部邮件.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+
+	"7-查看悬赏": {
+		"recognition": "TemplateMatch",
+		"roi": [186, 356, 45, 40],
+		"roi_offset": [0, -30, 60, 30],
+		"template": ["签到/悬赏封印.png", "签到/悬赏封印2.png"],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测勾协"],
+		"timeout": 200,
+		"on_error": ["ACT-检测各类右上部分叉号并点一下"]
+	},
+	"检测勾协": {
+		"recognition": "TemplateMatch",
+		"template": "签到/勾协.png",
+		"roi": [178, 497, 968, 97],
+		"next": ["悬赏封印截图"]
+	},
+	"悬赏封印截图": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/悬赏封印"},
+		"next": ["ACT-检测各类右上部分叉号并点一下"]
+	},
+
+	"8-领取商店每日黑蛋": {
+		"next": ["检测点击商店图标"],
+		"interrupt": ["检测卷轴是否打开"],
+		"timeout": 2000
+	},
+	"检测卷轴是否打开": {
+		"recognition": "TemplateMatch",
+		"roi": [35, 596, 77, 59],
+		"template": "庭院/闲庭图标.png",
+		"action": "Click",
+		"target": [1223, 632, 26, 49],
+		"post_delay": 1000
+	},
+	"检测点击商店图标": {
+		"recognition": "TemplateMatch",
+		"roi": [660, 610, 80, 55],
+		"template": "签到/商店图标.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测点击礼包屋"]
+	},
+	"检测点击礼包屋": {
+		"recognition": "TemplateMatch",
+		"roi": [1132, 636, 52, 52],
+		"template": "签到/礼包屋.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测点击日常"]
+	},
+	"检测点击日常": {
+		"recognition": "TemplateMatch",
+		"roi": [1181, 85, 55, 420],
+		"template": "签到/日常.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测点击黑蛋"],
+		"timeout": 500,
+		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+	"检测点击黑蛋": {
+		"recognition": "TemplateMatch",
+		"roi": [212, 195, 79, 55],
+		"template": "签到/黑蛋.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+
+	"9-读未读邮件": {
+		"recognition": "TemplateMatch",
+		"roi": [279, 501, 53, 48],
+		"roi_offset": [-60, -60, 120, 120],
+		"template": "签到/纸人抱的邮件.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测到所有都已读"],
+		"interrupt": ["检测未读邮件并点击划动"],
+		"timeout": 400,
+		"on_error": []
+	},
+	"检测到所有都已读": {
+		"recognition": "TemplateMatch",
+		"roi": [438, 94, 46, 183],
+		"template": "签到/已读.png",
+		"next": ["ACT-无条件按一下Esc"]
+	},
+	"检测未读邮件并点击划动": {
+		"recognition": "TemplateMatch",
+		"roi": [140, 90, 96, 213],
+		"template": "签到/未读邮件.png",
+		"threshold": 0.9,
+		"order_by": "Vertical",
+		"action": "Click",
+		"next": ["划动一下看下方邮件"]
+	},
+	"划动一下看下方邮件": {
+		"action": "Swipe",
+		"begin": [298, 274, 20, 20],
+		"end": [363, 200, 20, 20],
+		"duration": 300
+	},
+
+	"10-查看神秘商店并截图记录": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/神秘商店"},
+		"next": ["检测点击商店图标之后打开神秘商店"],
+		"interrupt": ["检测卷轴是否打开"],
+		"timeout": 2000
+	},
+	"检测点击商店图标之后打开神秘商店": {
+		"recognition": "TemplateMatch",
+		"roi": [660, 610, 80, 55],
+		"template": "签到/商店图标.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测神秘商店点击"],
+		"timeout": 2000,
+		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+	"检测神秘商店点击": {
+		"recognition": "TemplateMatch",
+		"roi": [22, 79, 79, 476],
+		"template": "签到/神秘商店.png",
+		"action": "Click",
+		"post_delay": 1200,
+		"next": ["神秘商店截第一张图"]
+	},
+	"神秘商店截第一张图": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/神秘商店"},
+		"post_delay": 500,
+		"next": ["划动一下之后再截第二张"]
+	},
+	"划动一下之后再截第二张": {
+		"action": "Swipe",
+		"begin": [570, 455, 20, 20],
+		"end": [592, 151, 20, 20],
+		"duration": 800,
+		"post_delay": 500,
+		"next": ["神秘商店截第二张图"]
+	},
+	"神秘商店截第二张图": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/神秘商店"},
+		"post_delay": 500,
+		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	}
+}

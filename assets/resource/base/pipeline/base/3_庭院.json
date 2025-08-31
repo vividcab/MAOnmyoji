@@ -10,15 +10,17 @@
 		"template": "庭院/枫叶庭院町中牌子.png"
 	},
 
-	"返回庭院": {
+	"TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗": {
 		"next": ["检测退出游戏弹窗"],
-		"interrupt": ["ACT-无条件按一下Esc"]
+		"interrupt": ["ACT-无条件按一下Esc"],
+		"rate_limit": 1200
 	},
 	"检测退出游戏弹窗": {
 		"recognition": "OCR",
 		"roi": [773, 420, 64, 40],
 		"expected": "取消",
-		"action": "Click"
+		"action": "Click",
+		"post_delay": 800
 	},
 
 	"TASK-尝试从任意界面回到庭院": {
@@ -37,7 +39,15 @@
 			"ACT-检测各类右上部分叉号并点一下",
 			"ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
 			"ACT-检测绑定手机弹窗并关闭",
+			"ACT-检测处于町中点一下返回庭院的牌子",
 			"ACT-无条件按一下Esc键-Count最多4次"
 		]
+	},
+	"ACT-检测处于町中点一下返回庭院的牌子": {
+		"recognition": "TemplateMatch",
+		"roi": [1026, 227, 58, 77],
+		"template": "庭院/町中里的庭院牌子.png",
+		"action": "Click",
+		"post_delay": 3000
 	}
 }

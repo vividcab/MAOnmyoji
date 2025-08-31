@@ -459,8 +459,8 @@ python/
 .venv/
 config/
 *.bak
-
+开发测试.json
 
 # PRIV
 assets/user_data/account_info.csv
-assets/user_data/*.png
+assets/user_data/*/*.png

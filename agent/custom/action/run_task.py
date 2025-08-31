@@ -88,4 +88,5 @@ class ForRolesToRunTask(CustomAction):
                 # print("##Task Detail##", task_detail)
                 sleep(task["wait"])
 
-        context.run_task("TASK-关闭游戏")
+        if len(rolenames) >= 3:
+            context.run_task("TASK-关闭游戏")
