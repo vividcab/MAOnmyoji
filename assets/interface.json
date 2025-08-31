@@ -33,7 +33,12 @@
 			"pipeline_override": {
 				"ENTRY-多角色每日签到领商店": {
 					"custom_action_param": {
-						"rolenames": "{每日签到领商店任务-指定角色名列表}"
+						"rolenames": "{每日签到领商店任务-指定角色名列表}",
+						"tasks": [
+							{"taskname": "ENTRY-登录某角色", "wait": 2},
+							{"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},
+							{"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+						]
 					}
 				}
 			}

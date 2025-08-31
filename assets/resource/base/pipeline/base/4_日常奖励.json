@@ -286,7 +286,7 @@
 		"post_delay": 1000,
 		"next": ["检测神秘商店点击"],
 		"timeout": 2000,
-		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测神秘商店点击": {
 		"recognition": "TemplateMatch",
@@ -316,6 +316,6 @@
 		"custom_action": "Screenshot",
 		"custom_action_param": {"save_dir": "user_data/神秘商店"},
 		"post_delay": 500,
-		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+		"next": ["TASK-尝试从任意界面回到庭院"]
 	}
 }

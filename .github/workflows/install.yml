@@ -1,7 +1,5 @@
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"
     paths:
       - ".github/workflows/install.yml"
       - "assets/**"
@@ -130,7 +128,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: M9A-win-${{ matrix.arch }}
+          name: MAOnmyoji-win-${{ matrix.arch }}
           path: "install"
 
   changelog:
