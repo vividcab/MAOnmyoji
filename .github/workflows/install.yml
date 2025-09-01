@@ -1,9 +1,4 @@
 on:
-  push:
-    paths:
-      - ".github/workflows/install.yml"
-      - "assets/**"
-      - "**.py"
   pull_request:
     branches:
       - "**"

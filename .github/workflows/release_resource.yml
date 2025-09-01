@@ -83,14 +83,7 @@ jobs:
       - name: Install
         shell: bash
         run: |
-          ./install/python/python.exe ./tools/ci/release_resource.py ${{ needs.meta.outputs.tag }}
-          if [ -d "MFA" ]; then
-            echo "Copying MFA files to install directory..."
-            mkdir -p install
-            cp -rpvn MFA/. install/
-          else
-            echo "MFA directory not found, skipping copy."
-          fi
+          python ./tools/ci/release_resource.py ${{ needs.meta.outputs.tag }}
 
       - uses: actions/upload-artifact@v4
         with:
