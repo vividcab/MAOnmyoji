@@ -9,9 +9,17 @@
 	"agent": {"child_exec": "python", "child_args": ["-u", "{PROJECT_DIR}/../agent/main.py"]},
 	"task": [
 		{
-			"name": "多角色-每日签到领商店",
+			"name": "多角色-每日签到领商店收结界",
 			"entry": "ENTRY-多角色任务模板",
-			"advanced": ["每日签到领商店任务-指定角色名列表"]
+			"advanced": ["每日签到商店结界任务-指定角色名列表"],
+			"option": ["是否查看神秘商店"],
+			"doc": "包含任务：\nENTRY-登录某角色\nENTRY-领取庭院中的日常奖励\nENTRY-领取阴阳寮和结界奖励\nENTRY-退出登录某角色"
+		},
+		{
+			"name": "多角色-混个逢魔",
+			"entry": "ENTRY-多角色任务模板",
+			"advanced": ["混个逢魔-指定角色名列表"],
+			"doc": "包含任务：\nENTRY-登录某角色\n7-查看悬赏\nENTRY-逢魔任务"
 		},
 		{
 			"name": "启动游戏",
@@ -25,18 +33,36 @@
 		}
 	],
 	"advanced": {
-		"每日签到领商店任务-指定角色名列表": {
-			"field": "每日签到领商店任务-指定角色名列表",
+		"每日签到商店结界任务-指定角色名列表": {
+			"field": "指定角色名列表",
 			"type": "string",
-			"default": "ALL",
+			"default": "ALL,",
 			"pipeline_override": {
 				"ENTRY-多角色每日签到领商店": {
 					"custom_action_param": {
-						"rolenames": "{每日签到领商店任务-指定角色名列表}",
+						"rolenames": "{指定角色名列表}",
 						"tasks": [
 							{"taskname": "ENTRY-登录某角色", "wait": 2},
 							{"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},
+							{"taskname": "ENTRY-领取阴阳寮和结界奖励", "wait": 0.5},
 							{"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+						]
+					}
+				}
+			}
+		},
+		"混个逢魔-指定角色名列表": {
+			"field": "指定角色名列表",
+			"type": "string",
+			"default": "ALL,",
+			"pipeline_override": {
+				"ENTRY-多角色每日签到领商店": {
+					"custom_action_param": {
+						"rolenames": "{指定角色名列表}",
+						"tasks": [
+							{"taskname": "ENTRY-登录某角色", "wait": 2},
+							{"taskname": "7-查看悬赏", "wait": 0.5},
+							{"taskname": "ENTRY-逢魔任务", "wait": 0.5}
 						]
 					}
 				}
@@ -53,17 +79,18 @@
 	"option": {
 		"是否输出 focus 信息": {
 			"cases": [
-				{
-					"name": "是",
-					"pipeline_override": {"Screenshot": {"focus": {"start": "执行测试截图任务"}}}
-				},
-				{
-					"name": "否",
-					"pipeline_override": {"Screenshot": {"focus": {}}}
-				}
+				{"name": "是", "pipeline_override": {"Screenshot": {"focus": {"start": "执行测试截图任务"}}}},
+				{"name": "否", "pipeline_override": {"Screenshot": {"focus": {}}}}
 			],
 			"default_case": "否",
 			"doc": "若选择否，则不在右侧日志栏打印输出信息"
+		},
+		"是否查看神秘商店": {
+			"cases": [
+				{"name": "是", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": true}}},
+				{"name": "否", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": false}}}
+			],
+			"default_case": "否"
 		}
 	}
 }
