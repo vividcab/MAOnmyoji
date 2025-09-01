@@ -191,7 +191,8 @@
 	"8-领取商店每日黑蛋": {
 		"next": ["检测点击商店图标"],
 		"interrupt": ["检测卷轴是否打开"],
-		"timeout": 2000
+		"timeout": 2000,
+		"on_error": []
 	},
 	"检测卷轴是否打开": {
 		"recognition": "TemplateMatch",
@@ -203,7 +204,7 @@
 	},
 	"检测点击商店图标": {
 		"recognition": "TemplateMatch",
-		"roi": [660, 610, 80, 55],
+		"roi": [645, 620, 72, 45],
 		"template": "签到/商店图标.png",
 		"action": "Click",
 		"post_delay": 1000,
@@ -280,7 +281,7 @@
 	},
 	"检测点击商店图标之后打开神秘商店": {
 		"recognition": "TemplateMatch",
-		"roi": [660, 610, 80, 55],
+		"roi": [645, 620, 72, 45],
 		"template": "签到/商店图标.png",
 		"action": "Click",
 		"post_delay": 1000,
