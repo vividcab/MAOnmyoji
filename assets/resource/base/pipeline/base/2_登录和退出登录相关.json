@@ -291,10 +291,18 @@
 		"post_delay": 800
 	},
 	"ACT-无条件按一下Esc键-Count最多4次": {
+		"recognition": {
+			"type": "Custom",
+			"param": {
+				"custom_recognition": "Count",
+				"custom_recognition_param": {
+					"target": 4
+				}
+			}
+		},
 		"action": "Key",
 		"key": 111,
-		"post_delay": 500,
-		"next": ["Count-按Esc键的次数"]
+		"post_delay": 500
 	},
 	"Count-按Esc键的次数": {
 		"recognition": {

@@ -14,11 +14,11 @@ class RunTaskList(CustomAction):
     def run(
         self, context: Context, argv: CustomAction.RunArg
     ) -> CustomAction.RunResult:
-        logger.debug(f"argv.custom_action_param: {argv.custom_action_param}")
+        # logger.debug(f"argv.custom_action_param: {argv.custom_action_param}")
         cus_param = json.loads(argv.custom_action_param)
 
         tasks = cus_param["tasks"]
-        logger.info(f"#RunTaskList# 传入的 tasks 参数为：{tasks}")
+        # logger.info(f"#RunTaskList# 传入的 tasks 参数为：{tasks}")
 
         for task in tasks:
             task_detail = context.run_task(task["taskname"])

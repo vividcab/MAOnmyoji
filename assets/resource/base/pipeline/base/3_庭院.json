@@ -24,7 +24,7 @@
 	},
 
 	"TASK-尝试从任意界面回到庭院": {
-		"next": ["STATUS-处于庭院初始状态"],
+		"next": ["STATUS-处于庭院初始状态", "STATUS-处于模拟器桌面"],
 		"interrupt": ["INT-尝试从任意界面回到庭院"],
 		"rate_limit": 2000
 	},

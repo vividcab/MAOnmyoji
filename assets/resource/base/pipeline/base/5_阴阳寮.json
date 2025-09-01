@@ -1,0 +1,540 @@
+{
+	"ENTRY-领取阴阳寮和结界奖励": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"next": ["TASK-领取阴阳寮和结界奖励"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-领取阴阳寮和结界奖励": {
+		"_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的",
+		"recognition": "TemplateMatch",
+		"roi": [680, 220, 240, 100],
+		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+		"threshold": [0.9, 0.9],
+		"action": "Custom",
+		"custom_action": "RunTaskList",
+		"custom_action_param": {
+			"tasks": [
+				{"taskname": "A-领阴阳寮体力并进入结界", "wait": 0.3},
+				{"taskname": "B-从阴阳寮大厅进入结界", "wait": 0.3},
+				{"taskname": "C-检测收取寄养", "wait": 0.3},
+				{"taskname": "E-检测收取自己结界卡", "wait": 0.3},
+				{"taskname": "F-收取食盒", "wait": 0.3},
+				{"taskname": "A-从结界退出回庭院", "wait": 0.3}
+			]
+		}
+	},
+	"A-领阴阳寮体力并进入结界": {
+		"next": ["检测点击寮图标进入寮大厅"],
+		"interrupt": ["检测卷轴是否打开"],
+		"timeout": 3000
+	},
+	"检测点击寮图标进入寮大厅": {
+		"recognition": "OCR",
+		"roi": [511, 649, 116, 43],
+		"expected": "阴阳",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["检测寮种树活动弹窗并关闭", "在寮大厅划一下视角然后检测领取工资和体力"]
+	},
+	"检测寮种树活动弹窗并关闭": {
+		"recognition": "TemplateMatch",
+		"roi": [628, 18, 559, 296],
+		"template": "阴阳寮/寮种树活动弹窗叉号.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["在寮大厅划一下视角然后检测领取工资和体力"]
+	},
+	"在寮大厅划一下视角然后检测领取工资和体力": {
+		"recognition": "DirectHit",
+		"action": "Swipe",
+		"begin": [870, 560, 10, 10],
+		"end": [800, 500, 10, 10],
+		"duration": 1500,
+		"post_delay": 800,
+		"next": ["OPT-检测可以领取体力补给就领", "OPT-检测可以领工资就领"],
+		"timeout": 300,
+		"on_error": ["B-从阴阳寮大厅进入结界"]
+	},
+
+	"OPT-检测可以领工资就领": {
+		"recognition": "TemplateMatch",
+		"roi": [87, 70, 1100, 538],
+		"template": "阴阳寮/每日工资.png",
+		"threshold": 0.9,
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["OPT-点击领取工资按钮"],
+		"timeout": 2000,
+		"on_error": ["B-从阴阳寮大厅进入结界"]
+	},
+	"OPT-点击领取工资按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [582, 431, 109, 51],
+		"template": "阴阳寮/领取工资.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["点击一下左上角空白处用来关闭领奖励的结果弹窗"]
+	},
+	"OPT-检测可以领取体力补给就领": {
+		"recognition": "TemplateMatch",
+		"roi": [87, 70, 1100, 538],
+		"template": "阴阳寮/体力补给.png",
+		"threshold": 0.9,
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["点击一下左上角空白处用来关闭领奖励的结果弹窗"]
+	},
+	"点击一下左上角空白处用来关闭领奖励的结果弹窗": {
+		"action": "Click",
+		"target": [172, 26, 144, 60],
+		"post_delay": 1000,
+		"next": ["在寮大厅划一下视角然后检测领取工资和体力"]
+	},
+
+	"B-从阴阳寮大厅进入结界": {
+		"next": ["检测小白头顶换肤按钮"],
+		"interrupt": ["检测点击结界图标"],
+		"rate_limit": 3000
+	},
+	"检测小白头顶换肤按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [169, 457, 66, 62],
+		"template": "阴阳寮/小白头顶结界换肤按钮.png",
+		"next": []
+	},
+	"检测点击结界图标": {
+		"recognition": "TemplateMatch",
+		"roi": [1061, 619, 68, 53],
+		"template": "阴阳寮/结界按钮.png",
+		"action": "Click",
+		"post_delay": 3000
+	},
+
+	"C-检测收取寄养": {
+		"recognition": "TemplateMatch",
+		"roi": [578, 139, 71, 52],
+		"roi_offset": [-50, -50, 100, 100],
+		"template": "阴阳寮/寄养奖励.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["关闭寄养奖励"],
+		"timeout": 1000,
+		"on_error": ["D-检测是否可以好友寄养"]
+	},
+	"关闭寄养奖励": {
+		"action": "Click",
+		"target": [120, 127, 95, 83],
+		"post_delay": 400,
+		"next": ["D-检测是否可以好友寄养"]
+	},
+
+	"D-检测是否可以好友寄养": {
+		"next": ["检测中间旗杆并点击"],
+		"timeout": 3000,
+		"on_error": []
+	},
+
+	"检测中间旗杆并点击": {
+		"recognition": "OCR",
+		"roi": [591, 314, 45, 36],
+		"expected": "神",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["检测自己结界的式神是否有培养到满级的", "检测是否可以到好友结界寄养"],
+		"timeout": 1000,
+		"on_error": ["B-返回到自己的结界"]
+	},
+	"检测自己结界的式神是否有培养到满级的": {
+		"recognition": "TemplateMatch",
+		"roi": [45, 236, 1120, 38],
+		"template": "阴阳寮/培养式神满级.png",
+		"next": ["点击一下最右边的式神放上去"]
+	},
+	"点击一下最右边的式神放上去": {
+		"action": "Click",
+		"target": [998, 555, 62, 59],
+		"post_delay": 300,
+		"next": ["检测自己结界的式神是否有培养到满级的"],
+		"timeout": 500,
+		"on_error": ["检测是否可以到好友结界寄养"]
+	},
+	"检测是否可以到好友结界寄养": {
+		"recognition": "TemplateMatch",
+		"roi": [1143, 59, 82, 66],
+		"template": "阴阳寮/可以寄养.png",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["D-1-在好友标签找太鼓坑位"],
+		"timeout": 500,
+		"on_error": ["B-返回到自己的结界"]
+	},
+	"D-1-在好友标签找太鼓坑位": {
+		"next": [
+			"检测到没有同区好友",
+			"检测到未放结界卡",
+			"检测到未公开",
+			"检测到已占用",
+			"D-3-检测到是可以占的太鼓坑"
+		],
+		"interrupt": ["看看下一个好友坑位1-Count最多20次"],
+		"timeout": 1000,
+		"on_error": ["D-2-去跨区标签找太鼓坑位"]
+	},
+	"检测到没有同区好友": {
+		"recognition": "TemplateMatch",
+		"roi": [625, 483, 70, 69],
+		"template": "阴阳寮/没添加好友.png",
+		"next": ["D-2-去跨区标签找太鼓坑位"]
+	},
+	"检测到未放结界卡": {
+		"recognition": "TemplateMatch",
+		"roi": [829, 235, 103, 56],
+		"template": "阴阳寮/未放置.png",
+		"next": ["D-2-去跨区标签找太鼓坑位"]
+	},
+	"检测到未公开": {
+		"recognition": "TemplateMatch",
+		"roi": [957, 255, 68, 105],
+		"template": "阴阳寮/未公开.png",
+		"next": ["D-2-去跨区标签找太鼓坑位"]
+	},
+	"检测到已占用": {
+		"recognition": "TemplateMatch",
+		"roi": [952, 254, 76, 107],
+		"template": "阴阳寮/已占用.png",
+		"next": ["D-2-去跨区标签找太鼓坑位"]
+	},
+	"检测到是其他结界卡": {
+		"recognition": "OCR",
+		"roi": [835, 344, 95, 51],
+		"expected": "太鼓",
+		"inverse": true,
+		"next": ["在当前列表找太鼓"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"在当前列表找太鼓": {
+		"recognition": "TemplateMatch",
+		"roi": [525, 190, 94, 395],
+		"template": "阴阳寮/列表里的太鼓.png",
+		"action": "Click",
+		"post_delay": 400,
+		"next": ["D-3-检测到是可以占的太鼓坑"]
+	},
+	"D-2-去跨区标签找太鼓坑位": {
+		"recognition": "TemplateMatch",
+		"roi": [351, 100, 77, 56],
+		"template": "阴阳寮/跨区.png",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"检测到没有跨区好友",
+			"检测到未公开2",
+			"检测到已占用2",
+			"D-3-检测到是可以占的太鼓坑"
+		],
+		"interrupt": ["看看下一个好友坑位2-Count最多20次"],
+		"timeout": 1000,
+		"on_error": ["B-返回到自己的结界"]
+	},
+	"检测到没有跨区好友": {
+		"recognition": "TemplateMatch",
+		"roi": [625, 483, 70, 69],
+		"template": "阴阳寮/没添加好友.png",
+		"next": ["B-返回到自己的结界"]
+	},
+	"检测到未放结界卡2": {
+		"recognition": "TemplateMatch",
+		"roi": [829, 235, 103, 56],
+		"template": "阴阳寮/未放置.png",
+		"next": ["B-返回到自己的结界"]
+	},
+	"检测到未公开2": {
+		"recognition": "TemplateMatch",
+		"roi": [957, 255, 68, 105],
+		"template": "阴阳寮/未公开.png",
+		"next": ["B-返回到自己的结界"]
+	},
+	"检测到已占用2": {
+		"recognition": "TemplateMatch",
+		"roi": [952, 254, 76, 107],
+		"template": "阴阳寮/已占用.png",
+		"next": ["B-返回到自己的结界"]
+	},
+
+	"D-3-检测到是可以占的太鼓坑": {
+		"recognition": "OCR",
+		"roi": [835, 344, 95, 51],
+		"expected": "太鼓",
+		"action": "Click",
+		"target": [814, 542, 142, 43],
+		"post_delay": 3000,
+		"next": ["寄养式神"],
+		"timeout": 5000,
+		"on_error": ["B-返回到自己的结界"]
+	},
+	"看看下一个好友坑位1-Count最多20次": {
+		"recognition": {
+			"type": "Custom",
+			"param": {
+				"custom_recognition": "Count",
+				"custom_recognition_param": {
+					"target": 20
+				}
+			}
+		},
+		"action": "Swipe",
+		"begin": [571, 334, 10, 10],
+		"end": [573, 225, 10, 10],
+		"duration": 800,
+		"next": ["点一下坑位"]
+	},
+	"看看下一个好友坑位2-Count最多20次": {
+		"recognition": {
+			"type": "Custom",
+			"param": {
+				"custom_recognition": "Count",
+				"custom_recognition_param": {
+					"target": 20
+				}
+			}
+		},
+		"action": "Swipe",
+		"begin": [571, 334, 10, 10],
+		"end": [573, 225, 10, 10],
+		"duration": 800,
+		"next": ["点一下坑位"]
+	},
+	"点一下坑位": {
+		"action": "Click",
+		"target": [573, 225, 10, 10]
+	},
+
+	"寄养式神": {
+		"recognition": "TemplateMatch",
+		"roi": [22, 628, 78, 51],
+		"template": "阴阳寮/左下角全部按钮.png",
+		"action": "Click",
+		"target": [589, 548, 63, 70],
+		"post_delay": 800,
+		"next": ["点击确定寄养"],
+		"timeout": 2000,
+		"on_error": ["B-返回到自己的结界"]
+	},
+	"点击确定寄养": {
+		"recognition": "TemplateMatch",
+		"roi": [678, 517, 70, 53],
+		"template": "阴阳寮/确定寄养.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["B-返回到自己的结界"]
+	},
+
+	"E-检测收取自己结界卡": {
+		"next": ["检测自己的箱子", "检测自己的太鼓", "检测自己的斗鱼", "检测自己的结界卡是否用完了"]
+	},
+	"检测自己的箱子": {
+		"recognition": "TemplateMatch",
+		"roi": [887, 152, 62, 49],
+		"roi_offset": [-50, -50, 100, 100],
+		"template": "阴阳寮/收取结界卡.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["关闭自己结界卡奖励"]
+	},
+	"检测自己的太鼓": {
+		"recognition": "TemplateMatch",
+		"roi": [885, 154, 66, 55],
+		"roi_offset": [-50, -50, 100, 100],
+		"template": "阴阳寮/收取太鼓.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["关闭自己结界卡奖励"]
+	},
+	"检测自己的斗鱼": {
+		"recognition": "TemplateMatch",
+		"roi": [885, 154, 66, 55],
+		"roi_offset": [-50, -50, 100, 100],
+		"template": "阴阳寮/收取太鼓.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["关闭自己结界卡奖励"]
+	},
+	"关闭自己结界卡奖励": {
+		"action": "Click",
+		"target": [120, 127, 95, 83],
+		"post_delay": 500,
+		"next": ["检测自己的结界卡是否用完了"]
+	},
+	"检测自己的结界卡是否用完了": {
+		"next": ["检测右边旗杆并点击"],
+		"rate_limit": 1000,
+		"timeout": 3000,
+		"on_error": []
+	},
+	"检测右边旗杆并点击": {
+		"recognition": "OCR",
+		"roi": [884, 288, 50, 49],
+		"expected": "结|結",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["检测结界卡为空放结界卡"],
+		"timeout": 2000,
+		"on_error": ["检测叉号并点击"]
+	},
+	"检测结界卡为空放结界卡": {
+		"recognition": "TemplateMatch",
+		"roi": [686, 268, 82, 96],
+		"template": "阴阳寮/空结界卡.png",
+		"action": "Click",
+		"target": [382, 105, 117, 34],
+		"next": ["切换到太鼓卡"]
+	},
+	"切换到太鼓卡": {
+		"recognition": "TemplateMatch",
+		"roi": [384, 244, 115, 47],
+		"template": "阴阳寮/太鼓选项.png",
+		"action": "Click",
+		"next": ["找到一个四或三星太鼓卡", "检测发现自己没这种结界卡了"],
+		"interrupt": ["翻翻下面的结界卡-Count最多6次"],
+		"timeout": 1000,
+		"on_error": ["检测叉号并点击"]
+	},
+	"检测发现自己没这种结界卡了": {
+		"recognition": "OCR",
+		"roi": [237, 272, 121, 66],
+		"only_rec": true,
+		"expected": "未获得",
+		"action": "DoNothing",
+		"next": ["检测叉号并点击"]
+	},
+	"找到一个四或三星太鼓卡": {
+		"recognition": "OCR",
+		"roi": [294, 170, 224, 472],
+		"expected": "(20|16)00/h",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["激活结界卡"],
+		"timeout": 3000,
+		"on_error": ["检测叉号并点击"]
+	},
+	"翻翻下面的结界卡-Count最多6次": {
+		"recognition": {
+			"type": "Custom",
+			"param": {
+				"custom_recognition": "Count",
+				"custom_recognition_param": {
+					"target": 6
+				}
+			}
+		},
+		"action": "Swipe",
+		"begin": [318, 544, 100, 20],
+		"end": [321, 90, 100, 20],
+		"duration": 1200,
+		"post_delay": 400
+	},
+	"激活结界卡": {
+		"recognition": "TemplateMatch",
+		"roi": [1058, 576, 81, 69],
+		"template": "阴阳寮/激活结界卡.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["点击确定公开"],
+		"timeout": 2000,
+		"on_error": ["检测叉号并点击"]
+	},
+	"点击确定公开": {
+		"recognition": "TemplateMatch",
+		"roi": [684, 405, 79, 47],
+		"template": "阴阳寮/确定公开.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["检测叉号并点击"]
+	},
+	"检测叉号并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [1142, 79, 70, 67],
+		"template": "阴阳寮/食盒叉号.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["B-返回到自己的结界"]
+	},
+
+	"F-收取食盒": {
+		"next": ["收取体力", "收取经验"]
+	},
+	"收取体力": {
+		"recognition": "TemplateMatch",
+		"roi": [802, 444, 78, 55],
+		"roi_offset": [-50, -50, 100, 100],
+		"template": "阴阳寮/体力食盒.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["检测点击取出体力"]
+	},
+	"检测点击取出体力": {
+		"recognition": "TemplateMatch",
+		"roi": [590, 508, 88, 57],
+		"template": "阴阳寮/取出体力按钮.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["识别到已经回到自己结界"],
+		"interrupt": ["检测食盒叉号并点击"]
+	},
+	"检测食盒叉号并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [950, 141, 48, 47],
+		"template": "阴阳寮/食盒叉号.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["收取经验"],
+		"timeout": 1000,
+		"on_error": []
+	},
+	"收取经验": {
+		"recognition": "TemplateMatch",
+		"roi": [882, 445, 71, 43],
+		"template": "阴阳寮/经验食盒.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["检测点击取出经验"]
+	},
+	"检测点击取出经验": {
+		"recognition": "TemplateMatch",
+		"roi": [595, 474, 88, 53],
+		"template": "阴阳寮/提取经验按钮.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["识别到已经回到自己结界"],
+		"interrupt": ["ACT-检测带取消按钮的弹窗并点击取消", "ACT-检测各类右上部分叉号并点一下"]
+	},
+
+	"B-返回到自己的结界": {
+		"next": ["识别到已经回到自己结界"],
+		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定", "检测左上角蓝色返回按钮并点击", "检测点击结界图标"]
+	},
+	"识别到已经回到自己结界": {
+		"recognition": "TemplateMatch",
+		"roi": [169, 457, 66, 62],
+		"template": "阴阳寮/小白头顶结界换肤按钮.png"
+	},
+	"检测左上角蓝色返回按钮并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [12, 13, 51, 61],
+		"template": "阴阳寮/结界蓝色返回按钮.png",
+		"action": "Click",
+		"post_delay": 1500
+	},
+
+	"A-从结界退出回庭院": {
+		"next": ["STATUS-处于庭院初始状态"],
+		"interrupt": ["点击左上角等2秒"],
+		"rate_limit": 2000
+	},
+	"点击左上角等2秒": {
+		"action": "Click",
+		"target": [30, 18, 40, 40],
+		"post_delay": 2000
+	}
+}

@@ -55,9 +55,7 @@ class Screenshot(CustomAction):
         logger.info(f"截图保存至 {save_dir}/{self._get_format_timestamp(now)}.png")
 
         task_detail = context.tasker.get_task_detail(argv.task_detail.task_id)
-        logger.debug(
-            f"task_id: {task_detail.task_id}, task_entry: {task_detail.entry}, status: {task_detail.status._status}"
-        )
+        # logger.debug(f"task_id: {task_detail.task_id}, task_entry: {task_detail.entry}, status: {task_detail.status._status}")
 
         return CustomAction.RunResult(success=True)
 

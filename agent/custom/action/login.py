@@ -15,9 +15,7 @@ class OverrideLoginInfo(CustomAction):
     def run(
         self, context: Context, argv: CustomAction.RunArg
     ) -> CustomAction.RunResult:
-        logger.debug(
-            f"OverrideLoginInfo argv.custom_action_param: {argv.custom_action_param}"
-        )
+        # logger.debug(f"OverrideLoginInfo argv.custom_action_param: {argv.custom_action_param}")
         cus_param = json.loads(argv.custom_action_param)
 
         account = cus_param["account"]
@@ -49,7 +47,7 @@ class OverrideLoginInfo(CustomAction):
                 }
             }
         )
-        logger.debug(
+        logger.info(
             f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}"
         )
 
