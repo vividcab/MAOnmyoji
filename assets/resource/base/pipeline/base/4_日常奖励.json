@@ -273,9 +273,6 @@
 	},
 
 	"10-查看神秘商店并截图记录": {
-		"action": "Custom",
-		"custom_action": "Screenshot",
-		"custom_action_param": {"save_dir": "user_data/神秘商店"},
 		"next": ["检测点击商店图标之后打开神秘商店"],
 		"interrupt": ["检测卷轴是否打开"],
 		"timeout": 2000,

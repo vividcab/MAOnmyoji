@@ -49,7 +49,8 @@
 		"custom_action_param": {
 			"account": "用于识别账号的字符串，若完整账号容易识别错误（例如把l识别为1导致不匹配），可以只填账号子串但是应唯一",
 			"platform": "安卓端或者苹果端",
-			"servername": "区服名称"
+			"servername": "区服名称",
+			"rolename": "角色昵称"
 		},
 		"next": ["TASK-A-3-0识别到当前账号就是要登录的账号", "TASK-A-3-1检测已经打开了账号选择列表开始查找账号"],
 		"interrupt": ["ACT-点击一下账号选择栏"],
@@ -134,7 +135,8 @@
 		"only_rec": true,
 		"action": "DoNothing",
 		"next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
-		"interrupt": ["INT-A-7-1检测协议弹窗并接受"]
+		"interrupt": ["INT-A-7-1检测协议弹窗并接受"],
+		"focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
 	},
 	"INT-A-7-1检测协议弹窗并接受": {
 		"recognition": "TemplateMatch",

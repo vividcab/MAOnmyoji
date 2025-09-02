@@ -21,6 +21,7 @@ class OverrideLoginInfo(CustomAction):
         account = cus_param["account"]
         platform = cus_param["platform"]
         servername = cus_param["servername"]
+        rolename = cus_param["rolename"]
 
         context.override_pipeline(
             {"TASK-A-3-0识别到当前账号就是要登录的账号": {"expected": account}}
@@ -47,8 +48,6 @@ class OverrideLoginInfo(CustomAction):
                 }
             }
         )
-        logger.info(
-            f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}"
-        )
+        # logger.info(f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}")
 
         return CustomAction.RunResult(success=True)

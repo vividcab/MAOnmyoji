@@ -50,12 +50,16 @@ class Screenshot(CustomAction):
 
         save_dir = json.loads(argv.custom_action_param)["save_dir"]
         os.makedirs(save_dir, exist_ok=True)
-        now = datetime.now()
-        img.save(f"{save_dir}/{self._get_format_timestamp(now)}.png")
-        logger.info(f"截图保存至 {save_dir}/{self._get_format_timestamp(now)}.png")
 
-        task_detail = context.tasker.get_task_detail(argv.task_detail.task_id)
-        # logger.debug(f"task_id: {task_detail.task_id}, task_entry: {task_detail.entry}, status: {task_detail.status._status}")
+        node_info = context.get_node_data("重写账号角色信息")
+        account_info_dict = node_info["action"]["param"]["custom_action_param"]
+        now = datetime.now()
+        save_file_path = f"{save_dir}/{self._get_format_timestamp(now)}-{account_info_dict['rolename']}.png"
+
+        img.save(save_file_path)
+        logger.info(f"截图保存至 {save_file_path}")
+
+        context.tasker.get_task_detail(argv.task_detail.task_id)
 
         return CustomAction.RunResult(success=True)
 
@@ -65,7 +69,7 @@ class Screenshot(CustomAction):
         time = now.strftime("%H.%M.%S")
         milliseconds = f"{now.microsecond // 1000:03d}"
 
-        return f"{date}-{time}.{milliseconds}"
+        return f"{date}-{time}"
 
 
 @AgentServer.custom_action("DisableNode")

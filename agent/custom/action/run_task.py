@@ -58,11 +58,11 @@ class ForRolesToRunTask(CustomAction):
         else:
             rolenames = []
 
-        all_num = len(rolenames)
-        logger.info(f"解析后的角色数量：{all_num}, 角色名：{rolenames}")
-
         if rolenames and rolenames[0] == "ALL":
             rolenames = get_all_rolenames()
+
+        all_num = len(rolenames)
+        logger.info(f"解析后的角色数量：{all_num}, 角色名：{rolenames}")
 
         for index, rolename in enumerate(rolenames):
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -78,6 +78,7 @@ class ForRolesToRunTask(CustomAction):
                             "account": info["account"],
                             "platform": info["platform"],
                             "servername": info["servername"],
+                            "rolename": rolename,
                         }
                     }
                 }
