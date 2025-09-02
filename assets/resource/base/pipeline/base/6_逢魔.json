@@ -146,7 +146,9 @@
 		],
 		"action": "Click",
 		"post_delay": 1000,
-		"next": ["F-6检测到boss集结弹窗并点击进入逢魔广场"]
+		"next": ["F-6检测到boss集结弹窗并点击进入逢魔广场"],
+		"timeout": 3000,
+		"on_error": ["F-4-2检测到已领取达摩宝箱点一下找boss按钮"]
 	},
 	"F-6检测到boss集结弹窗并点击进入逢魔广场": {
 		"recognition": "TemplateMatch",
