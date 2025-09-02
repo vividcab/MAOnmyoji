@@ -1,6 +1,8 @@
 {
 	"ENTRY-领取阴阳寮和结界奖励": {
 		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"action": "Custom",
+		"custom_action": "ResetCount",
 		"next": ["TASK-领取阴阳寮和结界奖励"],
 		"interrupt": ["INT-尝试从任意界面回到庭院"]
 	},

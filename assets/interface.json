@@ -38,7 +38,7 @@
 			"type": "string",
 			"default": "ALL,",
 			"pipeline_override": {
-				"ENTRY-多角色每日签到领商店": {
+				"ENTRY-多角色任务模板": {
 					"custom_action_param": {
 						"rolenames": "{指定角色名列表}",
 						"tasks": [
@@ -56,7 +56,7 @@
 			"type": "string",
 			"default": "ALL,",
 			"pipeline_override": {
-				"ENTRY-多角色每日签到领商店": {
+				"ENTRY-多角色任务模板": {
 					"custom_action_param": {
 						"rolenames": "{指定角色名列表}",
 						"tasks": [

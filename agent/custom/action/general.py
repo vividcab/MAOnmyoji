@@ -146,4 +146,5 @@ class ResetCount(CustomAction):
 
         node_name = param.get("node_name", None)
         Count.reset_count(node_name)
+        logger.info("#ResetCount#：重置 Node 计数器")
         return CustomAction.RunResult(success=True)
