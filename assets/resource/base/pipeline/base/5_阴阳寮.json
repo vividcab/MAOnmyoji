@@ -51,7 +51,7 @@
 		"action": "Swipe",
 		"begin": [870, 560, 10, 10],
 		"end": [800, 500, 10, 10],
-		"duration": 1500,
+		"duration": 1200,
 		"post_delay": 800,
 		"next": ["OPT-检测可以领取体力补给就领", "OPT-检测可以领工资就领"],
 		"timeout": 300,
@@ -89,7 +89,7 @@
 	"点击一下左上角空白处用来关闭领奖励的结果弹窗": {
 		"action": "Click",
 		"target": [172, 26, 144, 60],
-		"post_delay": 1000,
+		"post_delay": 800,
 		"next": ["在寮大厅划一下视角然后检测领取工资和体力"]
 	},
 
@@ -175,9 +175,10 @@
 			"检测到没有同区好友",
 			"检测到未公开",
 			"检测到已占用",
+			"检测到未放结界卡",
 			"D-3-检测到是可以占的太鼓坑"
 		],
-		"interrupt": ["看看下一个好友坑位1-Count最多20次"],
+		"interrupt": ["看看下一个好友坑位1-Count最多10次"],
 		"timeout": 1000,
 		"on_error": ["D-2-去跨区标签找太鼓坑位"]
 	},
@@ -232,9 +233,10 @@
 			"检测到没有跨区好友",
 			"检测到未公开2",
 			"检测到已占用2",
+			"检测到未放结界卡2",
 			"D-3-检测到是可以占的太鼓坑"
 		],
-		"interrupt": ["看看下一个好友坑位2-Count最多20次"],
+		"interrupt": ["看看下一个好友坑位2-Count最多10次"],
 		"timeout": 1000,
 		"on_error": ["B-返回到自己的结界"]
 	},
@@ -271,16 +273,16 @@
 		"target": [814, 542, 142, 43],
 		"post_delay": 3000,
 		"next": ["寄养式神"],
-		"timeout": 5000,
+		"timeout": 8000,
 		"on_error": ["B-返回到自己的结界"]
 	},
-	"看看下一个好友坑位1-Count最多20次": {
+	"看看下一个好友坑位1-Count最多10次": {
 		"recognition": {
 			"type": "Custom",
 			"param": {
 				"custom_recognition": "Count",
 				"custom_recognition_param": {
-					"target": 20
+					"target": 10
 				}
 			}
 		},
@@ -289,15 +291,15 @@
 		"end": [573, 225, 10, 10],
 		"duration": 800,
 		"next": ["点一下坑位"],
-		"focus": {"failed": "在同区好友列表找了 20 次都没 找到太鼓坑"}
+		"focus": {"failed": "在同区好友列表找了 10 次都没 找到太鼓坑"}
 	},
-	"看看下一个好友坑位2-Count最多20次": {
+	"看看下一个好友坑位2-Count最多10次": {
 		"recognition": {
 			"type": "Custom",
 			"param": {
 				"custom_recognition": "Count",
 				"custom_recognition_param": {
-					"target": 20
+					"target": 10
 				}
 			}
 		},
@@ -306,7 +308,7 @@
 		"end": [573, 225, 10, 10],
 		"duration": 800,
 		"next": ["点一下坑位"],
-		"focus": {"failed": "在跨区好友列表找了 20 次都没 找到太鼓坑"}
+		"focus": {"failed": "在跨区好友列表找了 10 次都没 找到太鼓坑"}
 	},
 	"点一下坑位": {
 		"action": "Click",
@@ -331,6 +333,12 @@
 		"template": "阴阳寮/确定寄养.png",
 		"action": "Click",
 		"post_delay": 800,
+		"next": ["REC-截个图记录一下寄养状态", "B-返回到自己的结界"]
+	},
+	"REC-截个图记录一下寄养状态": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/寄养记录"},
 		"next": ["B-返回到自己的结界"]
 	},
 
@@ -517,7 +525,12 @@
 
 	"B-返回到自己的结界": {
 		"next": ["识别到已经回到自己结界"],
-		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定", "检测左上角蓝色返回按钮并点击", "检测点击结界图标"]
+		"interrupt": [
+			"ACT-检测各类右上部分叉号并点一下",
+			"ACT-检测带确定按钮的弹窗并点击确定",
+			"检测左上角蓝色返回按钮并点击",
+			"检测点击结界图标"
+		]
 	},
 	"识别到已经回到自己结界": {
 		"recognition": "TemplateMatch",
