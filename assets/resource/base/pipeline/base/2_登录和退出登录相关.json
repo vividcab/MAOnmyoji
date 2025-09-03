@@ -250,6 +250,7 @@
 		"post_delay": 8000,
 		"next": ["STATUS-处于庭院初始状态"],
 		"interrupt": [
+			"ACT-检测到进入游戏四个字并点一下-Count最多3次",
 			"ACT-检测到还在加载中等待3秒",
 			"ACT-检测到退出游戏弹窗并点一下取消",
 			"ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
@@ -261,7 +262,42 @@
 			"ACT-检测到邮箱图标点一下",
 			"ACT-无条件按一下Esc键-Count最多4次"
 		],
-		"rate_limit": 1500
+		"rate_limit": 1500,
+		"timeout": 30000,
+		"on_error": [],
+		"_comment": "出错情况可能是游戏维护了等情况登录不进游戏"
+	},
+	"ACT-检测到进入游戏四个字并点一下-Count最多3次": {
+		"recognition": "OCR",
+		"roi": [545, 563, 185, 65],
+		"expected": "游戏",
+		"action": "Click",
+		"target": [558, 570, 160, 45],
+		"post_delay": 8000,
+		"next": ["Count-点击进入游戏的次数-最多3次", "Disable-停止检测点击进入游戏"]
+	},
+	"Count-点击进入游戏的次数-最多3次": {
+		"recognition": {
+			"type": "Custom",
+			"param": {
+				"custom_recognition": "Count",
+				"custom_recognition_param": {
+					"target": 3
+				}
+			}
+		}
+	},
+	"Disable-停止检测点击进入游戏": {
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "DisableNode",
+				"custom_action_param": {
+					"node_name": "ACT-检测到进入游戏四个字并点一下-Count最多3次"
+				}
+			}
+		},
+		"focus": {"succeeded": "[color:red]可能网络故障或游戏服务器维护，重复点击进入游戏4次均为成功[/color]"}
 	},
 	"ACT-检测到还在加载中等待3秒": {
 		"recognition": "OCR",
