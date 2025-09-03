@@ -209,7 +209,9 @@
 		"threshold": 0.4,
 		"action": "Click",
 		"post_delay": 1000,
-		"next": ["检测点击礼包屋"]
+		"next": ["检测点击礼包屋"],
+		"timeout": 4000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测点击礼包屋": {
 		"recognition": "TemplateMatch",
@@ -217,7 +219,9 @@
 		"template": "签到/礼包屋.png",
 		"action": "Click",
 		"post_delay": 1000,
-		"next": ["检测点击日常"]
+		"next": ["检测点击日常"],
+		"timeout": 4000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测点击日常": {
 		"recognition": "TemplateMatch",
