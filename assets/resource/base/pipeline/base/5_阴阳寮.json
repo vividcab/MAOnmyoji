@@ -141,7 +141,7 @@
 		"roi": [591, 314, 45, 36],
 		"expected": "神",
 		"action": "Click",
-		"post_delay": 500,
+		"post_delay": 1500,
 		"next": ["检测自己结界的式神是否有培养到满级的", "检测是否可以到好友结界寄养"],
 		"timeout": 1000,
 		"on_error": ["B-返回到自己的结界"]
@@ -171,6 +171,10 @@
 		"on_error": ["B-返回到自己的结界"]
 	},
 	"D-1-在好友标签找太鼓坑位": {
+		"recognition": "TemplateMatch",
+		"roi": [351, 100, 77, 56],
+		"template": "阴阳寮/跨区.png",
+		"action": "DoNothing",
 		"next": [
 			"检测到没有同区好友",
 			"检测到未公开",
