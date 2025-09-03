@@ -1,6 +1,5 @@
 {
 	"STATUS-处于模拟器桌面": {
-		"_doc": "目前没用",
 		"recognition": "TemplateMatch",
 		"roi": [1048, 353, 47, 52],
 		"template": "模拟器/阴阳师app图标.png",
@@ -10,7 +9,9 @@
 		"recognition": "TemplateMatch",
 		"roi": [6, 516, 270, 137],
 		"template": ["平台区服/适龄提示.png"],
-		"threshold": 0.9
+		"threshold": 0.9,
+		"action": "DoNothing",
+		"post_delay": 2000
 	},
 
 	"TASK-启动游戏到登录界面": {
@@ -19,7 +20,7 @@
 		"post_delay": 5000,
 		"next": ["STATUS-检测游戏已经启动到登录界面了"],
 		"rate_limit": 5000,
-		"timeout": 40000
+		"timeout": 100000
 	},
 	"TASK-关闭游戏": {
 		"action": "StopApp",
