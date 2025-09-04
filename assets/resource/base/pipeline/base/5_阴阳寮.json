@@ -19,6 +19,7 @@
 				{"taskname": "A-领阴阳寮体力并进入结界", "wait": 0.3},
 				{"taskname": "B-从阴阳寮大厅进入结界", "wait": 0.3},
 				{"taskname": "C-检测收取寄养", "wait": 0.3},
+				{"taskname": "D-检测是否可以好友寄养", "wait": 0.3},
 				{"taskname": "E-检测收取自己结界卡", "wait": 0.3},
 				{"taskname": "F-收取食盒", "wait": 0.3},
 				{"taskname": "A-从结界退出回庭院", "wait": 0.3}
@@ -121,13 +122,13 @@
 		"post_delay": 500,
 		"next": ["关闭寄养奖励"],
 		"timeout": 1000,
-		"on_error": ["D-检测是否可以好友寄养"]
+		"on_error": []
 	},
 	"关闭寄养奖励": {
 		"action": "Click",
 		"target": [120, 127, 95, 83],
 		"post_delay": 400,
-		"next": ["D-检测是否可以好友寄养"]
+		"next": []
 	},
 
 	"D-检测是否可以好友寄养": {
@@ -167,7 +168,7 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["D-1-在好友标签找太鼓坑位"],
-		"timeout": 500,
+		"timeout": 1500,
 		"on_error": ["B-返回到自己的结界"]
 	},
 	"D-1-在好友标签找太鼓坑位": {
