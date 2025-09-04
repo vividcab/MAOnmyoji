@@ -1,0 +1,103 @@
+{
+	"ENTRY-九周年活动每日免费10抽": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"action": "Custom",
+		"custom_action": "ResetCount",
+		"next": ["TASK-进入召唤屋抽每日免费10抽"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-进入召唤屋抽每日免费10抽": {
+		"_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的",
+		"recognition": "TemplateMatch",
+		"roi": [885, 85, 390, 251],
+		"template": "庭院/召唤灯笼.png",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测左边栏免费抽卡按钮"],
+		"timeout": 5000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测左边栏免费抽卡按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [9, 176, 77, 395],
+		"template": "召唤屋抽卡/左边栏免费抽卡按钮.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测底部免费抽卡"],
+		"timeout": 4000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测底部免费抽卡": {
+		"recognition": "OCR",
+		"roi": [588, 641, 124, 49],
+		"only_rec": true,
+		"expected": "免费召唤",
+		"action": "DoNothing",
+		"next": ["检测是否还有免费抽数"],
+		"timeout": 300,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测是否还有免费抽数": {
+		"recognition": "OCR",
+		"roi": [609, 613, 82, 39],
+		"only_rec": true,
+		"expected": "10/10",
+		"action": "Click",
+		"next": ["检测打开了画画抽卡界面"],
+		"timeout": 300,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测打开了画画抽卡界面": {
+		"recognition": "TemplateMatch",
+		"roi": [404, 575, 66, 58],
+		"template": "召唤屋抽卡/抽卡返回按钮.png",
+		"action": "Swipe",
+		"begin": [473, 383, 97, 84],
+		"end": [626, 180, 141, 127],
+		"duration": 500,
+		"post_delay": 5000,
+		"next": ["检测跳过按钮并点击"],
+		"interrupt": ["ACT-检测各类右上部分叉号并点一下"],
+		"timeout": 300000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测跳过按钮并点击": {
+		"recognition": "OCR",
+		"roi": [1108, 56, 69, 47],
+		"only_rec": true,
+		"expected": "跳过",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测到抽卡结果界面右下角的分享按钮然后截图"],
+		"interrupt": ["ACT-检测带取消按钮的弹窗并点击取消"],
+		"timeout": 40000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测到抽卡结果界面右下角的分享按钮然后截图": {
+		"recognition": "TemplateMatch",
+		"roi": [1182, 627, 61, 58],
+		"template": "召唤屋抽卡/右下角分享按钮.png",
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/抽卡记录"},
+		"post_delay": 800,
+		"next": ["截完图后点击空白处回到召唤屋"]
+	},
+	"截完图后点击空白处回到召唤屋": {
+		"action": "Click",
+		"target": [567, 531, 102, 71],
+		"post_delay": 3000,
+		"next": ["检测提示没有抽卡次数用完的弹窗确定按钮"],
+		"timeout": 3000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测提示没有抽卡次数用完的弹窗确定按钮": {
+		"recognition": "OCR",
+		"roi": [580, 350, 280, 250],
+		"expected": ["确定", "确认"],
+		"order_by": "Vertical",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["TASK-尝试从任意界面回到庭院"]
+	}
+}
