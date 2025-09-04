@@ -4,13 +4,14 @@
 		"action": "Custom",
 		"custom_action": "ResetCount",
 		"next": ["TASK-进入召唤屋抽每日免费10抽"],
-		"interrupt": ["INT-尝试从任意界面回到庭院"]
+		"interrupt": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"TASK-进入召唤屋抽每日免费10抽": {
 		"_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的",
 		"recognition": "TemplateMatch",
 		"roi": [885, 85, 390, 251],
 		"template": "庭院/召唤灯笼.png",
+		"threshold": 0.4,
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["检测左边栏免费抽卡按钮"],
@@ -57,9 +58,17 @@
 		"duration": 500,
 		"post_delay": 5000,
 		"next": ["检测跳过按钮并点击"],
-		"interrupt": ["ACT-检测各类右上部分叉号并点一下"],
+		"interrupt": ["检测到抽出SSR后右下角截图分享按钮并点击空白处", "ACT-检测各类右上部分叉号并点一下"],
 		"timeout": 300000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测到抽出SSR后右下角截图分享按钮并点击空白处": {
+		"recognition": "TemplateMatch",
+		"roi": [1151, 619, 124, 97],
+		"template": "召唤屋抽卡/抽到SSR后右下角的截图分享按钮.png",
+		"action": "Click",
+		"target": [1123, 70, 64, 57],
+		"post_delay": 2000
 	},
 	"检测跳过按钮并点击": {
 		"recognition": "OCR",
@@ -67,9 +76,9 @@
 		"only_rec": true,
 		"expected": "跳过",
 		"action": "Click",
-		"post_delay": 2000,
+		"post_delay": 4000,
 		"next": ["检测到抽卡结果界面右下角的分享按钮然后截图"],
-		"interrupt": ["ACT-检测带取消按钮的弹窗并点击取消"],
+		"interrupt": ["ACT-检测带取消按钮的弹窗并点击取消", "检测到抽出SSR后右下角截图分享按钮并点击空白处"],
 		"timeout": 40000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
@@ -88,7 +97,9 @@
 		"target": [567, 531, 102, 71],
 		"post_delay": 3000,
 		"next": ["检测提示没有抽卡次数用完的弹窗确定按钮"],
-		"timeout": 3000,
+		"interrupt": ["检测到抽卡结果界面右下角的分享按钮然后截图"],
+		"rate_limit": 1500,
+		"timeout": 10000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测提示没有抽卡次数用完的弹窗确定按钮": {
