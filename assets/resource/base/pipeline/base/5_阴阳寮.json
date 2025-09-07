@@ -483,7 +483,9 @@
 	},
 
 	"F-收取食盒": {
-		"next": ["收取体力", "收取经验"]
+		"next": ["收取体力", "收取经验"],
+		"timeout": 2000,
+		"on_error": []
 	},
 	"收取体力": {
 		"recognition": "TemplateMatch",
