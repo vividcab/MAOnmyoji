@@ -429,7 +429,16 @@
 		"template": "庭院/用户中心.png",
 		"action": "Click",
 		"post_delay": 800,
-		"next": ["TASK-B-2检测切换账号按钮并点击回到登录界面"]
+		"next": ["TASK-B-2检测切换账号按钮并点击回到登录界面"],
+		"interrupt": ["ACT-检测点击一下用户中心按钮"]
+	},
+	"ACT-检测点击一下用户中心按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [216, 481, 67, 69],
+		"roi_offset": [-200, -200, 400, 400],
+		"template": "庭院/用户中心.png",
+		"action": "Click",
+		"post_delay": 1000
 	},
 	"TASK-B-2检测切换账号按钮并点击回到登录界面": {
 		"recognition": "OCR",
@@ -438,6 +447,14 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["STATUS-检测游戏已经启动到登录界面了"],
+		"interrupt": ["ACT-检测点击一下切换账号按钮"],
 		"rate_limit": 3000
+	},
+	"ACT-检测点击一下切换账号按钮": {
+		"recognition": "OCR",
+		"roi": [940, 184, 127, 49],
+		"expected": "切换账号",
+		"action": "Click",
+		"post_delay": 2000
 	}
 }
