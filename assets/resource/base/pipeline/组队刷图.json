@@ -1,0 +1,88 @@
+{
+	"TASK-组队刷图-检测在组队界面": {
+		"recognition": "OCR",
+		"roi": [85, 16, 138, 50],
+		"expected": "队伍",
+		"action": "DoNothing",
+		"next": ["检测挑战次数是否超过设置的次数-组队"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"检测挑战次数是否超过设置的次数-组队": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 10
+		},
+		"next": ["检测挑战按钮然后点击-组队", "没检测挑战按钮那就作为队员等待"]
+	},
+	"没检测挑战按钮那就作为队员等待": {
+		"recognition": "TemplateMatch",
+		"roi": [1183, 611, 69, 62],
+		"template": "组队战斗/右下角挑战按钮.png",
+		"inverse": true,
+		"action": "DoNothing",
+		"next": ["检测已经进入战斗并且加载完毕-组队"],
+		"interrupt": ["ACT-什么都不做等待3秒"],
+		"timeout": 200000,
+		"on_error": []
+	},
+	"ACT-什么都不做等待3秒": {
+		"action": "DoNothing",
+		"post_delay": 3000
+	},
+
+	"检测挑战按钮然后点击-组队": {
+		"recognition": "TemplateMatch",
+		"roi": [1183, 611, 69, 62],
+		"template": "组队战斗/右下角挑战按钮.png",
+		"action": "DoNothing",
+		"next": ["检测挑战按钮为黄色然后点击"],
+		"interrupt": ["ACT-什么都不做等待3秒"],
+		"rate_limit": 3000,
+		"timeout": 200000
+	},
+	"检测挑战按钮为黄色然后点击": {
+		"recognition": "ColorMatch",
+		"roi": [1206, 632, 28, 13],
+		"method": 40,
+		"upper": [60, 255, 255],
+		"lower": [10, 40, 40],
+		"count": 300,
+		"action": "Click",
+		"post_delay": 2500,
+		"next": ["检测已经进入战斗并且加载完毕-组队"],
+		"interrupt": [],
+		"rate_limit": 2000,
+		"timeout": 6000,
+		"on_error": ["检测挑战按钮然后点击-组队"]
+	},
+
+	"检测已经进入战斗并且加载完毕-组队": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 100, 100],
+		"template": "通用界面按钮/左上角U形退出按钮.png",
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["检测已经开始战斗等待X秒-组队"],
+		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"检测已经开始战斗等待X秒-组队": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 13000,
+		"next": ["TASK-组队刷图-检测在组队界面"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等3秒",
+			"ACT-检测有御魂满了的弹窗就关闭",
+			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
+		],
+		"rate_limit": 1000,
+		"timeout": 6000,
+		"on_error": []
+	}
+}
