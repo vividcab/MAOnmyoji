@@ -420,7 +420,7 @@
 	"ACT-点击庭院左上角头像": {
 		"action": "Click",
 		"target": [28, 37, 37, 39],
-		"post_delay": 800
+		"post_delay": 1000
 	},
 	"TASK-B-1检测用户中心按钮并点击": {
 		"recognition": "TemplateMatch",
@@ -428,7 +428,7 @@
 		"roi_offset": [-200, -200, 400, 400],
 		"template": "庭院/用户中心.png",
 		"action": "Click",
-		"post_delay": 800,
+		"post_delay": 1200,
 		"next": ["TASK-B-2检测切换账号按钮并点击回到登录界面"],
 		"interrupt": ["ACT-检测点击一下用户中心按钮"]
 	},
@@ -447,8 +447,17 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["STATUS-检测游戏已经启动到登录界面了"],
-		"interrupt": ["ACT-检测点击一下切换账号按钮"],
+		"interrupt": ["ACT-检测到账号登录弹窗点击叉号", "ACT-检测点击一下切换账号按钮"],
 		"rate_limit": 3000
+	},
+	"ACT-检测到账号登录弹窗点击叉号": {
+		"recognition": "OCR",
+		"roi": [596, 422, 87, 47],
+		"expected": ["登录"],
+		"only_rec": true,
+		"action": "Click",
+		"target": [893, 163, 32, 30],
+		"post_delay": 1500
 	},
 	"ACT-检测点击一下切换账号按钮": {
 		"recognition": "OCR",
