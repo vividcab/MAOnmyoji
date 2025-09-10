@@ -81,7 +81,7 @@
 		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
 		"inverse": true,
 		"action": "Click",
-		"target": [823, 471, 312, 146],
+		"target": [952, 250, 312, 250],
 		"post_delay": 800
 	}
 }
