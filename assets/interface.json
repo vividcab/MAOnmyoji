@@ -32,6 +32,13 @@
 			"option": ["是否输出 focus 信息"]
 		},
 		{
+			"name": "刷999",
+			"entry": "TASK-检测999副本界面",
+			"advanced": ["挑战999副本次数", "预计通关999时间（毫秒）"],
+			"option": ["是否启用随机休眠"],
+			"doc": "执行本任务前，需要手动打开999副本界面\n阵容锁定或者不锁定都行"
+		},
+		{
 			"name": "刷业原火",
 			"entry": "TASK-检测业原火副本界面",
 			"advanced": ["挑战业原火副本次数", "预计通关业原火时间（毫秒）"],
@@ -56,7 +63,6 @@
 						"tasks": [
 							{"taskname": "ENTRY-登录某角色", "wait": 2},
 							{"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},
-							{"taskname": "ENTRY-九周年活动每日免费10抽", "wait": 0.5},
 							{"taskname": "ENTRY-领取阴阳寮和结界奖励", "wait": 0.5},
 							{"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
 						]
@@ -87,6 +93,30 @@
 			"default": "用户在此处输入信息",
 			"pipeline_override": {"Screenshot": {"focus": {"start": "{用户输入}"}}},
 			"doc": "用户在此处输入的内容将在任务节点执行时打印输出"
+		},
+		"挑战999副本次数": {
+			"field": "挑战999副本次数",
+			"type": "int",
+			"default": 10,
+			"pipeline_override": {
+				"检测挑战次数是否超过设置的次数-999": {
+					"custom_recognition_param": {
+						"target": "{挑战999副本次数}"
+					}
+				}
+			},
+			"doc": "输入挑战999副本的次数"
+		},
+		"预计通关999时间（毫秒）": {
+			"field": "预计通关999时间（毫秒）",
+			"type": "int",
+			"default": 7000,
+			"pipeline_override": {
+				"检测已经开始战斗等待X秒": {
+					"post_delay": "{预计通关999时间（毫秒）}"
+				}
+			},
+			"doc": "注意单位是毫秒，例如预计 7 秒通关，请填 7000 \n 次数设置的预计通关时间不影响流程，只是在这个时间段内不检测战斗是否完成，略微降低一点点性能消耗 \n 如果不在意这一点资源消耗，就写 5000 吧"
 		},
 		"挑战业原火副本次数": {
 			"field": "挑战业原火副本次数",
@@ -152,6 +182,23 @@
 				{"name": "否", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": false}}}
 			],
 			"default_case": "否"
+		},
+		"是否启用随机休眠": {
+			"cases": [
+				{
+					"name": "是",
+					"pipeline_override": {
+						"检测挑战次数是否超过设置的次数-999": {"action": "Custom", "custom_action": "RandomSleep"}
+					}
+				},
+				{
+					"name": "否",
+					"pipeline_override": {
+						"检测挑战次数是否超过设置的次数-999": {"action": "DoNothing"}
+					}
+				}
+			],
+			"default_case": "是"
 		}
 	}
 }

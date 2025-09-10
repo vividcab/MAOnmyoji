@@ -1,6 +1,8 @@
 import os
 import json
 from datetime import datetime
+from time import sleep
+import random
 
 from PIL import Image
 from maa.agent.agent_server import AgentServer
@@ -151,4 +153,28 @@ class ResetCount(CustomAction):
         node_name = param.get("node_name", None)
         Count.reset_count(node_name)
         logger.info("#ResetCount#：重置 Node 计数器")
+        return CustomAction.RunResult(success=True)
+
+
+@AgentServer.custom_action("RandomSleep")
+class RandomSleep(CustomAction):
+    """ """
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> CustomAction.RunResult:
+
+        param = json.loads(argv.custom_action_param)
+        t = random.gauss(2, 0.5)
+        if t < 0.5:
+            t = 30
+        if t < 0.8:
+            t = 20
+        if t < 1:
+            t = 10
+        # print("sleep: ", t)
+        sleep(t)
+
         return CustomAction.RunResult(success=True)

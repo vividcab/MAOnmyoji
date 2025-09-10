@@ -1,0 +1,65 @@
+{
+	"TASK-检测999副本界面": {
+		"recognition": "OCR",
+		"roi": [81, 6, 144, 58],
+		"expected": "巨兽",
+		"action": "DoNothing",
+		"next": ["检测挑战次数是否超过设置的次数-999"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"检测挑战次数是否超过设置的次数-999": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 10
+		},
+		"action": "Custom",
+		"custom_action": "RandomSleep",
+		"next": ["检测挑战按钮然后点击-999"]
+	},
+	"检测挑战按钮然后点击-999": {
+		"recognition": "OCR",
+		"roi": [1128, 594, 107, 62],
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 2500,
+		"next": ["检测已经进入战斗并且加载完毕-999"],
+		"rate_limit": 1000,
+		"timeout": 10000,
+		"on_error": []
+	},
+	"检测已经进入战斗并且加载完毕-999": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["检测已经开始战斗等待X秒-999"],
+		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"检测已经开始战斗等待X秒-999": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 7000,
+		"next": ["TASK-检测999副本界面"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等1秒",
+			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
+		],
+		"rate_limit": 1200,
+		"timeout": 6000,
+		"on_error": []
+	},
+	"ACT-检测还在战斗中再等1秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 1200
+	}
+}

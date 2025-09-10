@@ -24,18 +24,18 @@
 		"post_delay": 3000,
 		"next": ["检测已经进入战斗并且加载完毕"],
 		"rate_limit": 1500,
-		"timeout": 5000,
+		"timeout": 15000,
 		"on_error": []
 	},
 	"检测已经进入战斗并且加载完毕": {
 		"recognition": "TemplateMatch",
-		"roi": [0, 0, 100, 100],
-		"template": "通用界面按钮/左上角U形退出按钮.png",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
 		"action": "DoNothing",
 		"post_delay": 500,
 		"next": ["检测已经开始战斗等待X秒"],
 		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
-		"timeout": 5000,
+		"timeout": 15000,
 		"on_error": []
 	},
 	"ACT-检测右下角有准备按钮就点击一下": {
@@ -58,7 +58,7 @@
 			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
 		],
 		"rate_limit": 1000,
-		"timeout": 6000,
+		"timeout": 10000,
 		"on_error": []
 	},
 	"ACT-检测还在战斗中再等3秒": {
@@ -77,8 +77,8 @@
 	},
 	"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕": {
 		"recognition": "TemplateMatch",
-		"roi": [0, 0, 100, 100],
-		"template": "通用界面按钮/左上角U形退出按钮.png",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
 		"inverse": true,
 		"action": "Click",
 		"target": [823, 471, 312, 146],
