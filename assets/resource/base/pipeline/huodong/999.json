@@ -25,6 +25,7 @@
 		"action": "Click",
 		"post_delay": 2500,
 		"next": ["检测已经进入战斗并且加载完毕-999"],
+		"interrupt": ["ACT-检测到悬赏协作并处理"],
 		"rate_limit": 1000,
 		"timeout": 10000,
 		"on_error": []
@@ -36,7 +37,7 @@
 		"action": "DoNothing",
 		"post_delay": 500,
 		"next": ["检测已经开始战斗等待X秒-999"],
-		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
 		"timeout": 5000,
 		"on_error": []
 	},
@@ -49,6 +50,7 @@
 		"next": ["TASK-检测999副本界面"],
 		"interrupt": [
 			"ACT-检测还在战斗中再等1秒",
+			"ACT-检测到悬赏协作并处理",
 			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
 		],
 		"rate_limit": 1200,

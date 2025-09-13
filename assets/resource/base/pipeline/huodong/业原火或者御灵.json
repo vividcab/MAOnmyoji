@@ -1,8 +1,9 @@
 {
-	"TASK-检测业原火副本界面": {
+	"TASK-检测业原火或者御灵副本界面": {
 		"recognition": "TemplateMatch",
-		"roi": [543, 163, 86, 82],
-		"template": "组队战斗/业原火.png",
+		"roi": [1118, 210, 70, 70],
+		"template": "组队战斗/右侧边栏御魂图标.png",
+		"threshold": 0.5,
 		"action": "DoNothing",
 		"next": ["检测挑战次数是否超过设置的次数"],
 		"timeout": 300,
@@ -23,8 +24,9 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["检测已经进入战斗并且加载完毕"],
+		"interrupt": ["ACT-检测到悬赏协作并处理"],
 		"rate_limit": 1500,
-		"timeout": 15000,
+		"timeout": 20000,
 		"on_error": []
 	},
 	"检测已经进入战斗并且加载完毕": {
@@ -34,7 +36,7 @@
 		"action": "DoNothing",
 		"post_delay": 500,
 		"next": ["检测已经开始战斗等待X秒"],
-		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
 		"timeout": 15000,
 		"on_error": []
 	},
@@ -50,14 +52,15 @@
 		"roi": [17, 630, 85, 62],
 		"expected": "自动",
 		"action": "DoNothing",
-		"post_delay": 17000,
-		"next": ["TASK-检测业原火副本界面"],
+		"post_delay": 8000,
+		"next": ["TASK-检测业原火或者御灵副本界面"],
 		"interrupt": [
 			"ACT-检测还在战斗中再等3秒",
 			"ACT-检测有御魂满了的弹窗就关闭",
+			"ACT-检测到悬赏协作并处理",
 			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
 		],
-		"rate_limit": 1000,
+		"rate_limit": 1200,
 		"timeout": 10000,
 		"on_error": []
 	},
@@ -81,7 +84,7 @@
 		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
 		"inverse": true,
 		"action": "Click",
-		"target": [952, 250, 312, 250],
+		"target": [1000, 350, 110, 180],
 		"post_delay": 800
 	}
 }
