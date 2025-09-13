@@ -98,5 +98,28 @@
 		],
 		"rate_limit": 1000,
 		"timeout": 5000
+	},
+
+	"ACT-检测到悬赏协作并处理": {
+		"recognition": "TemplateMatch",
+		"roi": [516, 153, 38, 38],
+		"template": "通用界面按钮/检测悬赏协作弹窗.png",
+		"action": "DoNothing",
+		"next": ["检测到是勾协就接", "拒绝接受协作"],
+		"timeout": 2000,
+		"on_error": ["ACT-检测各类右上部分叉号并点一下"]
+	},
+	"检测到是勾协就接": {
+		"recognition": "TemplateMatch",
+		"roi": [556, 452, 165, 72],
+		"template": "签到/勾协.png",
+		"action": "Click",
+		"target": [827, 395, 53, 44],
+		"post_delay": 1000
+	},
+	"拒绝接受协作": {
+		"action": "Click",
+		"target": [825, 497, 52, 44],
+		"post_delay": 1000
 	}
 }
