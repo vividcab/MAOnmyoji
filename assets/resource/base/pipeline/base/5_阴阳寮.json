@@ -97,7 +97,9 @@
 	"B-从阴阳寮大厅进入结界": {
 		"next": ["检测小白头顶换肤按钮"],
 		"interrupt": ["检测点击结界图标"],
-		"rate_limit": 3000
+		"rate_limit": 3000,
+		"timeout": 10000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测小白头顶换肤按钮": {
 		"recognition": "TemplateMatch",
