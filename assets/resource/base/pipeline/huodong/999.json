@@ -16,7 +16,10 @@
 		},
 		"action": "Custom",
 		"custom_action": "RandomSleep",
-		"next": ["检测挑战按钮然后点击-999"]
+		"next": ["检测挑战按钮然后点击-999"],
+		"focus": {
+			"succeeded": "未达到预设次数，继续下一次挑战"
+		}
 	},
 	"检测挑战按钮然后点击-999": {
 		"recognition": "OCR",
