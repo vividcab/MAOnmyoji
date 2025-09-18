@@ -28,6 +28,12 @@
 			"doc": "包含任务：\nENTRY-登录某角色\n7-查看悬赏\nENTRY-逢魔任务"
 		},
 		{
+			"name": "多角色-活动爬塔",
+			"entry": "ENTRY-多角色任务模板",
+			"advanced": ["活动爬塔-指定角色名列表"],
+			"doc": "包含任务：\nENTRY-登录某角色\n任务入口-从庭院进入雪御前活动爬塔探索页面\nHD-活动探索爬塔任务入口\n任务出口-从活动页面回到庭院\nENTRY-退出登录某角色"
+		},
+		{
 			"name": "启动游戏",
 			"entry": "TASK-启动游戏到登录界面"
 		},
@@ -111,6 +117,25 @@
 							{"taskname": "ENTRY-登录某角色", "wait": 2},
 							{"taskname": "7-查看悬赏", "wait": 0.5},
 							{"taskname": "ENTRY-逢魔任务", "wait": 0.5}
+						]
+					}
+				}
+			}
+		},
+		"活动爬塔-指定角色名列表": {
+			"field": "指定角色名列表",
+			"type": "string",
+			"default": "ALL,",
+			"pipeline_override": {
+				"ENTRY-多角色任务模板": {
+					"custom_action_param": {
+						"rolenames": "{指定角色名列表}",
+						"tasks": [
+							{"taskname": "ENTRY-登录某角色", "wait": 2},
+							{"taskname": "任务入口-从庭院进入雪御前活动爬塔探索页面", "wait": 0.5},
+							{"taskname": "HD-活动探索爬塔任务入口", "wait": 0.5},
+							{"taskname": "任务出口-从活动页面回到庭院", "wait": 0.5},
+							{"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
 						]
 					}
 				}
