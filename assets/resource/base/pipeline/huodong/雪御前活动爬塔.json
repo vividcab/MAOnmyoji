@@ -8,10 +8,28 @@
 		"post_delay": 1000,
 		"next": [
 			"HD-END检测没有门票了停止任务",
+			"HD-0检测没设置自选御魂设置一下",
 			"HD-1检测999挑战按钮并点击"
 		],
 		"interrupt": ["ACT-检测各类右上部分叉号并点一下"],
 		"rate_limit": 2000
+	},
+	"HD-0检测没设置自选御魂设置一下": {
+		"recognition": "TemplateMatch",
+		"roi": [23, 482, 230, 56],
+		"template": "雪御前活动爬塔/没设置自选御魂.png",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["检测提交自选按钮并点击"]
+	},
+	"检测提交自选按钮并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [1000, 573, 62, 63],
+		"template": "雪御前活动爬塔/提交自选御魂.png",
+		"action": "Click",
+		"post_delay": 1200,
+		"next": ["HD-1检测999挑战按钮并点击"],
+		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定"]
 	},
 	"HD-1检测999挑战按钮并点击": {
 		"recognition": "OCR",
@@ -20,7 +38,7 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["HD-2检测已经进入999战斗并且加载完毕", "HD-END检测到购买门票弹窗"],
-		"interrupt": ["ACT-检测到悬赏协作并处理"],
+		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定", "ACT-检测到悬赏协作并处理"],
 		"rate_limit": 1000,
 		"timeout": 10000,
 		"on_error": []

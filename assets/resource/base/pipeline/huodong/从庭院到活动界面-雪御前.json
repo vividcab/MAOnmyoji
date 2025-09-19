@@ -14,7 +14,7 @@
 	},
 	"检测活动入口然后点击进入": {
 		"recognition": "TemplateMatch",
-		"roi": [397, 334, 73, 117],
+		"roi": [363, 262, 153, 60],
 		"template": "雪御前活动爬塔/庭院中活动快捷入口.png",
 		"action": "Click",
 		"post_delay": 5000,
@@ -50,8 +50,43 @@
 		"roi": [1174, 630, 69, 53],
 		"template": "雪御前活动爬塔/活动大地图右下角按钮.png",
 		"action": "DoNothing",
-		"next": ["检测已经处于活动爬塔界面"],
+		"next": ["检测到巫女助战可以点击", "检测已经处于活动爬塔界面"],
 		"interrupt": ["ACT-检测战斗驻守平安并点击"]
+	},
+	"检测到巫女助战可以点击": {
+		"recognition": "OCR",
+		"roi": [10, 94, 184, 370],
+		"expected": "巫女助战",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测到花120体力助力巫女"]
+	},
+	"检测到花120体力助力巫女": {
+		"recognition": "TemplateMatch",
+		"roi": [842, 530, 48, 48],
+		"template": "雪御前活动爬塔/助力巫女.png",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测到上滑拔剑"]
+	},
+	"检测到上滑拔剑": {
+		"recognition": "OCR",
+		"roi": [644, 642, 205, 60],
+		"expected": "上滑",
+		"action": "Swipe",
+		"begin": [156, 510, 50, 44],
+		"end": [138, 232, 71, 59],
+		"duration": 2000,
+		"post_delay": 5000,
+		"next": ["检测收下巫女奖励"]
+	},
+	"检测收下巫女奖励": {
+		"recognition": "OCR",
+		"roi": [822, 517, 94, 51],
+		"expected": "收下",
+		"action": "Click",
+		"post_delay": 1200,
+		"next": ["检测已经处于活动地图界面"]
 	},
 	"ACT-检测战斗驻守平安并点击": {
 		"recognition": "OCR",
