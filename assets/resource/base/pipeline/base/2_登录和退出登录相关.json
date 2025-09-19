@@ -86,8 +86,8 @@
 			"rolename": "角色昵称"
 		},
 		"next": ["TASK-A-3-0识别到当前账号就是要登录的账号", "TASK-A-3-1检测已经打开了账号选择列表开始查找账号"],
-		"interrupt": ["ACT-点击一下账号选择栏"],
-		"rate_limit": 1500
+		"interrupt": ["ACT-检测到没打开账号选择栏点击一下账号选择栏"],
+		"rate_limit": 2000
 	},
 	"TASK-A-3-0识别到当前账号就是要登录的账号": {
 		"recognition": "OCR",
@@ -98,10 +98,15 @@
 		"post_delay": 500,
 		"next": ["TASK-A-5检测登录按钮并点击"]
 	},
-	"ACT-点击一下账号选择栏": {
+	"ACT-检测到没打开账号选择栏点击一下账号选择栏": {
+		"recognition": "ColorMatch",
+		"roi": [790, 440, 10, 10],
+		"upper": [255, 255, 255],
+		"lower": [250, 250, 250],
+		"inverse": true,
 		"action": "Click",
 		"target": [499, 296, 283, 67],
-		"post_delay": 1500
+		"post_delay": 2000
 	},
 	"TASK-A-3-1检测已经打开了账号选择列表开始查找账号": {
 		"_doc": "识别原本红色的登录按钮位置如果是白色，证明账号选择栏已经打开",
@@ -145,7 +150,16 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["TASK-A-6检测平台按钮并点击", "TASK-A-5检测登录按钮并点击"],
+		"interrupt": ["INT-A-6-0检测到切换账号弹窗点击叉号"],
 		"rate_limit": 3000
+	},
+	"INT-A-6-0检测到切换账号弹窗点击叉号": {
+		"recognition": "OCR",
+		"roi": [940, 184, 127, 49],
+		"expected": "切换账号",
+		"action": "Click",
+		"target": [1053, 114, 20, 20],
+		"post_delay": 1200
 	},
 	"TASK-A-6检测平台按钮并点击": {
 		"recognition": "TemplateMatch",
@@ -438,7 +452,7 @@
 		"roi_offset": [-200, -200, 400, 400],
 		"template": "庭院/用户中心.png",
 		"action": "Click",
-		"post_delay": 1000
+		"post_delay": 1500
 	},
 	"TASK-B-2检测切换账号按钮并点击回到登录界面": {
 		"recognition": "OCR",
