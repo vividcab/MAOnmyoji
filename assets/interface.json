@@ -31,6 +31,7 @@
 			"name": "多角色-活动爬塔",
 			"entry": "ENTRY-多角色任务模板",
 			"advanced": ["活动爬塔-指定角色名列表"],
+			"option": ["是否只拔剑不刷门票"],
 			"doc": "包含任务：\nENTRY-登录某角色\n任务入口-从庭院进入雪御前活动爬塔探索页面\nHD-活动探索爬塔任务入口\n任务出口-从活动页面回到庭院\nENTRY-退出登录某角色"
 		},
 		{
@@ -262,6 +263,13 @@
 			"cases": [
 				{"name": "是", "pipeline_override": {}},
 				{"name": "否", "pipeline_override": {"检测挑战次数是否超过设置的次数-999": {"focus": {}}}}
+			],
+			"default_case": "是"
+		},
+		"是否只拔剑不刷门票": {
+			"cases": [
+				{"name": "是", "pipeline_override": {"HD-活动探索爬塔任务入口": {"enabled": false}}},
+				{"name": "否", "pipeline_override": {}}
 			],
 			"default_case": "是"
 		}
