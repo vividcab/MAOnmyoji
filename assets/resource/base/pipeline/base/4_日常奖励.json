@@ -153,11 +153,11 @@
 		"roi": [84, 613, 71, 59],
 		"template": "签到/全部领取.png",
 		"action": "Click",
-		"next": ["确定领取"]
+		"next": ["确定领取或御魂爆仓确认按钮"]
 	},
-	"确定领取": {
+	"确定领取或御魂爆仓确认按钮": {
 		"recognition": "TemplateMatch",
-		"roi": [730, 548, 85, 51],
+		"roi": [585, 397, 276, 193],
 		"template": "签到/确定领取全部邮件.png",
 		"action": "Click",
 		"post_delay": 1000,
