@@ -85,7 +85,8 @@
 		"recognition": "TemplateMatch",
 		"roi": [680, 220, 240, 100],
 		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
-		"threshold": [0.9, 0.9]
+		"threshold": [0.9, 0.9],
+		"next": ["ACT-检测带取消按钮的弹窗并点击取消"]
 	},
 
 	"ACT-从组队状态回到庭院": {
