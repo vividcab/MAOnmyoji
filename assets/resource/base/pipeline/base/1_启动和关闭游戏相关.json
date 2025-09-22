@@ -1,9 +1,9 @@
 {
 	"STATUS-处于模拟器桌面": {
-		"recognition": "TemplateMatch",
-		"roi": [1048, 353, 47, 52],
-		"template": "模拟器/阴阳师app图标.png",
-		"threshold": 0.6
+		"recognition": "OCR",
+		"roi": [761, 200, 76, 30],
+		"expected": "游戏中心",
+		"only_rec": true
 	},
 	"STATUS-检测游戏已经启动到登录界面了": {
 		"recognition": "TemplateMatch",

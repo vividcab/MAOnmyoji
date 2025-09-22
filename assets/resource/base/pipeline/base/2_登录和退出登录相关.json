@@ -14,10 +14,10 @@
 		"_comment": "interrupt 不对游戏加载等待时间进行处理，有任务超时兜底"
 	},
 	"INT-检测到在游戏界面中就等2秒-Count最多3次": {
-		"recognition": "TemplateMatch",
-		"roi": [1048, 353, 47, 52],
-		"template": "模拟器/阴阳师app图标.png",
-		"threshold": 0.8,
+		"recognition": "OCR",
+		"roi": [761, 200, 76, 30],
+		"expected": "游戏中心",
+		"only_rec": true,
 		"inverse": true,
 		"next": ["Count-登录前等待的次数-最多3次", "Disable-停止登录前等待"]
 	},
