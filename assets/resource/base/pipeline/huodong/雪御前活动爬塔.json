@@ -20,6 +20,47 @@
 		"template": "雪御前活动爬塔/没设置自选御魂.png",
 		"action": "Click",
 		"post_delay": 1500,
+		"next": ["在选择御魂弹窗检测是否没有选完4种御魂"],
+		"timeout": 2000,
+		"on_error": ["检测提交自选按钮并点击"]
+	},
+	"在选择御魂弹窗检测是否没有选完4种御魂": {
+		"recognition": "TemplateMatch",
+		"roi": [268, 579, 369, 49],
+		"template": "雪御前活动爬塔/没设置自选御魂2.png",
+		"action": "DoNothing",
+		"next": ["选择自选御魂1并点击"]
+	},
+	"选择自选御魂1并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [285, 146, 735, 370],
+		"template": "雪御前活动爬塔/1隐念.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["选择自选御魂2并点击"]
+	},
+	"选择自选御魂2并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [285, 146, 735, 370],
+		"template": "雪御前活动爬塔/2网切.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["选择自选御魂3并点击"]
+	},
+	"选择自选御魂3并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [285, 146, 735, 370],
+		"template": "雪御前活动爬塔/3海月.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["选择自选御魂4并点击"]
+	},
+	"选择自选御魂4并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [285, 146, 735, 370],
+		"template": "雪御前活动爬塔/4遗念火.png",
+		"action": "Click",
+		"post_delay": 800,
 		"next": ["检测提交自选按钮并点击"]
 	},
 	"检测提交自选按钮并点击": {
