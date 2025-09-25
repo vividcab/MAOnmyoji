@@ -268,7 +268,7 @@
 		},
 		"是否只拔剑不刷门票": {
 			"cases": [
-				{"name": "是", "pipeline_override": {"HD-活动探索爬塔任务入口": {"enabled": false}}},
+				{"name": "是", "pipeline_override": {"HD-END检测没有门票了停止任务": {"expected": "0"}}},
 				{"name": "否", "pipeline_override": {}}
 			],
 			"default_case": "是"

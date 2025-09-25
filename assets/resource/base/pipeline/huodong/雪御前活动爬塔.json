@@ -58,7 +58,7 @@
 	"选择自选御魂4并点击": {
 		"recognition": "TemplateMatch",
 		"roi": [285, 146, 735, 370],
-		"template": ["雪御前活动爬塔/4遗念火.png", "雪御前活动爬塔/4火灵.png"],
+		"template": ["雪御前活动爬塔/4遗念火.png", "雪御前活动爬塔/4火灵.png", "雪御前活动爬塔/4油赤子.png"],
 		"action": "Click",
 		"post_delay": 800,
 		"next": ["检测提交自选按钮并点击"]
@@ -118,7 +118,7 @@
 		"only_rec": true,
 		"expected": "^0$",
 		"action": "DoNothing",
-		"next": []
+		"next": ["REC-截个图记录一下爬塔状态"]
 	},
 	"HD-END检测到购买门票弹窗": {
 		"recognition": "TemplateMatch",
@@ -126,6 +126,12 @@
 		"template": "雪御前活动爬塔/购买门票按钮.png",
 		"action": "Click",
 		"target": "HD-活动探索爬塔任务入口",
+		"next": []
+	},
+	"REC-截个图记录一下爬塔状态": {
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/爬塔记录"},
 		"next": []
 	}
 }
