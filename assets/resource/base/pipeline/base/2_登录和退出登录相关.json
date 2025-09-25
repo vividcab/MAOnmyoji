@@ -51,8 +51,12 @@
 		"only_rec": true,
 		"action": "Click",
 		"target": [1209, 226, 35, 30],
-		"post_delay": 1000,
-		"next": ["TASK-A-2检测到登录框", "TASK-A-1检测到用户中心弹窗并点击切换账号按钮"],
+		"post_delay": 2000,
+		"next": [
+			"TASK-A-2检测到登录框",
+			"TASK-A-1检测到用户中心弹窗并点击切换账号按钮",
+			"TASK-A-0检测到没有任何弹窗的空的游戏登录界面"
+		],
 		"rate_limit": 1000,
 		"timeout": 5000
 	},
@@ -344,7 +348,8 @@
 				}
 			}
 		},
-		"focus": {"succeeded": "[color:red]可能网络故障或游戏服务器维护，重复点击进入游戏4次均为成功[/color]"}
+		"next": ["TASK-重新启动游戏"],
+		"focus": {"succeeded": "[color:red]可能网络故障或游戏服务器维护，重复点击进入游戏4次均未成功[/color]"}
 	},
 	"ACT-检测到还在加载中等待3秒": {
 		"recognition": "OCR",
