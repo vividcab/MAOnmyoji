@@ -126,7 +126,7 @@
 		"template": "雪御前活动爬塔/购买门票按钮.png",
 		"action": "Click",
 		"target": "HD-活动探索爬塔任务入口",
-		"next": []
+		"next": ["REC-截个图记录一下爬塔状态"]
 	},
 	"REC-截个图记录一下爬塔状态": {
 		"action": "Custom",

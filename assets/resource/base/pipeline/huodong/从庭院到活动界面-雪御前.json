@@ -78,16 +78,27 @@
 		"end": [138, 232, 71, 59],
 		"duration": 2000,
 		"post_delay": 5000,
-		"next": ["检测收下巫女奖励"]
+		"next": ["截图记录然后检测收下巫女奖励"]
 	},
-	"检测收下巫女奖励": {
+	"截图记录然后检测收下巫女奖励": {
+		"recognition": "OCR",
+		"roi": [822, 517, 94, 51],
+		"expected": "收下",
+		"action": "Custom",
+		"custom_action": "Screenshot",
+		"custom_action_param": {"save_dir": "user_data/爬塔记录"},
+		"post_delay": 500,
+		"next": ["收下巫女奖励"]
+	},
+	"收下巫女奖励": {
 		"recognition": "OCR",
 		"roi": [822, 517, 94, 51],
 		"expected": "收下",
 		"action": "Click",
 		"post_delay": 1200,
-		"next": ["检测已经处于活动地图界面"]
+		"next": ["检测已经处于活动爬塔界面"]
 	},
+
 	"ACT-检测战斗驻守平安并点击": {
 		"recognition": "OCR",
 		"roi": [10, 94, 184, 370],
