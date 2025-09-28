@@ -20,7 +20,10 @@ class Screenshot(CustomAction):
 
     参数格式:
     {
-        "save_dir": "保存截图的目录路径"
+        "save_dir": "保存截图的目录路径",
+        "format": "jpeg 或 png，默认 jpeg",
+        "quality": 70,  # jpeg 压缩质量（1-95），仅在 format=jpeg 时生效
+        "gray": false   # 是否转为灰度图
     }
     """
 
@@ -50,15 +53,32 @@ class Screenshot(CustomAction):
 
         img = Image.fromarray(rgb_array)
 
-        save_dir = json.loads(argv.custom_action_param)["save_dir"]
+        # 解析参数
+        params = json.loads(argv.custom_action_param)
+        save_dir = params["save_dir"]
         os.makedirs(save_dir, exist_ok=True)
 
+        img_format = params.get("format", "jpeg").lower()
+        quality = int(params.get("quality", 70))
+        gray = bool(params.get("gray", False))
+
+        # 灰度化
+        if gray:
+            img = img.convert("L")
+
+        # 文件名
         node_info = context.get_node_data("重写账号角色信息")
         account_info_dict = node_info["action"]["param"]["custom_action_param"]
         now = datetime.now()
-        save_file_path = f"{save_dir}/{self._get_format_timestamp(now)}-{account_info_dict['rolename']}.png"
+        ext = "jpg" if img_format == "jpeg" else "png"
+        save_file_path = f"{save_dir}/{self._get_format_timestamp(now)}-{account_info_dict['rolename']}.{ext}"
 
-        img.save(save_file_path)
+        # 保存
+        if img_format == "jpeg":
+            img.save(save_file_path, "JPEG", quality=quality, optimize=True)
+        else:
+            img.save(save_file_path, "PNG", optimize=True)
+
         logger.info(f"截图保存至 {save_file_path}")
 
         context.tasker.get_task_detail(argv.task_detail.task_id)
