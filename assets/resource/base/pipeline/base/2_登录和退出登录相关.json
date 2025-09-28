@@ -128,7 +128,7 @@
 		"roi": [461, 283, 367, 315],
 		"expected": "账号信息--在代码里设置",
 		"action": "Click",
-		"post_delay": 1000,
+		"post_delay": 1200,
 		"next": ["TASK-A-5检测登录按钮并点击"]
 	},
 	"TASK-A-END1检测划到底部了": {
@@ -136,8 +136,9 @@
 		"roi": [461, 546, 138, 46],
 		"expected": ["添加新账号"],
 		"only_rec": true,
-		"action": "DoNothing",
-		"next": []
+		"action": "Click",
+		"target": [200, 150, 50, 50],
+		"next": ["重写账号角色信息"]
 	},
 	"ACT-在账号选择页下划": {
 		"action": "Swipe",
@@ -193,7 +194,8 @@
 		"recognition": "TemplateMatch",
 		"roi": [742, 594, 89, 47],
 		"template": "平台区服/接受用户协议与隐私政策弹窗.png",
-		"action": "Click"
+		"action": "Click",
+		"post_delay": 1000
 	},
 	"TASK-A-7-2检测切换区服按钮并点击": {
 		"recognition": "OCR",
@@ -254,7 +256,7 @@
 		"roi": [239, 456, 796, 118],
 		"template": "平台区服/稚羽萌心.png",
 		"action": "Click",
-		"post_delay": 1000,
+		"post_delay": 1500,
 		"next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
 		"focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
 	},
@@ -447,9 +449,9 @@
 		"roi_offset": [-200, -200, 400, 400],
 		"template": "庭院/用户中心.png",
 		"action": "Click",
-		"post_delay": 1200,
+		"post_delay": 1500,
 		"next": ["TASK-B-2检测切换账号按钮并点击回到登录界面"],
-		"interrupt": ["ACT-检测点击一下用户中心按钮"]
+		"interrupt": ["ACT-检测点击一下用户中心按钮", "INT-检测到意外点开了工具箱点左上角叉号关闭"]
 	},
 	"ACT-检测点击一下用户中心按钮": {
 		"recognition": "TemplateMatch",
@@ -459,12 +461,19 @@
 		"action": "Click",
 		"post_delay": 1500
 	},
+	"INT-检测到意外点开了工具箱点左上角叉号关闭": {
+		"recognition": "TemplateMatch",
+		"roi": [18, 52, 47, 48],
+		"template": "平台区服/百宝箱左上角叉号.png",
+		"action": "Click",
+		"post_delay": 1000
+	},
 	"TASK-B-2检测切换账号按钮并点击回到登录界面": {
 		"recognition": "OCR",
 		"roi": [940, 184, 127, 49],
 		"expected": "切换账号",
 		"action": "Click",
-		"post_delay": 2000,
+		"post_delay": 3000,
 		"next": ["STATUS-检测游戏已经启动到登录界面了"],
 		"interrupt": ["ACT-检测到账号登录弹窗点击叉号", "ACT-检测点击一下切换账号按钮"],
 		"rate_limit": 3000
