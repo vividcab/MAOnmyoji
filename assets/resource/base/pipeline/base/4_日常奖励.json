@@ -213,9 +213,9 @@
 		"template": "签到/商店图标.png",
 		"threshold": 0.4,
 		"action": "Click",
-		"post_delay": 1000,
+		"post_delay": 1500,
 		"next": ["检测点击礼包屋"],
-		"timeout": 4000,
+		"timeout": 5000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测点击礼包屋": {
@@ -230,7 +230,7 @@
 	},
 	"检测点击日常": {
 		"recognition": "TemplateMatch",
-		"roi": [1181, 85, 55, 420],
+		"roi": [1181, 85, 55, 480],
 		"template": "签到/日常.png",
 		"action": "Click",
 		"post_delay": 1000,
@@ -293,9 +293,9 @@
 		"template": "签到/商店图标.png",
 		"threshold": 0.4,
 		"action": "Click",
-		"post_delay": 1000,
+		"post_delay": 1500,
 		"next": ["检测神秘商店点击"],
-		"timeout": 2000,
+		"timeout": 5000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
 	},
 	"检测神秘商店点击": {
@@ -303,7 +303,7 @@
 		"roi": [22, 79, 79, 476],
 		"template": "签到/神秘商店.png",
 		"action": "Click",
-		"post_delay": 1200,
+		"post_delay": 1500,
 		"next": ["神秘商店截第一张图"]
 	},
 	"神秘商店截第一张图": {
