@@ -96,7 +96,8 @@
 		"expected": "收下",
 		"action": "Click",
 		"post_delay": 1200,
-		"next": ["检测已经处于活动爬塔界面"]
+		"next": ["检测已经处于活动爬塔界面"],
+		"interrupt": ["ACT-检测战斗驻守平安并点击"]
 	},
 
 	"ACT-检测战斗驻守平安并点击": {
