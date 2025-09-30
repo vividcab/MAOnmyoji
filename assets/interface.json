@@ -35,6 +35,13 @@
 			"doc": "包含任务：\nENTRY-登录某角色\n任务入口-从庭院进入雪御前活动爬塔探索页面\nHD-活动探索爬塔任务入口\n任务出口-从活动页面回到庭院\nENTRY-退出登录某角色"
 		},
 		{
+			"name": "多角色-自动对弈竞猜下注梭哈",
+			"entry": "ENTRY-多角色任务模板",
+			"advanced": ["对弈竞猜-指定角色名列表"],
+			"option": ["正压还是反压"],
+			"doc": "包含任务：\nENTRY-登录某角色\nENTRY-对弈竞猜任务（下完注会自动退出登录）"
+		},
+		{
 			"name": "当前角色一键活动爬塔",
 			"entry": "ENTRY-当前角色一键爬塔"
 		},
@@ -146,6 +153,22 @@
 							{"taskname": "HD-活动探索爬塔任务入口", "wait": 0.5},
 							{"taskname": "任务出口-从活动页面回到庭院", "wait": 0.5},
 							{"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+						]
+					}
+				}
+			}
+		},
+		"对弈竞猜-指定角色名列表": {
+			"field": "指定角色名列表",
+			"type": "string",
+			"default": "ALL,",
+			"pipeline_override": {
+				"ENTRY-多角色任务模板": {
+					"custom_action_param": {
+						"rolenames": "{指定角色名列表}",
+						"tasks": [
+							{"taskname": "ENTRY-登录某角色", "wait": 1},
+							{"taskname": "ENTRY-对弈竞猜任务", "wait": 1}
 						]
 					}
 				}
@@ -273,10 +296,22 @@
 		},
 		"是否只拔剑不刷门票": {
 			"cases": [
-				{"name": "是", "pipeline_override": {"HD-END检测没有门票了停止任务": {"expected": "0"}}},
+				{"name": "是", "pipeline_override": {"HD-活动探索爬塔任务入口": {"next": []}}},
 				{"name": "否", "pipeline_override": {}}
 			],
 			"default_case": "是"
+		},
+		"正压还是反压": {
+			"cases": [
+				{"name": "正压", "pipeline_override": {}},
+				{
+					"name": "反压",
+					"pipeline_override": {
+						"J-4检测双方押注人数然后下注": {"custom_recognition_param": {"zhengya": false}}
+					}
+				}
+			],
+			"default_case": "正压"
 		}
 	}
 }
