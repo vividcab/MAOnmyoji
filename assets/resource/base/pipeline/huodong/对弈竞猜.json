@@ -10,7 +10,7 @@
 		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
 		"action": "Click",
 		"post_delay": 2000,
-		"next": ["J-1检测已经打开了对弈竞猜界面"],
+		"next": ["J-1检测已经打开了对弈竞猜界面", "TASK-J-0从庭院进入町中竞猜"],
 		"interrupt": ["J-ACT点击一下町中青蛙瓷器所在位置"]
 	},
 	"J-ACT点击一下町中青蛙瓷器所在位置": {
@@ -29,8 +29,21 @@
 		"expected": "对弈竞猜",
 		"action": "DoNothing",
 		"post_delay": 500,
-		"next": ["J-2检测到上一局竞猜成功并领奖", "J-2检测到上一局的竞猜结果并截图保存", "J-3检测到押注剩余时间"],
+		"next": [
+			"J-END检测到已经竞猜就结束任务",
+			"J-2检测到上一局竞猜成功并领奖",
+			"J-2检测到上一局的竞猜结果并截图保存",
+			"J-3检测到押注剩余时间"
+		],
 		"rate_limit": 2000
+	},
+	"J-END检测到已经竞猜就结束任务": {
+		"recognition": "TemplateMatch",
+		"roi": [91, 352, 1114, 77],
+		"template": "对弈竞猜/已经竞猜金币图标.png",
+		"action": "DoNothing",
+		"next": ["TASK-B-1检测用户中心按钮并点击"],
+		"interrupt": ["J-ACT检测点击一下左上角返回按钮", "ACT-点击庭院左上角头像"]
 	},
 	"J-2检测到上一局竞猜成功并领奖": {
 		"recognition": "TemplateMatch",
@@ -38,14 +51,14 @@
 		"template": "对弈竞猜/竞猜成功.png",
 		"action": "Click",
 		"target": [610, 410, 63, 38],
-		"post_delay": 1000,
+		"post_delay": 1500,
 		"next": ["J-2检测到上一局的竞猜结果并截图保存"],
-		"interrupt": ["J-ACT点击一下顶部中间空白处"]
+		"interrupt": ["J-ACT点击一下中间奖励宝箱"]
 	},
-	"J-ACT点击一下顶部中间空白处": {
+	"J-ACT点击一下中间奖励宝箱": {
 		"action": "Click",
-		"target": "J-1检测已经打开了对弈竞猜界面",
-		"post_delay": 800
+		"target": [609, 409, 64, 39],
+		"post_delay": 1500
 	},
 	"J-2-1领取竞猜成功奖励": {
 		"action": "Click",
