@@ -29,8 +29,28 @@
 		"expected": "对弈竞猜",
 		"action": "DoNothing",
 		"post_delay": 500,
-		"next": ["J-2检测到上一局的竞猜结果并截图保存", "J-3检测到押注剩余时间"],
+		"next": ["J-2检测到上一局竞猜成功并领奖", "J-2检测到上一局的竞猜结果并截图保存", "J-3检测到押注剩余时间"],
 		"rate_limit": 2000
+	},
+	"J-2检测到上一局竞猜成功并领奖": {
+		"recognition": "TemplateMatch",
+		"roi": [593, 296, 90, 58],
+		"template": "对弈竞猜/竞猜成功.png",
+		"action": "Click",
+		"target": [610, 410, 63, 38],
+		"post_delay": 1000,
+		"next": ["J-2检测到上一局的竞猜结果并截图保存"],
+		"interrupt": ["J-ACT点击一下顶部中间空白处"]
+	},
+	"J-ACT点击一下顶部中间空白处": {
+		"action": "Click",
+		"target": "J-1检测已经打开了对弈竞猜界面",
+		"post_delay": 800
+	},
+	"J-2-1领取竞猜成功奖励": {
+		"action": "Click",
+		"target": [610, 410, 63, 38],
+		"post_delay": 0
 	},
 	"J-2检测到上一局的竞猜结果并截图保存": {
 		"recognition": "OCR",
@@ -43,6 +63,7 @@
 		"next": ["J-3检测到押注剩余时间"],
 		"interrupt": ["J-ACT点击下一局按钮"]
 	},
+
 	"J-ACT点击下一局按钮": {
 		"action": "Click",
 		"target": "J-2检测到上一局的竞猜结果并截图保存",
