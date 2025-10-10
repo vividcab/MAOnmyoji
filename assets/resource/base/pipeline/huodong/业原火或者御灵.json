@@ -86,5 +86,14 @@
 		"action": "Click",
 		"target": [1000, 350, 110, 180],
 		"post_delay": 800
+	},
+	"ACT-检测不到左上角返回按钮之后就模拟点击一下左上角": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [20, 20, 120, 70],
+		"post_delay": 800
 	}
 }

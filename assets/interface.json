@@ -31,24 +31,11 @@
 			"name": "多角色-活动爬塔",
 			"entry": "ENTRY-多角色任务模板",
 			"advanced": ["活动爬塔-指定角色名列表"],
-			"option": ["是否只拔剑不刷门票"],
 			"doc": "包含任务：\nENTRY-登录某角色\n任务入口-从庭院进入雪御前活动爬塔探索页面\nHD-活动探索爬塔任务入口\n任务出口-从活动页面回到庭院\nENTRY-退出登录某角色"
-		},
-		{
-			"name": "多角色-自动对弈竞猜下注梭哈",
-			"entry": "ENTRY-多角色任务模板",
-			"advanced": ["对弈竞猜-指定角色名列表"],
-			"option": ["正压还是反压"],
-			"doc": "包含任务：\nENTRY-登录某角色\nENTRY-对弈竞猜任务（下完注会自动退出登录）"
 		},
 		{
 			"name": "当前角色一键活动爬塔",
 			"entry": "ENTRY-当前角色一键爬塔"
-		},
-		{
-			"name": "当前角色-崽战活动退治300体力",
-			"entry": "HD-0崽战退治任务入口",
-			"doc": "游戏需处于妖怪退治界面，刷到格子被占领或者300体力上限则停止"
 		},
 		{
 			"name": "启动游戏",
@@ -65,17 +52,14 @@
 			"option": ["是否输出 focus 信息"]
 		},
 		{
-			"name": "刷999",
-			"entry": "TASK-检测999副本界面",
-			"advanced": ["挑战999副本次数", "预计通关999时间（毫秒）"],
-			"option": ["是否启用随机休眠", "是否每一局开始前输出提示信息"],
-			"doc": "执行本任务前，需要手动打开999副本界面\n阵容锁定或者不锁定都行"
-		},
-		{
 			"name": "刷业原火或者御灵",
 			"entry": "TASK-检测业原火或者御灵副本界面",
 			"advanced": ["挑战业原火或者御灵副本次数", "预计通关业原火或者御灵时间（毫秒）"],
 			"doc": "执行本任务前，需要手动打开业原火或者御灵副本界面，自行选择好刷哪个\n请先手动刷一把，确认阵容配置正确，可以记录大致通关时间（通关时右上角记录的时间）\n请在任务高级设置处输入自动挑战的次数和预计通关时间"
+		},
+		{
+			"name": "清结界突破券",
+			"entry": "ENTRY-清结界突破券"
 		},
 		{
 			"name": "组队刷某副本",
@@ -158,52 +142,12 @@
 				}
 			}
 		},
-		"对弈竞猜-指定角色名列表": {
-			"field": "指定角色名列表",
-			"type": "string",
-			"default": "ALL,",
-			"pipeline_override": {
-				"ENTRY-多角色任务模板": {
-					"custom_action_param": {
-						"rolenames": "{指定角色名列表}",
-						"tasks": [
-							{"taskname": "ENTRY-登录某角色", "wait": 1},
-							{"taskname": "ENTRY-对弈竞猜任务", "wait": 1}
-						]
-					}
-				}
-			}
-		},
 		"focus输出内容": {
 			"field": "用户输入",
 			"type": "string",
 			"default": "用户在此处输入信息",
 			"pipeline_override": {"Screenshot": {"focus": {"start": "{用户输入}"}}},
 			"doc": "用户在此处输入的内容将在任务节点执行时打印输出"
-		},
-		"挑战999副本次数": {
-			"field": "挑战999副本次数",
-			"type": "int",
-			"default": 10,
-			"pipeline_override": {
-				"检测挑战次数是否超过设置的次数-999": {
-					"custom_recognition_param": {
-						"target": "{挑战999副本次数}"
-					}
-				}
-			},
-			"doc": "输入挑战999副本的次数"
-		},
-		"预计通关999时间（毫秒）": {
-			"field": "预计通关999时间（毫秒）",
-			"type": "int",
-			"default": 7000,
-			"pipeline_override": {
-				"检测已经开始战斗等待X秒": {
-					"post_delay": "{预计通关999时间（毫秒）}"
-				}
-			},
-			"doc": "注意单位是毫秒，例如预计 7 秒通关，请填 7000 \n 次数设置的预计通关时间不影响流程，只是在这个时间段内不检测战斗是否完成，略微降低一点点性能消耗 \n 如果不在意这一点资源消耗，就写 5000 吧"
 		},
 		"挑战业原火或者御灵副本次数": {
 			"field": "挑战业原火或者御灵副本次数",
@@ -269,49 +213,6 @@
 				{"name": "否", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": false}}}
 			],
 			"default_case": "否"
-		},
-		"是否启用随机休眠": {
-			"cases": [
-				{
-					"name": "是",
-					"pipeline_override": {
-						"检测挑战次数是否超过设置的次数-999": {"action": "Custom", "custom_action": "RandomSleep"}
-					}
-				},
-				{
-					"name": "否",
-					"pipeline_override": {
-						"检测挑战次数是否超过设置的次数-999": {"action": "DoNothing"}
-					}
-				}
-			],
-			"default_case": "是"
-		},
-		"是否每一局开始前输出提示信息": {
-			"cases": [
-				{"name": "是", "pipeline_override": {}},
-				{"name": "否", "pipeline_override": {"检测挑战次数是否超过设置的次数-999": {"focus": {}}}}
-			],
-			"default_case": "是"
-		},
-		"是否只拔剑不刷门票": {
-			"cases": [
-				{"name": "是", "pipeline_override": {"HD-活动探索爬塔任务入口": {"next": []}}},
-				{"name": "否", "pipeline_override": {}}
-			],
-			"default_case": "是"
-		},
-		"正压还是反压": {
-			"cases": [
-				{"name": "正压", "pipeline_override": {}},
-				{
-					"name": "反压",
-					"pipeline_override": {
-						"J-4检测双方押注人数然后下注": {"custom_recognition_param": {"zhengya": false}}
-					}
-				}
-			],
-			"default_case": "正压"
 		}
 	}
 }

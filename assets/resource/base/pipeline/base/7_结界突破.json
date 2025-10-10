@@ -1,0 +1,207 @@
+{
+	"ENTRY-清结界突破券": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"next": [
+			"TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
+			"TASK-T-1从探索到结界突破界面",
+			"TASK-T-0从庭院到探索界面"
+		],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-T-0从庭院到探索界面": {
+		"recognition": "OCR",
+		"roi": [630, 130, 48, 46],
+		"expected": "索",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-T-1从探索到结界突破界面"]
+	},
+	"TASK-T-1从探索到结界突破界面": {
+		"recognition": "OCR",
+		"roi": [222, 674, 111, 46],
+		"expected": "结界突破",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"]
+	},
+
+	"TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗": {
+		"recognition": "TemplateMatch",
+		"roi": [1093, 10, 45, 39],
+		"template": "突破/右上角突破券图标.png",
+		"action": "Click",
+		"target": [31, 22, 46, 42],
+		"post_delay": 1200,
+		"next": [
+			"TASK-T-2-1检测到如果有弹窗挡住5号结界则再点击一下左上角",
+			"TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角",
+			"TASK-END检测到没突破券了停止",
+			"TASK-T-3检测到阵容锁定的话点击解锁",
+			"TASK-T-4初始化突破状态记录"
+		]
+	},
+	"TASK-END检测到没突破券了停止": {
+		"recognition": "OCR",
+		"roi": [1137, 17, 41, 28],
+		"only_rec": true,
+		"expected": "^0",
+		"action": "DoNothing",
+		"next": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"TASK-T-2-1检测到如果有弹窗挡住5号结界则再点击一下左上角": {
+		"recognition": "TemplateMatch",
+		"roi": [562, 339, 180, 57],
+		"template": ["突破/勋章.png", "突破/空勋章.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [31, 22, 46, 42],
+		"post_delay": 1200,
+		"next": [
+			"TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角",
+			"TASK-END检测到没突破券了停止",
+			"TASK-T-3检测到阵容锁定的话点击解锁",
+			"TASK-T-4初始化突破状态记录"
+		]
+	},
+	"TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角": {
+		"recognition": "TemplateMatch",
+		"roi": [561, 472, 216, 61],
+		"template": ["突破/勋章.png", "突破/空勋章.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [31, 22, 46, 42],
+		"post_delay": 1200,
+		"next": ["TASK-END检测到没突破券了停止", "TASK-T-3检测到阵容锁定的话点击解锁", "TASK-T-4初始化突破状态记录"]
+	},
+
+	"TASK-T-3检测到阵容锁定的话点击解锁": {
+		"recognition": "TemplateMatch",
+		"roi": [815, 573, 38, 52],
+		"template": ["突破/阵容锁定.png"],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-T-4初始化突破状态记录"]
+	},
+
+	"TASK-T-4初始化突破状态记录": {
+		"recognition": "Custom",
+		"custom_recognition": "InitTuPoStatus",
+		"action": "Custom",
+		"custom_action": "ResetCount",
+		"next": ["TASK-T-5检测是否最后一个突破", "TASK-T-6不是最后一个则获取下一个要突破的结界"]
+	},
+
+	"TASK-T-5检测是否最后一个突破": {
+		"recognition": "Custom",
+		"custom_recognition": "IsLastTuPo",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-T-8退这个突破X次", "TASK-T-11挑战结界直到挑战结束"],
+		"timeout": 1000,
+		"on_error": []
+	},
+
+	"TASK-T-8退这个突破X次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 4,
+			"recognition": {
+				"type": "TemplateMatch",
+				"param": {"template": "突破/突破进攻按钮.png", "roi": [241, 333, 923, 381]}
+			}
+		},
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["TASK-T-9检测到左上角退出突破按钮就点击一下"],
+		"timeout": 3000,
+		"on_error": []
+	},
+	"TASK-T-9检测到左上角退出突破按钮就点击一下": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["TASK-T-10检测到返回到了突破主界面"],
+		"interrupt": [
+			"ACT-检测带确定按钮的弹窗并点击确定",
+			"ACT-检测到再次挑战按钮点击下方中间"
+		],
+		"rate_limit": 2000
+	},
+	"TASK-T-10检测到返回到了突破主界面": {
+		"recognition": "TemplateMatch",
+		"roi": [1093, 10, 45, 39],
+		"template": "突破/右上角突破券图标.png",
+		"action": "DoNothing",
+		"post_delay": 1000,
+		"next": ["TASK-T-5检测是否最后一个突破"]
+	},
+	"TASK-T-11挑战结界直到挑战结束": {
+		"recognition": "TemplateMatch",
+		"roi": [241, 333, 923, 381],
+		"template": "突破/突破进攻按钮.png",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["TASK-T-12检测到进入战斗并加载完毕"],
+		"timeout": 3000,
+		"on_error": []
+	},
+	"TASK-T-12检测到进入战斗并加载完毕": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["TASK-T-13检测已经开始战斗等待8秒"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"TASK-T-13检测已经开始战斗等待8秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 7000,
+		"next": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等3秒",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
+		],
+		"rate_limit": 1200,
+		"timeout": 6000,
+		"on_error": []
+	},
+
+	"TASK-T-6不是最后一个则获取下一个要突破的结界": {
+		"recognition": "Custom",
+		"custom_recognition": "GetNextTuPo",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-T-11挑战结界直到挑战结束"]
+	},
+
+	"RCO-检测突破成功": {
+		"recognition": "TemplateMatch",
+		"roi": [403, 169, 54, 54],
+		"roi_offset": [0, 0, 0, 0],
+		"template": "突破/突破成功.png"
+	},
+	"RCO-检测突破失败": {
+		"recognition": "TemplateMatch",
+		"roi": [398, 142, 70, 40],
+		"roi_offset": [0, 0, 0, 0],
+		"template": "突破/突破失败.png"
+	},
+	"ACT-检测到再次挑战按钮点击下方中间": {
+		"recognition": "TemplateMatch",
+		"roi": [823, 479, 73, 63],
+		"template": "突破/再次挑战按钮.png",
+		"action": "Click",
+		"target": [542, 663, 192, 55],
+		"post_delay": 2000
+	}
+}
