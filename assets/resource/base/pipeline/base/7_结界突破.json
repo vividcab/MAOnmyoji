@@ -17,9 +17,9 @@
 		"next": ["TASK-T-1从探索到结界突破界面"]
 	},
 	"TASK-T-1从探索到结界突破界面": {
-		"recognition": "OCR",
-		"roi": [222, 674, 111, 46],
-		"expected": "结界突破",
+		"recognition": "TemplateMatch",
+		"roi": [226, 615, 114, 97],
+		"template": "突破/探索界面下栏结界突破按钮.png",
 		"action": "Click",
 		"post_delay": 1500,
 		"next": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"]
@@ -44,7 +44,7 @@
 		"recognition": "OCR",
 		"roi": [1137, 17, 41, 28],
 		"only_rec": true,
-		"expected": "^0",
+		"expected": "^0$",
 		"action": "DoNothing",
 		"next": ["TASK-尝试从任意界面回到庭院"]
 	},
