@@ -1,0 +1,213 @@
+{
+	"任务入口-从庭院进入活动爬塔探索页面": {
+		"next": ["HD-活动爬塔任务入口", "检测已经在庭院然后开始找活动入口"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"],
+		"rate_limit": 1500
+	},
+
+	"检测已经在庭院然后开始找活动入口": {
+		"recognition": "TemplateMatch",
+		"roi": [680, 220, 240, 100],
+		"template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+		"threshold": [0.9, 0.9],
+		"next": ["检测活动入口然后点击进入"]
+	},
+	"检测活动入口然后点击进入": {
+		"recognition": "TemplateMatch",
+		"roi": [422, 175, 37, 36],
+		"template": ["平将门活动爬塔/庭院中活动快捷入口.png"],
+		"action": "Click",
+		"post_delay": 5000,
+		"next": ["检测活动探索按钮然后点击进入"],
+		"interrupt": ["ACT-检测活动剧情跳过按钮然后点击", "ACT-检测各类右上部分叉号并点一下"],
+		"rate_limit": 1500
+	},
+	"ACT-检测活动剧情跳过按钮然后点击": {
+		"recognition": "OCR",
+		"roi": [1147, 28, 74, 40],
+		"only_rec": true,
+		"expected": "跳过",
+		"action": "Click",
+		"post_delay": 1000
+	},
+	"检测活动探索按钮然后点击进入": {
+		"recognition": "OCR",
+		"roi": [810, 257, 38, 33],
+		"only_rec": true,
+		"expected": "征",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["检测已经处于活动地图界面-点一下格子"],
+		"interrupt": ["ACT-检测各类右上部分叉号并点一下"],
+		"on_error": []
+	},
+
+	"检测已经处于活动地图界面-点一下格子": {
+		"recognition": "OCR",
+		"roi": [555, 2, 173, 56],
+		"only_rec": true,
+		"expected": "斗场",
+		"action": "Click",
+		"target": [427, 427, 67, 51],
+		"post_delay": 1200,
+		"next": ["HD-活动爬塔任务入口"],
+		"interrupt": ["ACT-还在地图界面的话点一下格子"],
+		"on_error": []
+	},
+	"ACT-还在地图界面的话点一下格子": {
+		"recognition": "OCR",
+		"roi": [555, 2, 173, 56],
+		"only_rec": true,
+		"expected": "斗场",
+		"action": "Click",
+		"target": [427, 427, 67, 51],
+		"post_delay": 1200
+	},
+
+	"HD-活动爬塔任务入口": {
+		"recognition": "OCR",
+		"roi": [180, 15, 43, 43],
+		"only_rec": true,
+		"expected": "战|炼|武",
+		"action": "DoNothing",
+		"next": [
+			"HD-END检测没有门票了停止任务",
+			"HD-END检测到购买门票弹窗",
+			"HD-END检测到将魂试炼没门票了",
+			"HD-END检测到临战演武没门票了",
+			"HD-1检测爬塔挑战按钮并点击"
+		]
+	},
+	"HD-END检测没有门票了停止任务": {
+		"recognition": "OCR",
+		"roi": [1118, 23, 90, 32],
+		"only_rec": true,
+		"expected": "^0$",
+		"action": "DoNothing",
+		"next": []
+	},
+	"HD-END检测到购买门票弹窗": {
+		"recognition": "TemplateMatch",
+		"roi": [812, 593, 96, 59],
+		"template": "雪御前活动爬塔/购买门票按钮.png",
+		"action": "Click",
+		"target": "HD-活动爬塔任务入口",
+		"next": []
+	},
+	"HD-END检测到将魂试炼没门票了": {
+		"recognition": "Custom",
+		"custom_recognition": "MultiRecognition",
+		"custom_recognition_param": {
+			"nodes": ["REC-检测左上角炼字", "REC-检测将魂试炼门票为0"],
+			"logic": {
+				"type": "AND"
+			},
+			"return": "$0"
+		},
+		"next": []
+	},
+	"REC-检测左上角炼字": {
+		"recognition": "OCR",
+		"roi": [180, 15, 43, 43],
+		"only_rec": true,
+		"expected": "炼"
+	},
+	"REC-检测将魂试炼门票为0": {
+		"recognition": "OCR",
+		"roi": [929, 22, 90, 34],
+		"only_rec": true,
+		"expected": "^0$"
+	},
+	"HD-END检测到临战演武没门票了": {
+		"recognition": "Custom",
+		"custom_recognition": "MultiRecognition",
+		"custom_recognition_param": {
+			"nodes": ["REC-检测左上角武字", "REC-检测临战演武门票为0"],
+			"logic": {
+				"type": "AND"
+			},
+			"return": "$0"
+		},
+		"next": []
+	},
+	"REC-检测左上角武字": {
+		"recognition": "OCR",
+		"roi": [180, 15, 43, 43],
+		"only_rec": true,
+		"expected": "武"
+	},
+	"REC-检测临战演武门票为0": {
+		"recognition": "OCR",
+		"roi": [723, 15, 96, 33],
+		"only_rec": true,
+		"expected": "^0$"
+	},
+
+	"HD-1检测爬塔挑战按钮并点击": {
+		"recognition": "OCR",
+		"roi": [1126, 580, 109, 65],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["HD-2检测已经进入爬塔战斗并且加载完毕", "HD-END检测到购买门票弹窗"],
+		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定", "ACT-检测到悬赏协作并处理"],
+		"rate_limit": 1000,
+		"timeout": 10000,
+		"on_error": [],
+		"focus": {
+			"failed": "[color:blue]可能这个格子的怪还不能打，手动换个格子吧[/color]"
+		}
+	},
+	"HD-2检测已经进入爬塔战斗并且加载完毕": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["HD-3检测已经开始爬塔战斗等待X秒"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"HD-3检测已经开始爬塔战斗等待X秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 50000,
+		"next": ["HD-活动爬塔任务入口"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等2秒",
+			"ACT-检测有御魂满了的弹窗就关闭",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就点击一下屏幕上部中间"
+		],
+		"rate_limit": 1200,
+		"timeout": 12000,
+		"on_error": []
+	},
+
+	"任务出口-从活动页面回到庭院": {
+		"next": ["STATUS-处于庭院初始状态"],
+		"interrupt": ["INT-尝试从任意界面回到庭院"],
+		"rate_limit": 1500
+	},
+
+	"ACT-检测还在战斗中再等2秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 2000
+	},
+	"ACT-检测不到左上角返回按钮之后就点击一下屏幕上部中间": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [380, 15, 350, 115],
+		"post_delay": 800
+	}
+}
