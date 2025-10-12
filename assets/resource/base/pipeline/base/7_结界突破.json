@@ -114,7 +114,8 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["TASK-T-9检测到左上角退出突破按钮就点击一下"],
-		"timeout": 3000,
+		"rate_limit": 1500,
+		"timeout": 13000,
 		"on_error": []
 	},
 	"TASK-T-9检测到左上角退出突破按钮就点击一下": {
@@ -145,7 +146,8 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["TASK-T-12检测到进入战斗并加载完毕"],
-		"timeout": 3000,
+		"rate_limit": 1500,
+		"timeout": 13000,
 		"on_error": []
 	},
 	"TASK-T-12检测到进入战斗并加载完毕": {
