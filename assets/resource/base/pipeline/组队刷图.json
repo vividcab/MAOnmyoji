@@ -33,6 +33,7 @@
 	},
 
 	"检测挑战按钮然后点击-组队": {
+		"_comment": "作为队长，等待有队员加入队伍后按钮变成黄色",
 		"recognition": "TemplateMatch",
 		"roi": [1183, 611, 69, 62],
 		"template": "组队战斗/右下角挑战按钮.png",
@@ -40,7 +41,8 @@
 		"next": ["检测挑战按钮为黄色然后点击"],
 		"interrupt": ["ACT-什么都不做等待3秒"],
 		"rate_limit": 3000,
-		"timeout": 200000
+		"timeout": 200000,
+		"on_error": []
 	},
 	"检测挑战按钮为黄色然后点击": {
 		"recognition": "ColorMatch",
@@ -52,20 +54,31 @@
 		"action": "Click",
 		"post_delay": 2500,
 		"next": ["检测已经进入战斗并且加载完毕-组队"],
-		"interrupt": [],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测到黄色挑战按钮然后点击"],
 		"rate_limit": 2000,
-		"timeout": 6000,
+		"timeout": 30000,
 		"on_error": ["检测挑战按钮然后点击-组队"]
+	},
+	"ACT-检测到黄色挑战按钮然后点击": {
+		"recognition": "ColorMatch",
+		"roi": [1206, 632, 28, 13],
+		"method": 40,
+		"upper": [60, 255, 255],
+		"lower": [10, 40, 40],
+		"count": 300,
+		"action": "Click",
+		"post_delay": 2500
 	},
 
 	"检测已经进入战斗并且加载完毕-组队": {
+		"_comment": "司机和打手任务流程都会执行到这一步",
 		"recognition": "TemplateMatch",
 		"roi": [0, 0, 70, 70],
 		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
 		"action": "DoNothing",
 		"post_delay": 500,
 		"next": ["检测已经开始战斗等待X秒-组队"],
-		"interrupt": ["ACT-检测右下角有准备按钮就点击一下"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
 		"timeout": 5000,
 		"on_error": []
 	},
@@ -77,12 +90,22 @@
 		"post_delay": 13000,
 		"next": ["TASK-组队刷图-检测在组队界面"],
 		"interrupt": [
+			"ACT-检测到悬赏协作并处理",
 			"ACT-检测还在战斗中再等3秒",
 			"ACT-检测有御魂满了的弹窗就关闭",
-			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
+			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕-组队刷图"
 		],
-		"rate_limit": 1000,
-		"timeout": 6000,
+		"rate_limit": 1200,
+		"timeout": 10000,
 		"on_error": []
+	},
+	"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕-组队刷图": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [860, 450, 300, 230],
+		"post_delay": 800
 	}
 }
