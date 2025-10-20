@@ -16,7 +16,7 @@
 		"custom_action": "RunTaskList",
 		"custom_action_param": {
 			"tasks": [
-				{"taskname": "A-领阴阳寮体力并进入结界", "wait": 0.3},
+				{"taskname": "A-领阴阳寮体力工资做寮30捐觉醒材料", "wait": 0.3},
 				{"taskname": "B-从阴阳寮大厅进入结界", "wait": 0.3},
 				{"taskname": "C-检测收取寄养", "wait": 0.3},
 				{"taskname": "D-检测是否可以好友寄养", "wait": 0.3},
@@ -26,7 +26,7 @@
 			]
 		}
 	},
-	"A-领阴阳寮体力并进入结界": {
+	"A-领阴阳寮体力工资做寮30捐觉醒材料": {
 		"next": ["检测点击寮图标进入寮大厅"],
 		"interrupt": ["检测卷轴是否打开"],
 		"timeout": 3000
@@ -54,9 +54,14 @@
 		"end": [800, 500, 10, 10],
 		"duration": 1200,
 		"post_delay": 800,
-		"next": ["OPT-检测可以领取体力补给就领", "OPT-检测可以领工资就领"],
+		"next": [
+			"检测寮种树活动弹窗并关闭",
+			"OPT-检测可以领取体力补给就领",
+			"OPT-检测可以领工资就领",
+			"OPT-检测到可以做寮30就捐一下"
+		],
 		"timeout": 300,
-		"on_error": ["B-从阴阳寮大厅进入结界"]
+		"on_error": []
 	},
 
 	"OPT-检测可以领工资就领": {
@@ -92,6 +97,110 @@
 		"target": [172, 26, 144, 60],
 		"post_delay": 800,
 		"next": ["在寮大厅划一下视角然后检测领取工资和体力"]
+	},
+	"OPT-检测到可以做寮30就捐一下": {
+		"recognition": "OCR",
+		"roi": [31, 160, 86, 34],
+		"expected": "集体任务",
+		"only_rec": true,
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测到打开了集体任务弹窗"],
+		"interrupt": ["OPT-检测到可以做寮30就捐一下"],
+		"on_error": ["B-从阴阳寮大厅进入结界"]
+	},
+	"检测到打开了集体任务弹窗": {
+		"recognition": "OCR",
+		"roi": [611, 41, 86, 52],
+		"expected": "任务",
+		"only_rec": true,
+		"action": "DoNothing",
+		"next": ["检测到刷新到捐觉醒材料的任务了"],
+		"interrupt": ["ACT-点一下刷新寮30任务的按钮"]
+	},
+	"检测到刷新到捐觉醒材料的任务了": {
+		"recognition": "OCR",
+		"roi": [148, 178, 238, 47],
+		"only_rec": true,
+		"expected": "觉醒材料",
+		"action": "Click",
+		"target": [242, 471, 117, 42],
+		"post_delay": 1200,
+		"next": ["检测到打开了捐材料的界面"]
+	},
+	"ACT-点一下刷新寮30任务的按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [411, 479, 49, 35],
+		"template": "阴阳寮/寮三十任务刷新按钮.png",
+		"action": "Click",
+		"post_delay": 1000
+	},
+	"检测到打开了捐材料的界面": {
+		"recognition": "OCR",
+		"roi": [594, 603, 85, 47],
+		"only_rec": true,
+		"expected": "提交",
+		"action": "Swipe",
+		"begin": [690, 518, 26, 29],
+		"end": [959, 508, 26, 45],
+		"duration": 1300,
+		"post_delay": 400,
+		"next": ["检测不够30次再提交第二种材料", "点击提交按钮捐材料"]
+	},
+	"检测不够30次再提交第二种材料": {
+		"recognition": "OCR",
+		"roi": [534, 48, 219, 51],
+		"expected": "提交30次",
+		"only_rec": true,
+		"inverse": true,
+		"action": "Swipe",
+		"begin": [690, 396, 26, 29],
+		"end": [959, 396, 26, 45],
+		"duration": 1300,
+		"post_delay": 400,
+		"next": ["检测不够30次再提交第三种材料", "点击提交按钮捐材料"]
+	},
+	"检测不够30次再提交第三种材料": {
+		"recognition": "OCR",
+		"roi": [534, 48, 219, 51],
+		"expected": "提交30次",
+		"only_rec": true,
+		"inverse": true,
+		"action": "Swipe",
+		"begin": [690, 276, 26, 29],
+		"end": [959, 276, 26, 45],
+		"duration": 1300,
+		"post_delay": 400,
+		"next": ["检测不够30次再提交第四种材料", "点击提交按钮捐材料"]
+	},
+	"检测不够30次再提交第四种材料": {
+		"recognition": "OCR",
+		"roi": [534, 48, 219, 51],
+		"expected": "提交30次",
+		"only_rec": true,
+		"inverse": true,
+		"action": "Swipe",
+		"begin": [690, 156, 26, 29],
+		"end": [959, 156, 26, 45],
+		"duration": 1300,
+		"post_delay": 400,
+		"next": ["点击提交按钮捐材料"]
+	},
+	"点击提交按钮捐材料": {
+		"recognition": "OCR",
+		"roi": [594, 603, 85, 47],
+		"only_rec": true,
+		"expected": "提交",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["检测回到了寮大厅"],
+		"interrupt": ["ACT-检测各类右上部分叉号并点一下"]
+	},
+	"检测回到了寮大厅": {
+		"recognition": "TemplateMatch",
+		"roi": [1061, 619, 68, 53],
+		"template": "阴阳寮/结界按钮.png",
+		"next": []
 	},
 
 	"B-从阴阳寮大厅进入结界": {
