@@ -1,0 +1,167 @@
+{
+	"ENTRY-清寮突破": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"action": "Custom",
+		"custom_action": "ResetCount",
+		"next": [
+			"TASK-T-3-检测已经处于寮突界面然后点一下左上角空白处",
+			"TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
+			"TASK-T-1从探索到结界突破界面-寮突",
+			"TASK-T-0从庭院到探索界面-寮突"
+		],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-T-0从庭院到探索界面-寮突": {
+		"recognition": "OCR",
+		"roi": [630, 130, 48, 46],
+		"expected": "索",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-T-1从探索到结界突破界面-寮突"]
+	},
+	"TASK-T-1从探索到结界突破界面-寮突": {
+		"recognition": "TemplateMatch",
+		"roi": [226, 615, 114, 97],
+		"template": "突破/探索界面下栏结界突破按钮.png",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突"]
+	},
+
+	"TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突": {
+		"recognition": "TemplateMatch",
+		"roi": [1093, 10, 45, 39],
+		"template": "突破/右上角突破券图标.png",
+		"action": "Click",
+		"target": [31, 22, 46, 42],
+		"post_delay": 1200,
+		"next": ["TASK-T-3-检测已经处于寮突界面然后点一下左上角空白处"],
+		"interrupt": ["ACT-检测点击寮突标签页"]
+	},
+	"ACT-检测点击寮突标签页": {
+		"recognition": "OCR",
+		"roi": [1209, 437, 38, 32],
+		"only_rec": true,
+		"expected": "阳",
+		"action": "Click",
+		"post_delay": 800
+	},
+	"TASK-T-3-检测已经处于寮突界面然后点一下左上角空白处": {
+		"recognition": "OCR",
+		"roi": [39, 659, 109, 44],
+		"only_rec": true,
+		"expected": "记录",
+		"action": "Click",
+		"target": [171, 19, 76, 39],
+		"post_delay": 800,
+		"next": [
+			"TASK-END检测到没寮突次数了停止",
+			"TASK-END检测到突破进度100了停止",
+			"TASK-T-4检测到阵容锁定的话点击解锁-寮突",
+			"TASK-T-5在左边一列检测一个突破并点击",
+			"TASK-T-5在右边一列检测一个突破并点击"
+		],
+		"interrupt": ["ACT-划动一下找下面的寮突-最多3次"],
+		"timeout": 3000,
+		"on_error": ["TASK-END清寮突任务结束"]
+	},
+	"ACT-划动一下找下面的寮突-最多3次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 3,
+			"recognition": {
+				"type": "DirectHit"
+			}
+		},
+		"action": "Swipe",
+		"begin": [673, 615, 37, 32],
+		"end": [662, 83, 30, 26],
+		"duration": 2400,
+		"post_delay": 1000
+	},
+	"TASK-T-4检测到阵容锁定的话点击解锁-寮突": {
+		"recognition": "TemplateMatch",
+		"roi": [194, 591, 43, 51],
+		"template": ["突破/阵容锁定.png", "突破/阵容锁定-2.png"],
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["TASK-T-5在左边一列检测一个突破并点击"]
+	},
+
+	"TASK-END检测到没寮突次数了停止": {
+		"recognition": "OCR",
+		"roi": [264, 552, 60, 44],
+		"only_rec": true,
+		"expected": "^0",
+		"action": "DoNothing",
+		"next": ["TASK-END清寮突任务结束"]
+	},
+	"TASK-END检测到突破进度100了停止": {
+		"recognition": "OCR",
+		"roi": [198, 364, 109, 50],
+		"only_rec": true,
+		"expected": "^100",
+		"action": "DoNothing",
+		"next": ["TASK-END清寮突任务结束"]
+	},
+	"TASK-END清寮突任务结束": {
+		"_comment": "结束后就停在这个界面还是返回庭院：TASK-尝试从任意界面回到庭院",
+		"next": []
+	},
+
+	"TASK-T-5在左边一列检测一个突破并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [653, 124, 106, 530],
+		"template": "突破/寮突识别测试.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["挑战寮突直到挑战结束"]
+	},
+	"TASK-T-5在右边一列检测一个突破并点击": {
+		"recognition": "TemplateMatch",
+		"roi": [993, 121, 108, 538],
+		"template": "突破/寮突识别测试.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["挑战寮突直到挑战结束"]
+	},
+	"挑战寮突直到挑战结束": {
+		"recognition": "TemplateMatch",
+		"roi": [580, 319, 520, 393],
+		"template": "突破/突破进攻按钮.png",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["TASK-T-12检测到进入战斗并加载完毕-寮突"],
+		"rate_limit": 1500,
+		"timeout": 13000,
+		"on_error": []
+	},
+	"TASK-T-12检测到进入战斗并加载完毕-寮突": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["TASK-T-13检测已经开始战斗等待8秒-寮突"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"TASK-T-13检测已经开始战斗等待8秒-寮突": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 7000,
+		"next": ["TASK-T-3-检测已经处于寮突界面然后点一下左上角空白处"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等3秒",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
+		],
+		"rate_limit": 1200,
+		"timeout": 6000,
+		"on_error": []
+	}
+}
