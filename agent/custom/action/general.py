@@ -198,3 +198,17 @@ class RandomSleep(CustomAction):
         sleep(t)
 
         return CustomAction.RunResult(success=True)
+
+
+@AgentServer.custom_action("LogAnError")
+class LogAnError(CustomAction):
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> CustomAction.RunResult:
+
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open("user_data/error.log", mode="a", encoding="utf-8") as f:
+            f.write(now + "\n")
+        return CustomAction.RunResult(success=True)

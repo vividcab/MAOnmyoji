@@ -43,13 +43,20 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["F-2从逢魔地图到点完4次现世逢魔"],
-		"interrupt": ["ACT-检测逢魔灯笼并点击"],
-		"rate_limit": 3000
+		"interrupt": ["ACT-检测逢魔灯笼并点击-最多3次"],
+		"rate_limit": 3000,
+		"timeout": 4000
 	},
-	"ACT-检测逢魔灯笼并点击": {
-		"recognition": "TemplateMatch",
-		"roi": [616, 136, 54, 73],
-		"template": "逢魔/逢魔灯笼.png",
+	"ACT-检测逢魔灯笼并点击-最多3次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 3,
+			"recognition": {
+				"type": "TemplateMatch",
+				"param": {"template": "逢魔/逢魔灯笼.png", "roi": [616, 136, 54, 73]}
+			}
+		},
 		"action": "Click",
 		"post_delay": 1000
 	},

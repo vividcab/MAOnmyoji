@@ -3,7 +3,7 @@
 		"action": "Custom",
 		"custom_action": "ForRolesToRunTask",
 		"custom_action_param": {
-			"rolenames": ["ALL,"],
+			"rolenames": "ALL,",
 			"tasks": [
 				{"taskname": "ENTRY-登录某角色", "wait": 2},
 				{"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},

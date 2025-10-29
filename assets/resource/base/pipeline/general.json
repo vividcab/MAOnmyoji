@@ -24,5 +24,18 @@
 				}
 			}
 		}
+	},
+	"任务出错-写日志记录一下": {
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "LogAnError",
+				"custom_action_param": {}
+			}
+		},
+		"next": ["默认错误处理方式-截图并关闭游戏"],
+		"focus": {
+			"start": "[color:red]任务运行出错，记录到user_data/error.log中，将终止后续角色任务[/color]"
+		}
 	}
 }

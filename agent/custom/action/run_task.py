@@ -1,4 +1,5 @@
 import json
+import os
 from time import sleep
 from datetime import datetime
 from maa.agent.agent_server import AgentServer
@@ -64,7 +65,20 @@ class ForRolesToRunTask(CustomAction):
         all_num = len(rolenames)
         logger.info(f"解析后的角色数量：{all_num}, 角色名：{rolenames}")
 
+        task_begin_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        os.makedirs("user_data", exist_ok=True)
+
         for index, rolename in enumerate(rolenames):
+            try:
+                with open("user_data/error.log", mode="r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                    last_line = lines[-1].strip() if lines else None
+                    if last_line > task_begin_time:
+                        logger.error("检测到多角色任务执行过程出错，终止后续角色任务")
+                        return
+            except:
+                pass
+
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             logger.info(f"{now} 当前任务角色 {rolename}, {index}/{all_num}")
             info = find_role_info(rolename)
@@ -85,6 +99,17 @@ class ForRolesToRunTask(CustomAction):
             )
 
             for task in tasks:
+                try:
+                    with open("user_data/error.log", mode="r", encoding="utf-8") as f:
+                        lines = f.readlines()
+                        last_line = lines[-1].strip() if lines else None
+                        if last_line > task_begin_time:
+                            logger.error(
+                                "检测到多角色任务执行过程出错，终止后续角色任务"
+                            )
+                            return
+                except:
+                    pass
                 task_detail = context.run_task(task["taskname"])
                 # print("##Task Detail##", task_detail)
                 sleep(task["wait"])
