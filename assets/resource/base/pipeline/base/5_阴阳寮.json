@@ -37,6 +37,14 @@
 		"expected": "阴阳",
 		"action": "Click",
 		"post_delay": 3000,
+		"next": ["检测到达了寮大厅"]
+	},
+	"检测到达了寮大厅": {
+		"recognition": "TemplateMatch",
+		"roi": [1061, 619, 68, 53],
+		"template": "阴阳寮/结界按钮.png",
+		"action": "DoNothing",
+		"post_delay": 1200,
 		"next": ["检测寮种树活动弹窗并关闭", "在寮大厅划一下视角然后检测领取工资和体力"]
 	},
 	"检测寮种树活动弹窗并关闭": {
