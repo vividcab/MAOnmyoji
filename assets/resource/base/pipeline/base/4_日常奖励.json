@@ -305,7 +305,7 @@
 		"recognition": "OCR",
 		"roi": [570, 671, 108, 47],
 		"only_rec": true,
-		"expected": "免费",
+		"expected": "免",
 		"action": "DoNothing",
 		"next": ["检测是否还有免费抽数"],
 		"timeout": 300,
