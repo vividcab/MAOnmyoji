@@ -22,7 +22,6 @@
 				{"taskname": "6-领邮件", "wait": 0.3},
 				{"taskname": "7-查看悬赏", "wait": 0.3},
 				{"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
-				{"taskname": "9-读未读邮件", "wait": 0.3},
 				{"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
 			]
 		}
@@ -82,7 +81,8 @@
 		"action": "Custom",
 		"custom_action": "Screenshot",
 		"custom_action_param": {"save_dir": "user_data/签到记录"},
-		"next": ["ACT-检测各类右上部分叉号并点一下"]
+		"next": ["ACT-检测各类右上部分叉号并点一下"],
+		"on_error": []
 	},
 
 	"2-领取御魂加成": {
@@ -144,16 +144,27 @@
 		"roi": [1132, 26, 44, 38],
 		"template": "签到/邮件图标.png",
 		"action": "Click",
-		"next": ["全部领取"],
+		"next": ["点击一键已读"],
 		"timeout": 500,
 		"on_error": ["ACT-无条件按一下Esc"]
 	},
-	"全部领取": {
-		"recognition": "TemplateMatch",
-		"roi": [84, 613, 71, 59],
-		"template": "签到/全部领取.png",
+	"点击一键已读": {
+		"recognition": "OCR",
+		"roi": [184, 610, 107, 33],
+		"only_rec": true,
+		"expected": "已读",
 		"action": "Click",
-		"next": ["确定领取或御魂爆仓确认按钮"]
+		"post_delay": 800,
+		"next": ["点击一键领取"],
+		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+	"点击一键领取": {
+		"recognition": "TemplateMatch",
+		"roi": [50, 604, 59, 55],
+		"template": "签到/一键领取.png",
+		"action": "Click",
+		"next": ["确定领取或御魂爆仓确认按钮"],
+		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
 	},
 	"确定领取或御魂爆仓确认按钮": {
 		"recognition": "TemplateMatch",
@@ -190,7 +201,8 @@
 		"action": "Custom",
 		"custom_action": "Screenshot",
 		"custom_action_param": {"save_dir": "user_data/悬赏封印"},
-		"next": ["ACT-检测各类右上部分叉号并点一下"]
+		"next": ["ACT-检测各类右上部分叉号并点一下"],
+		"on_error": []
 	},
 
 	"8-领取商店每日黑蛋": {
@@ -223,10 +235,22 @@
 		"roi": [1132, 636, 52, 52],
 		"template": "签到/礼包屋.png",
 		"action": "Click",
-		"post_delay": 1000,
+		"post_delay": 1200,
 		"next": ["检测点击日常"],
+		"interrupt": [
+			"ACT-检测左上角方框折线返回按钮并点一下",
+			"ACT-检测各类右上部分叉号并点一下",
+			"ACT-检测点击礼包屋按钮"
+		],
 		"timeout": 4000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"ACT-检测点击礼包屋按钮": {
+		"recognition": "TemplateMatch",
+		"roi": [1132, 636, 52, 52],
+		"template": "签到/礼包屋.png",
+		"action": "Click",
+		"post_delay": 1200
 	},
 	"检测点击日常": {
 		"recognition": "TemplateMatch",
@@ -245,40 +269,6 @@
 		"action": "Click",
 		"post_delay": 800,
 		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
-	},
-
-	"9-读未读邮件": {
-		"recognition": "TemplateMatch",
-		"roi": [279, 501, 53, 48],
-		"roi_offset": [-60, -60, 120, 120],
-		"template": "签到/纸人抱的邮件.png",
-		"action": "Click",
-		"post_delay": 1000,
-		"next": ["检测到所有都已读"],
-		"interrupt": ["检测未读邮件并点击划动"],
-		"timeout": 400,
-		"on_error": []
-	},
-	"检测到所有都已读": {
-		"recognition": "TemplateMatch",
-		"roi": [438, 94, 46, 183],
-		"template": "签到/已读.png",
-		"next": ["ACT-无条件按一下Esc"]
-	},
-	"检测未读邮件并点击划动": {
-		"recognition": "TemplateMatch",
-		"roi": [140, 90, 96, 213],
-		"template": "签到/未读邮件.png",
-		"threshold": 0.9,
-		"order_by": "Vertical",
-		"action": "Click",
-		"next": ["划动一下看下方邮件"]
-	},
-	"划动一下看下方邮件": {
-		"action": "Swipe",
-		"begin": [298, 274, 20, 20],
-		"end": [363, 200, 20, 20],
-		"duration": 300
 	},
 
 	"10-查看神秘商店并截图记录": {

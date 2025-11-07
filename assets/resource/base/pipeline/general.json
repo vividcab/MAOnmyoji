@@ -33,7 +33,7 @@
 				"custom_action_param": {}
 			}
 		},
-		"next": ["默认错误处理方式-截图并关闭游戏"],
+		"next": ["STATUS-处于模拟器桌面", "默认错误处理方式-截图并关闭游戏"],
 		"focus": {
 			"start": "[color:red]任务运行出错，记录到user_data/error.log中，将终止后续角色任务[/color]"
 		}

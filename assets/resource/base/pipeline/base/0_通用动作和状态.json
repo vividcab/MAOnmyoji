@@ -12,6 +12,16 @@
 		"action": "Click",
 		"post_delay": 3000
 	},
+	"ACT-检测左上角方框折线返回按钮并点一下": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 100, 100],
+		"template": [
+			"通用界面按钮/左上角返回键1-白底黄色折线.png",
+			"通用界面按钮/左上角返回键3-黑底黄色折线.png"
+		],
+		"action": "Click",
+		"post_delay": 3000
+	},
 	"ACT-检测各类右上部分叉号并点一下": {
 		"recognition": "TemplateMatch",
 		"roi": [730, 0, 540, 250],
