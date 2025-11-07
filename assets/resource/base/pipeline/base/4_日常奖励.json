@@ -22,6 +22,7 @@
 				{"taskname": "6-领邮件", "wait": 0.3},
 				{"taskname": "7-查看悬赏", "wait": 0.3},
 				{"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
+				{"taskname": "9-每日免费抽卡", "wait": 0.3},
 				{"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
 			]
 		}
@@ -269,6 +270,89 @@
 		"action": "Click",
 		"post_delay": 800,
 		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+	},
+
+	"9-每日免费抽卡": {
+		"recognition": "TemplateMatch",
+		"roi": [885, 85, 390, 251],
+		"template": "庭院/召唤灯笼.png",
+		"threshold": 0.4,
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测处于召唤屋抽卡页面"],
+		"timeout": 5000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测处于召唤屋抽卡页面": {
+		"recognition": "OCR",
+		"roi": [113, 5, 92, 55],
+		"only_rec": true,
+		"expected": "^召唤$",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测底部是神秘召唤则没有免费抽卡资格", "检测底部免费抽卡"],
+		"timeout": 1500,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测底部是神秘召唤则没有免费抽卡资格": {
+		"recognition": "OCR",
+		"roi": [566, 675, 112, 43],
+		"only_rec": true,
+		"expected": "神秘",
+		"next": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测底部免费抽卡": {
+		"recognition": "OCR",
+		"roi": [570, 671, 108, 47],
+		"only_rec": true,
+		"expected": "免费",
+		"action": "DoNothing",
+		"next": ["检测是否还有免费抽数"],
+		"timeout": 300,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测是否还有免费抽数": {
+		"recognition": "OCR",
+		"roi": [625, 674, 54, 43],
+		"only_rec": true,
+		"expected": "1/1",
+		"action": "Click",
+		"target": [603, 611, 49, 43],
+		"next": ["检测打开了画画抽卡界面"],
+		"timeout": 300,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测打开了画画抽卡界面": {
+		"recognition": "OCR",
+		"roi": [393, 650, 80, 50],
+		"only_rec": true,
+		"expected": "单抽",
+		"action": "Swipe",
+		"begin": [473, 383, 97, 84],
+		"end": [626, 180, 141, 127],
+		"duration": 500,
+		"post_delay": 10000,
+		"next": ["检测抽完卡的确定按钮并点击"],
+		"interrupt": ["检测到抽出SSR后右下角截图分享按钮并点击空白处", "ACT-检测各类右上部分叉号并点一下"],
+		"timeout": 300000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"检测到抽出SSR后右下角截图分享按钮并点击空白处": {
+		"recognition": "TemplateMatch",
+		"roi": [1151, 619, 124, 97],
+		"template": "召唤屋抽卡/抽到SSR后右下角的截图分享按钮.png",
+		"action": "Click",
+		"target": [1123, 70, 64, 57],
+		"post_delay": 2000
+	},
+	"检测抽完卡的确定按钮并点击": {
+		"recognition": "OCR",
+		"roi": [455, 626, 94, 43],
+		"only_rec": true,
+		"expected": "确定",
+		"action": "Click",
+		"post_delay": 800,
+		"next": ["TASK-尝试从任意界面回到庭院"]
 	},
 
 	"10-查看神秘商店并截图记录": {
