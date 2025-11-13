@@ -265,18 +265,35 @@
 	},
 	"检测点击黑蛋": {
 		"recognition": "TemplateMatch",
-		"roi": [212, 195, 79, 55],
+		"roi": [217, 197, 51, 40],
 		"template": "签到/黑蛋.png",
+		"threshold": 0.5,
 		"action": "Click",
 		"post_delay": 800,
 		"next": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
 	},
 
 	"9-每日免费抽卡": {
-		"recognition": "TemplateMatch",
-		"roi": [885, 85, 390, 251],
-		"template": "庭院/召唤灯笼.png",
-		"threshold": 0.4,
+		"next": ["枫色秋庭找召唤物灯笼", "初始庭院找召唤灯笼"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"枫色秋庭找召唤物灯笼": {
+		"recognition": "OCR",
+		"roi": [1091, 157, 43, 46],
+		"only_rec": true,
+		"expected": "召",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["检测处于召唤屋抽卡页面"],
+		"timeout": 5000,
+		"on_error": ["TASK-尝试从任意界面回到庭院"]
+	},
+	"初始庭院找召唤灯笼": {
+		"recognition": "OCR",
+		"roi": [1076, 162, 50, 46],
+		"only_rec": true,
+		"expected": "召",
 		"action": "Click",
 		"post_delay": 2000,
 		"next": ["检测处于召唤屋抽卡页面"],
