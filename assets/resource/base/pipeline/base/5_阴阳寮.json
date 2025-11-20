@@ -124,7 +124,9 @@
 		"only_rec": true,
 		"action": "DoNothing",
 		"next": ["检测到刷新到捐觉醒材料的任务了"],
-		"interrupt": ["ACT-点一下刷新寮30任务的按钮"]
+		"interrupt": ["ACT-点一下刷新寮30任务的按钮-最多15次"],
+		"timeout": 2000,
+		"on_error": ["B-从阴阳寮大厅进入结界"]
 	},
 	"检测到刷新到捐觉醒材料的任务了": {
 		"recognition": "OCR",
@@ -134,12 +136,19 @@
 		"action": "Click",
 		"target": [242, 471, 117, 42],
 		"post_delay": 1200,
-		"next": ["检测到打开了捐材料的界面"]
+		"next": ["检测到打开了捐材料的界面"],
+		"on_error": ["B-从阴阳寮大厅进入结界"]
 	},
-	"ACT-点一下刷新寮30任务的按钮": {
-		"recognition": "TemplateMatch",
-		"roi": [411, 479, 49, 35],
-		"template": "阴阳寮/寮三十任务刷新按钮.png",
+	"ACT-点一下刷新寮30任务的按钮-最多15次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 15,
+			"recognition": {
+				"type": "TemplateMatch",
+				"param": {"template": "阴阳寮/寮三十任务刷新按钮.png", "roi": [411, 479, 49, 35]}
+			}
+		},
 		"action": "Click",
 		"post_delay": 1000
 	},
@@ -213,7 +222,7 @@
 
 	"B-从阴阳寮大厅进入结界": {
 		"next": ["检测小白头顶换肤按钮"],
-		"interrupt": ["检测点击结界图标"],
+		"interrupt": ["检测点击结界图标", "ACT-检测各类右上部分叉号并点一下"],
 		"rate_limit": 3000,
 		"timeout": 10000,
 		"on_error": ["TASK-尝试从任意界面回到庭院"]

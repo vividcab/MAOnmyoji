@@ -72,9 +72,10 @@
 		"post_delay": 3000
 	},
 	"ACT-检测有御魂满了的弹窗就关闭": {
-		"recognition": "TemplateMatch",
-		"roi": [588, 396, 59, 54],
-		"template": "组队战斗/确御魂满了弹窗确认按钮.png",
+		"recognition": "OCR",
+		"roi": [684, 398, 82, 50],
+		"only_rec": true,
+		"expected": "知道",
 		"action": "Click",
 		"post_delay": 800
 	},
