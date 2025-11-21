@@ -1,5 +1,23 @@
 {
-	"TASK-检测业原火或者御灵副本界面": {
+	"TASK-检测副本界面": {
+		"recognition": "OCR",
+		"roi": [1112, 600, 84, 51],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "DoNothing",
+		"next": ["检测业原火或者御灵副本界面", "检测觉醒副本界面"]
+	},
+	"检测觉醒副本界面": {
+		"recognition": "OCR",
+		"roi": [98, 16, 80, 53],
+		"only_rec": true,
+		"expected": "觉醒",
+		"action": "DoNothing",
+		"next": ["检测挑战次数是否超过设置的次数"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"检测业原火或者御灵副本界面": {
 		"recognition": "TemplateMatch",
 		"roi": [1118, 210, 70, 70],
 		"template": "组队战斗/右侧边栏御魂图标.png",
@@ -7,7 +25,7 @@
 		"action": "DoNothing",
 		"next": ["检测挑战次数是否超过设置的次数"],
 		"timeout": 300,
-		"on_error": []
+		"on_error": ["刷副本任务次数够了结束"]
 	},
 	"检测挑战次数是否超过设置的次数": {
 		"recognition": "Custom",
@@ -20,6 +38,7 @@
 	"检测挑战按钮然后点击": {
 		"recognition": "OCR",
 		"roi": [1112, 600, 84, 51],
+		"only_rec": true,
 		"expected": "挑战",
 		"action": "Click",
 		"post_delay": 3000,
@@ -53,7 +72,7 @@
 		"expected": "自动",
 		"action": "DoNothing",
 		"post_delay": 8000,
-		"next": ["TASK-检测业原火或者御灵副本界面"],
+		"next": ["TASK-检测副本界面"],
 		"interrupt": [
 			"ACT-检测还在战斗中再等3秒",
 			"ACT-检测有御魂满了的弹窗就关闭",
@@ -96,5 +115,8 @@
 		"action": "Click",
 		"target": [20, 20, 120, 70],
 		"post_delay": 800
+	},
+	"刷副本任务次数够了结束": {
+		"focus": {"succeeded": "[color:green]刷副本达到设定次数，任务完成[/color]"}
 	}
 }
