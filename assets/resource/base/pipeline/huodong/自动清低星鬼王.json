@@ -1,0 +1,81 @@
+{
+	"ENTRY-自动清低星鬼王": {
+		"recognition": "OCR",
+		"roi": [81, 11, 148, 52],
+		"only_rec": true,
+		"expected": "迷津",
+		"action": "DoNothing",
+		"next": ["检测点击挑战鬼王", "检测点击召唤鬼王"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-什么都不做等待3秒"]
+	},
+	"检测点击召唤鬼王": {
+		"recognition": "OCR",
+		"roi": [1136, 572, 86, 57],
+		"only_rec": true,
+		"expected": "召唤",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["检测点击挑战鬼王"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测能召唤就召唤一下"]
+	},
+	"ACT-检测能召唤就召唤一下": {
+		"recognition": "OCR",
+		"roi": [1136, 572, 86, 57],
+		"only_rec": true,
+		"expected": "召唤",
+		"action": "Click",
+		"post_delay": 3000
+	},
+	"检测点击挑战鬼王": {
+		"recognition": "OCR",
+		"roi": [1136, 584, 91, 54],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["检测准备战斗按钮并等待"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测能挑战就点一下"]
+	},
+	"ACT-检测能挑战就点一下": {
+		"recognition": "OCR",
+		"roi": [1136, 584, 91, 54],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 3000
+	},
+	"检测准备战斗按钮并等待": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["检测已经开始战斗等待10秒-超鬼王"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 30000,
+		"on_error": []
+	},
+	"检测已经开始战斗等待10秒-超鬼王": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 10000,
+		"next": ["ENTRY-自动清低星鬼王"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等10秒",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
+		],
+		"rate_limit": 1200,
+		"timeout": 10000,
+		"on_error": []
+	},
+	"ACT-检测还在战斗中再等10秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 10000
+	}
+}
