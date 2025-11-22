@@ -1,0 +1,172 @@
+{
+	"ENTRY-单刷觉醒刷票": {
+		"_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理",
+		"next": [
+			"TASK-C-0检测到已经到了探索地图界面",
+			"TASK-C-0从庭院到探索界面-初始庭院",
+			"TASK-C-0从庭院到探索界面-枫色秋庭"
+		],
+		"interrupt": ["INT-尝试从任意界面回到庭院"]
+	},
+	"TASK-C-0从庭院到探索界面-初始庭院": {
+		"recognition": "OCR",
+		"roi": [653, 132, 48, 49],
+		"only_rec": true,
+		"expected": "索",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["TASK-C-0检测到已经到了探索地图界面"]
+	},
+	"TASK-C-0从庭院到探索界面-枫色秋庭": {
+		"recognition": "OCR",
+		"roi": [630, 130, 48, 46],
+		"only_rec": true,
+		"expected": "索",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["TASK-C-0检测到已经到了探索地图界面"]
+	},
+	"TASK-C-0检测到已经到了探索地图界面": {
+		"recognition": "TemplateMatch",
+		"roi": [62, 633, 45, 47],
+		"template": "探索和副本/觉醒副本图标.png",
+		"action": "DoNothing",
+		"next": ["TASK-C-1从探索界面确认是否刷满门票", "TASK-C-2重置计数器然后开始刷N次觉醒"]
+	},
+	"TASK-C-1从探索界面确认是否刷满门票": {
+		"recognition": "OCR",
+		"roi": [337, 7, 97, 40],
+		"only_rec": true,
+		"expected": "^50",
+		"action": "DoNothing",
+		"next": ["TASK-C-END刷满门票了结束任务"]
+	},
+	"TASK-C-2重置计数器然后开始刷N次觉醒": {
+		"action": "Custom",
+		"custom_action": "ResetCount",
+		"next": ["TASK-C-2检测点击觉醒副本图标"]
+	},
+
+	"TASK-C-2检测点击觉醒副本图标": {
+		"recognition": "TemplateMatch",
+		"roi": [62, 633, 45, 47],
+		"template": "探索和副本/觉醒副本图标.png",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-C-3检测到觉醒之塔点击火麒麟"]
+	},
+	"TASK-C-3检测到觉醒之塔点击火麒麟": {
+		"recognition": "OCR",
+		"roi": [100, 15, 139, 53],
+		"only_rec": true,
+		"expected": "之塔",
+		"action": "Click",
+		"post_delay": 1500,
+		"target": [150, 297, 76, 118],
+		"next": ["TASK-C-4检测到觉醒材料界面"]
+	},
+	"TASK-C-4检测到觉醒材料界面": {
+		"recognition": "OCR",
+		"roi": [100, 15, 139, 53],
+		"only_rec": true,
+		"expected": "材料",
+		"action": "DoNothing",
+		"next": ["TASK-C-OPT检测到加成图标点击一下", "开始循环刷觉醒"]
+	},
+	"TASK-C-OPT检测到加成图标点击一下": {
+		"recognition": "OCR",
+		"roi": [326, 47, 41, 39],
+		"only_rec": true,
+		"expected": "成",
+		"action": "Click",
+		"post_delay": 1500,
+		"next": ["TASK-C-OPT检测觉醒加成如果是红色点击开启加成", "TASK-C-OPT点击一下空白处关闭弹窗"]
+	},
+	"TASK-C-OPT检测觉醒加成如果是红色点击开启加成": {
+		"recognition": "ColorMatch",
+		"roi": [778, 145, 12, 16],
+		"method": 4,
+		"upper": [184, 13, 48],
+		"lower": [177, 10, 33],
+		"count": 100,
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-C-OPT点击一下空白处关闭弹窗"]
+	},
+	"TASK-C-OPT点击一下空白处关闭弹窗": {
+		"action": "Click",
+		"target": [551, 656, 120, 46],
+		"post_delay": 1000,
+		"next": ["开始循环刷觉醒"]
+	},
+	"开始循环刷觉醒": {
+		"recognition": "OCR",
+		"roi": [98, 16, 80, 53],
+		"only_rec": true,
+		"expected": "觉醒",
+		"action": "DoNothing",
+		"next": ["检测挑战次数是否达到N次", "点击左上角返回到探索界面查看门票数量"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"检测挑战次数是否达到N次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 20
+		},
+		"next": ["检测挑战按钮然后点击-刷票"]
+	},
+	"检测挑战按钮然后点击-刷票": {
+		"recognition": "OCR",
+		"roi": [1112, 600, 84, 51],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 3000,
+		"next": ["检测已经进入战斗并且加载完毕-刷票"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测到挑战按钮就再点击一下"],
+		"rate_limit": 1500,
+		"timeout": 20000,
+		"on_error": []
+	},
+	"检测已经进入战斗并且加载完毕-刷票": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["检测已经开始战斗等待X秒-刷票"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 15000,
+		"on_error": []
+	},
+	"检测已经开始战斗等待X秒-刷票": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 2000,
+		"next": ["开始循环刷觉醒"],
+		"interrupt": [
+			"ACT-检测还在战斗中再等3秒",
+			"ACT-检测有御魂满了的弹窗就关闭",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
+		],
+		"rate_limit": 1200,
+		"timeout": 10000,
+		"on_error": []
+	},
+	"点击左上角返回到探索界面查看门票数量": {
+		"action": "Click",
+		"target": [35, 40, 39, 41],
+		"post_delay": 2000,
+		"next": ["TASK-C-0检测到已经到了探索地图界面"]
+	},
+	"TASK-C-END刷满门票了结束任务": {
+		"action": "Click",
+		"target": [35, 40, 39, 41],
+		"post_delay": 5000
+	}
+}

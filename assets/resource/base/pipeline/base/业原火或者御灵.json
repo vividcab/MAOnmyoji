@@ -43,10 +43,18 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["检测已经进入战斗并且加载完毕"],
-		"interrupt": ["ACT-检测到悬赏协作并处理"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测到挑战按钮就再点击一下"],
 		"rate_limit": 1500,
 		"timeout": 20000,
 		"on_error": []
+	},
+	"ACT-检测到挑战按钮就再点击一下": {
+		"recognition": "OCR",
+		"roi": [1112, 600, 84, 51],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 2000
 	},
 	"检测已经进入战斗并且加载完毕": {
 		"recognition": "TemplateMatch",
