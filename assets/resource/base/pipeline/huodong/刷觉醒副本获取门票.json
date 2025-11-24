@@ -115,6 +115,33 @@
 		"custom_recognition_param": {
 			"target": 20
 		},
+		"next": ["选择层数-查找第X层"],
+		"interrupt": ["检测到已经到了最下面则下划", "上划看看下面的层数"]
+	},
+	"检测到已经到了最下面则下划": {
+		"recognition": "OCR",
+		"roi": [272, 555, 90, 47],
+		"only_rec": true,
+		"expected": "拾",
+		"action": "Swipe",
+		"begin": [320, 200, 75, 60],
+		"end": [330, 500, 64, 53],
+		"duration": 1200,
+		"post_delay": 500
+	},
+	"上划看看下面的层数": {
+		"action": "Swipe",
+		"begin": [320, 560, 75, 60],
+		"end": [330, 168, 64, 53],
+		"duration": 1500,
+		"post_delay": 500
+	},
+	"选择层数-查找第X层": {
+		"recognition": "TemplateMatch",
+		"roi": [278, 146, 40, 477],
+		"template": "探索和副本/第六层.png",
+		"action": "Click",
+		"post_delay": 500,
 		"next": ["检测挑战按钮然后点击-刷票"]
 	},
 	"检测挑战按钮然后点击-刷票": {
@@ -125,7 +152,7 @@
 		"action": "Click",
 		"post_delay": 3000,
 		"next": ["检测已经进入战斗并且加载完毕-刷票"],
-		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测到挑战按钮就再点击一下"],
+		"interrupt": ["END-检测到购买体力弹窗就结束任务", "ACT-检测到悬赏协作并处理", "ACT-检测到挑战按钮就再点击一下"],
 		"rate_limit": 1500,
 		"timeout": 20000,
 		"on_error": []
@@ -168,5 +195,13 @@
 		"action": "Click",
 		"target": [35, 40, 39, 41],
 		"post_delay": 5000
+	},
+	"END-检测到购买体力弹窗就结束任务": {
+		"recognition": "OCR",
+		"roi": [566, 193, 143, 55],
+		"only_rec": true,
+		"expected": "购买体力",
+		"next": ["TASK-尝试从任意界面回到庭院"],
+		"focus": {"succeeded": "[color:blue]这个角色没有体力了[/color]"}
 	}
 }

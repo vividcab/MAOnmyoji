@@ -23,9 +23,9 @@
 		"template": "组队战斗/右侧边栏御魂图标.png",
 		"threshold": 0.5,
 		"action": "DoNothing",
-		"next": ["检测挑战次数是否超过设置的次数"],
+		"next": ["检测挑战次数是否超过设置的次数", "刷副本任务次数够了结束"],
 		"timeout": 300,
-		"on_error": ["刷副本任务次数够了结束"]
+		"on_error": []
 	},
 	"检测挑战次数是否超过设置的次数": {
 		"recognition": "Custom",
