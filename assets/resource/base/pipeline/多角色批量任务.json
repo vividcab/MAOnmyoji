@@ -15,10 +15,7 @@
 		"action": "Custom",
 		"custom_action": "RunTaskList",
 		"custom_action_param": {
-			"tasks": [
-				{"taskname": "任务入口-从庭院进入活动爬塔探索页面", "wait": 0.5},
-				{"taskname": "任务出口-从活动页面回到庭院", "wait": 0.5}
-			]
+			"tasks": [{"taskname": "任务入口-SP白版本活动体力刷爬塔4加1", "wait": 0.5}]
 		}
 	}
 }

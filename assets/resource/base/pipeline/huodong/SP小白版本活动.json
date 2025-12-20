@@ -1,0 +1,110 @@
+{
+	"任务入口-SP白版本活动体力刷爬塔4加1": {
+		"recognition": "OCR",
+		"roi": [155, 23, 47, 44],
+		"only_rec": true,
+		"expected": "层",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["HD-1检测魇兽讨伐然后点击"]
+	},
+	"HD-1检测魇兽讨伐然后点击": {
+		"recognition": "OCR",
+		"roi": [118, 125, 116, 35],
+		"only_rec": true,
+		"expected": "讨",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["检测打开了挑战弹窗"]
+	},
+	"检测打开了挑战弹窗": {
+		"recognition": "OCR",
+		"roi": [1124, 592, 111, 64],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "DoNothing",
+		"next": ["检测挑战次数是否超过设置的次数-爬塔4加1"],
+		"timeout": 300,
+		"on_error": []
+	},
+	"检测挑战次数是否超过设置的次数-爬塔4加1": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 5
+		},
+		"action": "Custom",
+		"custom_action": "RandomSleep",
+		"next": ["HD-2检测挑战按钮然后点击"],
+		"focus": {
+			"succeeded": "未达到预设次数，继续下一次挑战"
+		}
+	},
+	"HD-2检测挑战按钮然后点击": {
+		"recognition": "OCR",
+		"roi": [1124, 592, 111, 64],
+		"only_rec": true,
+		"expected": "挑战",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": ["HD-3检测已经进入爬塔战斗并且加载完毕", "HD-END检测到没有次数剩余了"],
+		"interrupt": ["ACT-检测带确定按钮的弹窗并点击确定", "ACT-检测到悬赏协作并处理"],
+		"rate_limit": 1000,
+		"timeout": 10000
+	},
+	"HD-3检测已经进入爬塔战斗并且加载完毕": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"action": "DoNothing",
+		"post_delay": 500,
+		"next": ["HD-4检测已经开始爬塔战斗等待X秒"],
+		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测右下角有准备按钮就点击一下"],
+		"timeout": 5000,
+		"on_error": []
+	},
+	"HD-4检测已经开始爬塔战斗等待X秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "Custom",
+		"custom_action": "RandomSleep",
+		"post_delay": 10000,
+		"next": [
+			"检测打开了挑战弹窗",
+			"任务入口-SP白版本活动体力刷爬塔4加1"
+		],
+		"interrupt": [
+			"ACT-检测还在战斗中再等1秒",
+			"ACT-检测有御魂满了的弹窗就关闭",
+			"ACT-检测到悬赏协作并处理",
+			"ACT-检测不到左上角返回按钮之后就点击一下屏幕左下部分"
+		],
+		"rate_limit": 1200,
+		"timeout": 12000,
+		"on_error": []
+	},
+	"ACT-检测还在战斗中再等1秒": {
+		"recognition": "OCR",
+		"roi": [17, 630, 85, 62],
+		"expected": "自动",
+		"action": "DoNothing",
+		"post_delay": 1100
+	},
+	"ACT-检测不到左上角返回按钮之后就点击一下屏幕左下部分": {
+		"recognition": "TemplateMatch",
+		"roi": [0, 0, 70, 70],
+		"template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+		"inverse": true,
+		"action": "Click",
+		"target": [152, 499, 119, 112],
+		"post_delay": 800
+	},
+	"HD-END检测到没有次数剩余了": {
+		"recognition": "OCR",
+		"roi": [411, 581, 107, 35],
+		"only_rec": true,
+		"expected": "余0次",
+		"next": []
+	}
+}
