@@ -271,9 +271,18 @@
 		"expected": "神",
 		"action": "Click",
 		"post_delay": 1500,
-		"next": ["检测自己结界的式神是否有培养到满级的", "检测是否可以到好友结界寄养"],
+		"next": ["检测并点一下智能放入按键", "检测是否可以到好友结界寄养"],
 		"timeout": 1000,
 		"on_error": ["B-返回到自己的结界"]
+	},
+	"检测并点一下智能放入按键": {
+		"recognition": "OCR",
+		"roi": [1148, 505, 46, 28],
+		"only_rec": true,
+		"expected": "智能",
+		"action": "Click",
+		"post_delay": 500,
+		"next": ["检测是否可以到好友结界寄养"]
 	},
 	"检测自己结界的式神是否有培养到满级的": {
 		"recognition": "TemplateMatch",

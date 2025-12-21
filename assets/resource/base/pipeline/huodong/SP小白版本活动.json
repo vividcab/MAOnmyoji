@@ -1,7 +1,7 @@
 {
 	"任务入口-SP白版本活动体力刷爬塔4加1": {
 		"recognition": "OCR",
-		"roi": [155, 23, 47, 44],
+		"roi": [91, 23, 174, 47],
 		"only_rec": true,
 		"expected": "层",
 		"action": "Click",
