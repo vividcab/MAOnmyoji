@@ -157,6 +157,7 @@
 		"action": "Click",
 		"post_delay": 800,
 		"next": ["点击一键领取"],
+		"timeout": 500,
 		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
 	},
 	"点击一键领取": {
@@ -165,6 +166,7 @@
 		"template": "签到/一键领取.png",
 		"action": "Click",
 		"next": ["确定领取或御魂爆仓确认按钮"],
+		"timeout": 500,
 		"on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
 	},
 	"确定领取或御魂爆仓确认按钮": {
@@ -394,7 +396,7 @@
 		"roi": [22, 79, 79, 476],
 		"template": "签到/神秘商店.png",
 		"action": "Click",
-		"post_delay": 1500,
+		"post_delay": 2000,
 		"next": ["神秘商店截第一张图"]
 	},
 	"神秘商店截第一张图": {
