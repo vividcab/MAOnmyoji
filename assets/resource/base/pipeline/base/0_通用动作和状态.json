@@ -35,6 +35,14 @@
 		"action": "Click",
 		"post_delay": 1200
 	},
+	"ACT-检测右上角跳过按钮并点击": {
+		"recognition": "OCR",
+		"roi": [1163, 32, 68, 38],
+		"expected": "跳过",
+		"only_rec": true,
+		"action": "Click",
+		"post_delay": 1000
+	},
 
 	"ACT-检测带确定按钮的弹窗并点击确定": {
 		"_doc": "有时候会有连续两层弹窗，后弹出来的窗口更小，确定按钮位置更靠上，所以用 Vertical 排序",

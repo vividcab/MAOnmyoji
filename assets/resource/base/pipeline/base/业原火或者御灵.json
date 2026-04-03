@@ -1,11 +1,16 @@
 {
 	"TASK-检测副本界面": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 84, 51],
+		"roi": [1112, 600, 113, 51],
 		"only_rec": true,
 		"expected": "挑战",
 		"action": "DoNothing",
-		"next": ["检测业原火或者御灵副本界面", "检测觉醒副本界面"]
+		"next": [
+			"检测业原火或者御灵副本界面",
+			"检测觉醒副本界面",
+			"检测挑战次数是否超过设置的次数",
+			"刷副本任务次数够了结束"
+		]
 	},
 	"检测觉醒副本界面": {
 		"recognition": "OCR",
@@ -13,7 +18,7 @@
 		"only_rec": true,
 		"expected": "觉醒",
 		"action": "DoNothing",
-		"next": ["检测挑战次数是否超过设置的次数"],
+		"next": ["检测挑战次数是否超过设置的次数", "刷副本任务次数够了结束"],
 		"timeout": 300,
 		"on_error": []
 	},
@@ -37,7 +42,7 @@
 	},
 	"检测挑战按钮然后点击": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 84, 51],
+		"roi": [1112, 600, 113, 51],
 		"only_rec": true,
 		"expected": "挑战",
 		"action": "Click",
@@ -50,7 +55,7 @@
 	},
 	"ACT-检测到挑战按钮就再点击一下": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 84, 51],
+		"roi": [1112, 600, 113, 51],
 		"only_rec": true,
 		"expected": "挑战",
 		"action": "Click",
