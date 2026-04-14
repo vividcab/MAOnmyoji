@@ -48,6 +48,10 @@ class OverrideLoginInfo(CustomAction):
                 }
             }
         )
+        context.override_pipeline(
+            {"检测侧边栏要登录的角色信息并点击": {"expected": servername}}
+        )
+
         # logger.info(f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}")
 
         return CustomAction.RunResult(success=True)

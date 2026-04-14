@@ -1,35 +1,14 @@
 {
 	"TASK-检测副本界面": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 113, 51],
-		"only_rec": true,
-		"expected": ["挑战", "探查"],
+		"roi": [1053, 559, 180, 116],
+		"expected": ["挑战"],
 		"action": "DoNothing",
 		"next": [
-			"检测业原火或者御灵副本界面",
-			"检测觉醒副本界面",
 			"检测挑战次数是否超过设置的次数",
 			"刷副本任务次数够了结束"
-		]
-	},
-	"检测觉醒副本界面": {
-		"recognition": "OCR",
-		"roi": [98, 16, 80, 53],
-		"only_rec": true,
-		"expected": "觉醒",
-		"action": "DoNothing",
-		"next": ["检测挑战次数是否超过设置的次数", "刷副本任务次数够了结束"],
-		"timeout": 300,
-		"on_error": []
-	},
-	"检测业原火或者御灵副本界面": {
-		"recognition": "TemplateMatch",
-		"roi": [1118, 210, 70, 70],
-		"template": "组队战斗/右侧边栏御魂图标.png",
-		"threshold": 0.5,
-		"action": "DoNothing",
-		"next": ["检测挑战次数是否超过设置的次数", "刷副本任务次数够了结束"],
-		"timeout": 300,
+		],
+		"timeout": 2000,
 		"on_error": []
 	},
 	"检测挑战次数是否超过设置的次数": {
@@ -42,12 +21,11 @@
 	},
 	"检测挑战按钮然后点击": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 113, 51],
-		"only_rec": true,
-		"expected": ["挑战", "探查"],
+		"roi": [1053, 559, 180, 116],
+		"expected": ["挑战"],
 		"action": "Click",
 		"post_delay": 3000,
-		"next": ["检测已经进入战斗并且加载完毕"],
+		"next": ["检测已经开始战斗等待X秒", "检测已经进入战斗并且加载完毕"],
 		"interrupt": ["ACT-检测到悬赏协作并处理", "ACT-检测到挑战按钮就再点击一下"],
 		"rate_limit": 1500,
 		"timeout": 20000,
@@ -55,9 +33,8 @@
 	},
 	"ACT-检测到挑战按钮就再点击一下": {
 		"recognition": "OCR",
-		"roi": [1112, 600, 113, 51],
-		"only_rec": true,
-		"expected": ["挑战", "探查"],
+		"roi": [1053, 559, 180, 116],
+		"expected": ["挑战"],
 		"action": "Click",
 		"post_delay": 2000
 	},
@@ -88,14 +65,14 @@
 		"next": ["TASK-检测副本界面"],
 		"interrupt": [
 			"ACT-检测还在战斗中再等3秒",
-			"ACT-检测有御魂满了的弹窗就关闭",
 			"ACT-检测到悬赏协作并处理",
+			"ACT-检测有御魂满了的弹窗就关闭",
 			"ACT-检测到刷英杰试炼选择技能的界面-点击确定",
 			"ACT-检测到契灵结契失败点放弃结契",
 			"ACT-检测到刷探查发现首领契灵点稍后集结",
 			"ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
 		],
-		"rate_limit": 1200,
+		"rate_limit": 1500,
 		"timeout": 10000,
 		"on_error": []
 	},
