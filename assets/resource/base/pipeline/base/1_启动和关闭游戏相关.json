@@ -1,9 +1,8 @@
 {
 	"STATUS-处于模拟器桌面": {
 		"recognition": "OCR",
-		"roi": [761, 200, 76, 30],
-		"expected": "游戏中心",
-		"only_rec": true
+		"roi": [755, 169, 93, 42],
+		"expected": "游戏中心"
 	},
 	"STATUS-检测游戏已经启动到登录界面了": {
 		"recognition": "TemplateMatch",

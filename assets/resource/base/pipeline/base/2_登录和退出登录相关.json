@@ -10,43 +10,28 @@
 		],
 		"interrupt": [
 			"ACT-检测各类右上部分叉号并点一下",
-			"INT-检测到在游戏界面中就等2秒-Count最多3次",
+			"INT-检测到非处于MuMu模拟器桌面就等3秒-最多3次",
 			"TASK-重新启动游戏"
 		],
 		"timeout": 10000,
 		"on_error": [],
 		"_comment": "interrupt 不对游戏加载等待时间进行处理，有任务超时兜底"
 	},
-	"INT-检测到在游戏界面中就等2秒-Count最多3次": {
-		"recognition": "OCR",
-		"roi": [761, 200, 76, 30],
-		"expected": "游戏中心",
-		"only_rec": true,
-		"inverse": true,
-		"next": ["Count-登录前等待的次数-最多3次", "Disable-停止登录前等待"]
-	},
-	"Count-登录前等待的次数-最多3次": {
-		"recognition": {
-			"type": "Custom",
-			"param": {
-				"custom_recognition": "Count",
-				"custom_recognition_param": {
-					"target": 3
-				}
-			}
-		}
-	},
-	"Disable-停止登录前等待": {
-		"action": {
-			"type": "Custom",
-			"param": {
-				"custom_action": "DisableNode",
-				"custom_action_param": {
-					"node_name": "INT-检测到在游戏界面中就等2秒-Count最多3次"
-				}
+	"INT-检测到非处于MuMu模拟器桌面就等3秒-最多3次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 3,
+			"recognition": {
+				"type": "OCR",
+				"roi": [761, 200, 76, 30],
+				"expected": "游戏中心",
+				"only_rec": true,
+				"inverse": true
 			}
 		},
-		"focus": {"succeeded": "[color:red]出现未知错误，未等待游戏到可登录角色界面[/color]"}
+		"action": "DoNothing",
+		"post_delay": 3000
 	},
 	"TASK-A-0检测到没有任何弹窗的空的游戏登录界面": {
 		"recognition": "OCR",
@@ -257,7 +242,7 @@
 		"template": "平台区服/已有角色.png",
 		"action": "DoNothing",
 		"next": ["TASK-A-9查找区服图标并点击选择该角色"],
-		"interrupt": ["ACT-角色昵称栏左滑一次-Count最多划3次", "TASK-A-END3没有目标区服的角色"]
+		"interrupt": ["INT-角色昵称栏左滑一次-最多划3次", "TASK-A-END3没有目标区服的角色"]
 	},
 	"TASK-A-9查找区服图标并点击选择该角色": {
 		"recognition": "TemplateMatch",
@@ -268,38 +253,20 @@
 		"next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
 		"focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
 	},
-	"ACT-角色昵称栏左滑一次-Count最多划3次": {
+	"INT-角色昵称栏左滑一次-最多划3次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 3
+		},
 		"action": "Swipe",
 		"begin": [998, 595, 1, 1],
 		"end": [277, 595, 1, 1],
-		"duration": 1800,
-		"next": ["Count-角色栏左滑次数", "Disable-停止角色栏左滑"]
-	},
-	"Count-角色栏左滑次数": {
-		"recognition": {
-			"type": "Custom",
-			"param": {
-				"custom_recognition": "Count",
-				"custom_recognition_param": {
-					"target": 3
-				}
-			}
-		}
-	},
-	"Disable-停止角色栏左滑": {
-		"action": {
-			"type": "Custom",
-			"param": {
-				"custom_action": "DisableNode",
-				"custom_action_param": {
-					"node_name": "ACT-角色昵称栏左滑一次-Count最多划3次"
-				}
-			}
-		},
-		"focus": {"succeeded": "[color:red]查找了 3 次未找到目标区服[/color]"}
+		"duration": 1800
 	},
 	"TASK-A-END3没有目标区服的角色": {
-		"action": "DoNothing"
+		"action": "DoNothing",
+		"focus": {"succeeded": "[color:red]查找了 3 次未找到目标区服[/color]"}
 	},
 
 	"TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态": {
@@ -311,7 +278,7 @@
 		"post_delay": 4000,
 		"next": ["检测到需要在侧边选择同区不同角色", "STATUS-处于庭院初始状态"],
 		"interrupt": [
-			"ACT-检测到进入游戏四个字并点一下-Count最多3次",
+			"INT-检测到进入游戏四个字并点一下-最多3次",
 			"ACT-检测到还在加载中等待3秒",
 			"ACT-检测到退出游戏弹窗并点一下取消",
 			"ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
@@ -321,7 +288,7 @@
 			"ACT-检测各类右上部分叉号并点一下",
 			"ACT-检测各类左上角返回按钮并点一下",
 			"ACT-检测到邮箱图标点一下",
-			"ACT-无条件按一下Esc键-Count最多4次"
+			"INT-无条件按一下Esc键-最多4次"
 		],
 		"rate_limit": 1500,
 		"timeout": 30000,
@@ -362,45 +329,27 @@
 			"ACT-检测各类右上部分叉号并点一下",
 			"ACT-检测各类左上角返回按钮并点一下",
 			"ACT-检测到邮箱图标点一下",
-			"ACT-无条件按一下Esc键-Count最多4次"
+			"INT-无条件按一下Esc键-最多4次"
 		],
 		"rate_limit": 1500,
 		"timeout": 30000,
 		"on_error": [],
 		"_comment": "出错情况可能是游戏维护了等情况登录不进游戏"
 	},
-	"ACT-检测到进入游戏四个字并点一下-Count最多3次": {
-		"recognition": "OCR",
-		"roi": [545, 563, 185, 65],
-		"expected": "游戏",
-		"action": "Click",
-		"target": [558, 570, 160, 45],
-		"post_delay": 8000,
-		"next": ["Count-点击进入游戏的次数-最多3次", "Disable-停止检测点击进入游戏"]
-	},
-	"Count-点击进入游戏的次数-最多3次": {
-		"recognition": {
-			"type": "Custom",
-			"param": {
-				"custom_recognition": "Count",
-				"custom_recognition_param": {
-					"target": 3
-				}
-			}
-		}
-	},
-	"Disable-停止检测点击进入游戏": {
-		"action": {
-			"type": "Custom",
-			"param": {
-				"custom_action": "DisableNode",
-				"custom_action_param": {
-					"node_name": "ACT-检测到进入游戏四个字并点一下-Count最多3次"
-				}
+	"INT-检测到进入游戏四个字并点一下-最多3次": {
+		"recognition": "Custom",
+		"custom_recognition": "Count",
+		"custom_recognition_param": {
+			"target": 3,
+			"recognition": {
+				"type": "OCR",
+				"roi": [545, 563, 185, 65],
+				"expected": "游戏"
 			}
 		},
-		"next": ["TASK-重新启动游戏"],
-		"focus": {"succeeded": "[color:red]可能网络故障或游戏服务器维护，重复点击进入游戏4次均未成功[/color]"}
+		"action": "Click",
+		"target": [558, 570, 160, 45],
+		"post_delay": 8000
 	},
 	"ACT-检测到还在加载中等待3秒": {
 		"recognition": "OCR",
@@ -433,7 +382,7 @@
 		"action": "Click",
 		"post_delay": 800
 	},
-	"ACT-无条件按一下Esc键-Count最多4次": {
+	"INT-无条件按一下Esc键-最多4次": {
 		"recognition": {
 			"type": "Custom",
 			"param": {
@@ -446,29 +395,6 @@
 		"action": "Key",
 		"key": 111,
 		"post_delay": 500
-	},
-	"Count-按Esc键的次数": {
-		"recognition": {
-			"type": "Custom",
-			"param": {
-				"custom_recognition": "Count",
-				"custom_recognition_param": {
-					"target": 4
-				}
-			}
-		}
-	},
-	"Disable-停止无条件按Esc键": {
-		"action": {
-			"type": "Custom",
-			"param": {
-				"custom_action": "DisableNode",
-				"custom_action_param": {
-					"node_name": "ACT-无条件按一下Esc键-Count最多4次"
-				}
-			}
-		},
-		"focus": {"succeeded": "[color:red]可能出错：按下4次Esc键了还没到庭院初始状态[/color]"}
 	},
 
 	"ENTRY-退出登录某角色": {
