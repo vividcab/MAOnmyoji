@@ -197,10 +197,7 @@
 		"only_rec": true,
 		"action": "Click",
 		"post_delay": 1800,
-		"next": [
-			"TASK-A-8检测打开了区服选择界面且有角色点击第一个角色名展开区服图标",
-			"TASK-A-7-2检测切换区服按钮并点击"
-		],
+		"next": ["TASK-A-8检测打开了区服选择界面且有角色"],
 		"rate_limit": 2000,
 		"timeout": 6000,
 		"on_error": ["TASK-A-END2没有角色"]
@@ -209,15 +206,15 @@
 		"action": "DoNothing"
 	},
 
-	"TASK-A-8检测打开了区服选择界面且有角色点击第一个角色名展开区服图标": {
-		"recognition": "TemplateMatch",
-		"roi": [228, 529, 180, 40],
-		"template": "平台区服/已有角色.png",
+	"TASK-A-8检测打开了区服选择界面且有角色": {
+		"recognition": "OCR",
+		"roi": [242, 142, 120, 39],
+		"only_rec": true,
+		"expected": "已有角色",
 		"action": "Click",
-		"target": [276, 578, 61, 19],
 		"post_delay": 800,
-		"next": ["TASK-A-9-0检测展开了区服图标然后开始查找目标区服图标"],
-		"interrupt": ["INT-A-8-0检测新区集结弹窗并点击取消", "ACT-点击第一个角色名展开区服图标"],
+		"next": ["TASK-A-9-0在已有角色界面查找目标服务器名"],
+		"interrupt": ["INT-A-8-0检测新区集结弹窗并点击取消"],
 		"timeout": 6000
 	},
 	"INT-A-8-0检测新区集结弹窗并点击取消": {
@@ -236,13 +233,14 @@
 		"post_delay": 800
 	},
 
-	"TASK-A-9-0检测展开了区服图标然后开始查找目标区服图标": {
-		"recognition": "TemplateMatch",
-		"roi": [228, 405, 185, 53],
-		"template": "平台区服/已有角色.png",
-		"action": "DoNothing",
-		"next": ["TASK-A-9查找区服图标并点击选择该角色"],
-		"interrupt": ["INT-角色昵称栏左滑一次-最多划3次", "TASK-A-END3没有目标区服的角色"]
+	"TASK-A-9-0在已有角色界面查找目标服务器名": {
+		"recognition": "OCR",
+		"roi": [501, 132, 501, 484],
+		"expected": "区服信息--在代码里设置",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
+		"interrupt": ["INT-角色栏上滑一次-最多划3次", "TASK-A-END3没有目标区服的角色"]
 	},
 	"TASK-A-9查找区服图标并点击选择该角色": {
 		"recognition": "TemplateMatch",
@@ -253,15 +251,15 @@
 		"next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
 		"focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
 	},
-	"INT-角色昵称栏左滑一次-最多划3次": {
+	"INT-角色栏上滑一次-最多划3次": {
 		"recognition": "Custom",
 		"custom_recognition": "Count",
 		"custom_recognition_param": {
 			"target": 3
 		},
 		"action": "Swipe",
-		"begin": [998, 595, 1, 1],
-		"end": [277, 595, 1, 1],
+		"begin": [764, 536, 50, 50],
+		"end": [794, 247, 50, 50],
 		"duration": 1800
 	},
 	"TASK-A-END3没有目标区服的角色": {

@@ -42,12 +42,9 @@ class OverrideLoginInfo(CustomAction):
             {"TASK-A-7-0识别到当前区服就是要登录的区服": {"expected": servername}}
         )
         context.override_pipeline(
-            {
-                "TASK-A-9查找区服图标并点击选择该角色": {
-                    "template": "平台区服/" + servername + ".png"
-                }
-            }
+            {"TASK-A-9-0在已有角色界面查找目标服务器名": {"expected": servername}}
         )
+
         context.override_pipeline(
             {"检测侧边栏要登录的角色信息并点击": {"expected": servername}}
         )
