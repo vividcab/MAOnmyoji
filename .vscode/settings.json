@@ -1,11 +1,13 @@
 {
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
     "json.schemas": [
         {
             "fileMatch": [
                 "/assets/resource/**/*.json",
                 "/install/resource/**/*.json",
-                "!/assets/resource/data/activity/{cn,en,jp,items}.json",
-                "!/install/resource/data/activity/{cn,en,jp,items}.json"
+                "!/assets/resource/tasks/**/**.json",
+                "!/install/resource/tasks/**/**.json"
             ],
             "url": "/deps/tools/pipeline.schema.json"
         },
@@ -15,6 +17,13 @@
                 "/install/interface.json"
             ],
             "url": "/deps/tools/interface.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/assets/resource/tasks/**/*.json",
+                "/install/resource/tasks/**/*.json"
+            ],
+            "url": "/deps/tools/interface_import.schema.json"
         },
         {
             "fileMatch": [

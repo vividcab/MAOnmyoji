@@ -1,6 +1,13 @@
 {
-  "devDependencies": {
-    "prettier": "^3.6.2",
-    "prettier-plugin-multiline-arrays": "^3.0.6"
-  }
+    "scripts": {
+        "format:json": "prettier --write \"**/*.json\"",
+        "format:py": "black .",
+        "format:all": "pnpm format:json && pnpm format:py"
+    },
+    "devDependencies": {
+        "@nekosu/maa-tools": "^1.0.23",
+        "@nekosu/prettier-plugin-maafw-sort": "^1.0.5",
+        "prettier": "^3.8.3",
+        "prettier-plugin-multiline-arrays": "^4.1.7"
+    }
 }

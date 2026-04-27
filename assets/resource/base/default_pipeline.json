@@ -1,8 +1,8 @@
 {
-	"Default": {
-		"rate_limit": 1000,
-		"post_delay": 500,
-		"timeout": 20000,
-		"on_error": "任务出错-写日志记录一下"
-	}
+    "Default": {
+        "rate_limit": 1000,
+        "post_delay": 500,
+        "timeout": 20000,
+        "on_error": "任务出错-写日志记录一下"
+    }
 }
