@@ -1,5 +1,6 @@
 {
     "ENTRY-登录某角色": {
+        "desc": "执行此任务的时候，游戏应当已经启动到登录界面了；但是也要考虑其他情况，做异常处理",
         "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
         "timeout": 10000,
         "next": [
@@ -7,60 +8,97 @@
             "TASK-A-1检测到用户中心弹窗并点击切换账号按钮",
             "TASK-A-0检测到没有任何弹窗的空的游戏登录界面",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]INT-检测到非处于MuMu模拟器桌面就等3秒-最多3次",
+            "[JumpBack]INT-检测到非处于MuMu模拟器桌面就等3秒-最多4次",
             "[JumpBack]TASK-重新启动游戏"
         ],
         "on_error": [],
-        "_doc": "一般情况下，执行此任务的时候，游戏应当已经启动到登录界面了；但是也要考虑其他情况，做异常处理"
+        "_doc": "还是使用旧的 custon_action 实现的计数器，因为多角色任务会共享 context 共享计数次数，节点命中到达 max_hit 次数后剩余角色的任务无法执行节点"
     },
-    "INT-检测到非处于MuMu模拟器桌面就等3秒-最多3次": {
+    "INT-检测到非处于MuMu模拟器桌面就等3秒-最多4次": {
         "recognition": {
             "type": "Custom",
             "param": {
                 "custom_recognition": "Count",
                 "custom_recognition_param": {
-                    "target": 3,
+                    "target": 20,
                     "recognition": {
-                        "type": "OCR",
-                        "roi": [761, 200, 76, 30],
-                        "expected": "游戏中心",
-                        "only_rec": true,
-                        "inverse": true
+                        "type": "Or",
+                        "param": {
+                            "any_of": [
+                                {"recognition": "OCR", "roi": [755, 169, 93, 42], "expected": "游戏中心"},
+                                {
+                                    "recognition": "TemplateMatch",
+                                    "roi": [213, 616, 874, 86],
+                                    "template": "平台区服/MUMU模拟器桌面dock栏设置按钮.png"
+                                }
+                            ]
+                        }
                     }
                 }
             }
         },
-        "action": {"type": "DoNothing"},
+        "inverse": true,
         "post_delay": 3000
     },
     "TASK-A-0检测到没有任何弹窗的空的游戏登录界面": {
-        "recognition": {"type": "OCR", "param": {"roi": [1184, 254, 82, 27], "expected": ["中心"], "only_rec": true}},
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 6,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [1184, 254, 82, 27], "expected": ["中心"], "only_rec": true}
+                    }
+                }
+            }
+        },
         "action": {"type": "Click", "param": {"target": [1209, 226, 35, 30]}},
-        "post_delay": 2000,
+        "post_delay": 1500,
         "timeout": 5000,
-        "rate_limit": 1000,
         "next": [
             "TASK-A-2检测到登录框",
             "TASK-A-1检测到用户中心弹窗并点击切换账号按钮",
             "TASK-A-0检测到没有任何弹窗的空的游戏登录界面"
-        ]
+        ],
+        "_doc": "因为该节点自己的 next 有自己，避免死循环，加上命中次数限制"
     },
     "TASK-A-1检测到用户中心弹窗并点击切换账号按钮": {
         "recognition": {
-            "type": "OCR",
-            "param": {"roi": [950, 187, 108, 44], "expected": ["切换账号"], "only_rec": true}
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 6,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [950, 187, 108, 44], "expected": ["切换账号"], "only_rec": true}
+                    }
+                }
+            }
         },
         "action": {"type": "Click"},
-        "post_delay": 1000,
-        "rate_limit": 1000,
-        "next": ["TASK-A-2检测到登录框"]
+        "post_delay": 1500,
+        "timeout": 5000,
+        "next": ["TASK-A-2检测到登录框", "TASK-A-1检测到用户中心弹窗并点击切换账号按钮"],
+        "_doc": "因为该节点自己的 next 有自己，避免死循环，加上命中次数限制"
     },
     "TASK-A-2检测到登录框": {
-        "recognition": {"type": "OCR", "param": {"roi": [596, 422, 87, 47], "expected": ["登录"], "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [596, 422, 87, 47],
+                "expected": ["登录"],
+                "only_rec": true
+            }
+        },
         "post_delay": 1000,
-        "next": ["重写账号角色信息"]
+        "next": ["TASK-A-OPT-需要指定账号重写账号角色信息", "TASK-A-5检测登录按钮并点击"]
     },
-    "重写账号角色信息": {
+    "TASK-A-OPT-需要指定账号重写账号角色信息": {
+        "desc": "此节点默认不启用，需指定账号、平台、区服、角色名参数才启用此节点",
+        "enabled": false,
         "action": {
             "type": "Custom",
             "param": {
@@ -77,23 +115,29 @@
         "next": [
             "TASK-A-3-0识别到当前账号就是要登录的账号",
             "TASK-A-3-1检测已经打开了账号选择列表开始查找账号",
-            "[JumpBack]ACT-检测到没打开账号选择栏点击一下账号选择栏"
-        ],
-        "_doc": "此节点用于设置登录角色信息。用户在通用UI的任务设置处填写账号、平台、区服参数"
+            "[JumpBack]TASK-A-ACT-检测到没打开账号选择栏点击一下账号选择栏"
+        ]
     },
     "TASK-A-3-0识别到当前账号就是要登录的账号": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [464, 292, 386, 42], "expected": "账号信息--在代码里设置", "only_rec": true}
+            "param": {
+                "roi": [464, 292, 386, 42],
+                "expected": [".*", "账号信息--在代码里设置"],
+                "only_rec": true
+            }
         },
-        "action": {"type": "DoNothing"},
         "post_delay": 500,
         "next": ["TASK-A-5检测登录按钮并点击"]
     },
-    "ACT-检测到没打开账号选择栏点击一下账号选择栏": {
+    "TASK-A-ACT-检测到没打开账号选择栏点击一下账号选择栏": {
         "recognition": {
             "type": "ColorMatch",
-            "param": {"roi": [790, 440, 10, 10], "lower": [250, 250, 250], "upper": [255, 255, 255]}
+            "param": {
+                "roi": [790, 440, 10, 10],
+                "lower": [250, 250, 250],
+                "upper": [255, 255, 255]
+            }
         },
         "inverse": true,
         "action": {"type": "Click", "param": {"target": [499, 296, 283, 67]}},
@@ -102,14 +146,28 @@
     "TASK-A-3-1检测已经打开了账号选择列表开始查找账号": {
         "recognition": {
             "type": "ColorMatch",
-            "param": {"roi": [790, 440, 10, 10], "lower": [250, 250, 250], "upper": [255, 255, 255], "count": 90}
+            "param": {
+                "roi": [790, 440, 10, 10],
+                "lower": [250, 250, 250],
+                "upper": [255, 255, 255],
+                "count": 90
+            }
         },
-        "action": {"type": "DoNothing"},
-        "next": ["TASK-A-4找到匹配的账号了并点击", "TASK-A-END1检测划到底部了", "[JumpBack]ACT-在账号选择页下划"],
+        "next": [
+            "TASK-A-4找到匹配的账号了并点击",
+            "TASK-A-END1检测划到底部了",
+            "[JumpBack]TASK-A-ACT-在账号选择页上划"
+        ],
         "_doc": "识别原本红色的登录按钮位置如果是白色，证明账号选择栏已经打开"
     },
     "TASK-A-4找到匹配的账号了并点击": {
-        "recognition": {"type": "OCR", "param": {"roi": [461, 283, 367, 315], "expected": "账号信息--在代码里设置"}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [461, 283, 367, 315],
+                "expected": [".*", "账号信息--在代码里设置"]
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 1200,
         "next": ["TASK-A-5检测登录按钮并点击"]
@@ -117,34 +175,63 @@
     "TASK-A-END1检测划到底部了": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [461, 546, 138, 46], "expected": ["添加新账号"], "only_rec": true}
+            "param": {
+                "roi": [461, 546, 138, 46],
+                "expected": ["添加新账号"],
+                "only_rec": true
+            }
         },
         "action": {"type": "Click", "param": {"target": [200, 150, 50, 50]}},
-        "next": ["重写账号角色信息"]
+        "next": ["TASK-A-OPT-需要指定账号重写账号角色信息"],
+        "_doc": "如果划到最下方还没找到账号可能是中间卡了，点一下空白处关掉账号下拉选择框重新开始找"
     },
-    "ACT-在账号选择页下划": {
-        "action": {"type": "Swipe", "param": {"begin": [424, 551, 10, 10], "end": [427, 216, 10, 10], "duration": 1500}}
+    "TASK-A-ACT-在账号选择页上划": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [424, 551, 10, 10],
+                "end": [427, 216, 10, 10],
+                "duration": 1600
+            }
+        }
     },
     "TASK-A-5检测登录按钮并点击": {
-        "recognition": {"type": "OCR", "param": {"roi": [596, 422, 87, 47], "expected": ["登录"], "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [596, 422, 87, 47],
+                "expected": ["登录"],
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
             "TASK-A-6检测平台按钮并点击",
             "TASK-A-5检测登录按钮并点击",
-            "[JumpBack]INT-A-6-0检测到切换账号弹窗点击叉号"
+            "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号"
         ]
     },
-    "INT-A-6-0检测到切换账号弹窗点击叉号": {
-        "recognition": {"type": "OCR", "param": {"roi": [940, 184, 127, 49], "expected": "切换账号"}},
+    "TASK-A-6-INT检测到切换账号弹窗点击叉号": {
+        "desc": "处理少见的情况，模拟器卡的话可能导致前面的弹窗没关闭，在这手动关掉它",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [940, 184, 127, 49],
+                "expected": "切换账号"
+            }
+        },
         "action": {"type": "Click", "param": {"target": [1053, 114, 20, 20]}},
         "post_delay": 1200
     },
     "TASK-A-6检测平台按钮并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [527, 373, 226, 64], "template": "平台区服/安卓端.png"}
+            "param": {
+                "roi": [527, 373, 226, 64],
+                "template": ["平台区服/安卓端.png", "平台区服/苹果端.png"]
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 2000,
@@ -153,30 +240,44 @@
             "TASK-A-7-0识别到当前区服就是要登录的区服",
             "TASK-A-7-2检测切换区服按钮并点击",
             "TASK-A-6检测平台按钮并点击",
-            "[JumpBack]INT-A-7-1检测协议弹窗并接受",
-            "[JumpBack]INT-A-6-0检测到切换账号弹窗点击叉号",
+            "[JumpBack]TASK-A-7-INT检测协议弹窗并接受",
+            "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下"
         ]
     },
     "TASK-A-7-0识别到当前区服就是要登录的区服": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [478, 507, 240, 34], "expected": "区服信息--在代码里设置", "only_rec": true}
+            "param": {
+                "roi": [478, 507, 240, 34],
+                "expected": [".*", "区服信息--在代码里设置"],
+                "only_rec": true
+            }
         },
-        "action": {"type": "DoNothing"},
-        "next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态", "[JumpBack]INT-A-7-1检测协议弹窗并接受"],
+        "next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态", "[JumpBack]TASK-A-7-INT检测协议弹窗并接受"],
         "focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
     },
-    "INT-A-7-1检测协议弹窗并接受": {
+    "TASK-A-7-INT检测协议弹窗并接受": {
+        "desc": "处理用户协议弹窗，协议更新后会弹出来",
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [742, 594, 89, 47], "template": "平台区服/接受用户协议与隐私政策弹窗.png"}
+            "param": {
+                "roi": [742, 594, 89, 47],
+                "template": "平台区服/接受用户协议与隐私政策弹窗.png"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 1000
     },
     "TASK-A-7-2检测切换区服按钮并点击": {
-        "recognition": {"type": "OCR", "param": {"roi": [717, 508, 66, 33], "expected": ["切换"], "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [717, 508, 66, 33],
+                "expected": ["切换"],
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 1800,
         "timeout": 6000,
@@ -186,99 +287,133 @@
     },
     "TASK-A-END2没有角色": {"action": {"type": "DoNothing"}},
     "TASK-A-8检测打开了区服选择界面且有角色": {
-        "recognition": {"type": "OCR", "param": {"roi": [242, 142, 120, 39], "expected": "已有角色", "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [242, 142, 120, 39],
+                "expected": "已有角色",
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 800,
         "timeout": 6000,
-        "next": ["TASK-A-9-0在已有角色界面查找目标服务器名", "[JumpBack]INT-A-8-0检测新区集结弹窗并点击取消"]
+        "next": ["TASK-A-9在已有角色界面查找目标服务器名", "[JumpBack]TASK-A-9-INT检测新区集结弹窗并点击取消"]
     },
-    "INT-A-8-0检测新区集结弹窗并点击取消": {
-        "recognition": {"type": "OCR", "param": {"roi": [485, 425, 100, 50], "expected": "取消"}},
+    "TASK-A-9-INT检测新区集结弹窗并点击取消": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [485, 425, 100, 50],
+                "expected": "取消"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 800
     },
-    "ACT-点击第一个角色名展开区服图标": {
+    "TASK-A-9在已有角色界面查找目标服务器名": {
         "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [228, 529, 180, 40], "template": "平台区服/已有角色.png"}
+            "type": "OCR",
+            "param": {
+                "roi": [501, 132, 501, 484],
+                "expected": [".*", "区服信息--在代码里设置"]
+            }
         },
-        "action": {"type": "Click", "param": {"target": [276, 578, 61, 19]}},
-        "post_delay": 800
-    },
-    "TASK-A-9-0在已有角色界面查找目标服务器名": {
-        "recognition": {"type": "OCR", "param": {"roi": [501, 132, 501, 484], "expected": "区服信息--在代码里设置"}},
         "action": {"type": "Click"},
         "post_delay": 1000,
         "next": [
             "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态",
-            "[JumpBack]INT-角色栏上滑一次-最多划3次",
+            "[JumpBack]TASK-A-INT-在已有角色栏上滑一次-最多划3次",
             "[JumpBack]TASK-A-END3没有目标区服的角色"
         ]
     },
-    "TASK-A-9查找区服图标并点击选择该角色": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [239, 456, 796, 118], "template": "平台区服/稚羽萌心.png"}
-        },
-        "action": {"type": "Click"},
-        "post_delay": 1500,
-        "next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态"],
-        "focus": {"succeeded": "[color:green]找到了要登录的角色[/color]"}
-    },
-    "INT-角色栏上滑一次-最多划3次": {
+    "TASK-A-INT-在已有角色栏上滑一次-最多划3次": {
         "recognition": {
             "type": "Custom",
-            "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 3}}
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [242, 142, 120, 39], "expected": "已有角色", "only_rec": true}
+                    }
+                }
+            }
         },
-        "action": {"type": "Swipe", "param": {"begin": [764, 536, 50, 50], "end": [794, 247, 50, 50], "duration": 1800}}
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [764, 536, 50, 50],
+                "end": [794, 247, 50, 50],
+                "duration": 1800
+            }
+        }
     },
     "TASK-A-END3没有目标区服的角色": {
-        "action": {"type": "DoNothing"},
         "focus": {"succeeded": "[color:red]查找了 3 次未找到目标区服[/color]"}
     },
     "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态": {
-        "recognition": {"type": "OCR", "param": {"roi": [545, 563, 185, 65], "expected": "游戏"}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [545, 563, 185, 65],
+                "expected": "游戏"
+            }
+        },
         "action": {"type": "Click", "param": {"target": [558, 570, 160, 45]}},
         "post_delay": 4000,
         "timeout": 30000,
         "rate_limit": 1500,
         "next": [
-            "检测到需要在侧边选择同区不同角色",
+            "TASK-A-OPT-1-检测到需要在侧边选择同区不同角色",
             "STATUS-处于庭院初始状态",
-            "[JumpBack]INT-检测到进入游戏四个字并点一下-最多3次",
-            "[JumpBack]ACT-检测到还在加载中等待3秒",
+            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
+            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
             "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
-            "[JumpBack]ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
-            "[JumpBack]ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
             "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
             "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
-            "[JumpBack]ACT-检测到邮箱图标点一下",
+            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测到邮箱图标点一下",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": [],
         "_doc": "出错情况可能是游戏维护了等情况登录不进游戏"
     },
-    "检测到需要在侧边选择同区不同角色": {
+    "TASK-A-OPT-1-检测到需要在侧边选择同区不同角色": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [0, 0, 100, 100], "template": ["通用界面按钮/左上角返回键2-蓝底白色折线.png"]}
+            "param": {
+                "roi": [0, 0, 100, 100],
+                "template": ["通用界面按钮/左上角返回键2-蓝底白色折线.png"]
+            }
         },
-        "action": {"type": "DoNothing"},
-        "next": ["检测侧边栏要登录的角色信息并点击"],
-        "on_error": ["检测点击屏幕进入游戏并点击"]
+        "timeout": 5000,
+        "next": ["TASK-A-OPT-2-检测侧边栏要登录的角色信息并点击"],
+        "on_error": ["TASK-A-OPT-3-检测点击屏幕进入游戏并点击"]
     },
-    "检测侧边栏要登录的角色信息并点击": {
-        "recognition": {"type": "OCR", "param": {"roi": [105, 108, 205, 251], "expected": "区服信息--在代码里设置"}},
+    "TASK-A-OPT-2-检测侧边栏要登录的角色信息并点击": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [105, 108, 205, 251],
+                "expected": [".*", "区服信息--在代码里设置"]
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 1000,
-        "next": ["检测点击屏幕进入游戏并点击"]
+        "next": ["TASK-A-OPT-3-检测点击屏幕进入游戏并点击"]
     },
-    "检测点击屏幕进入游戏并点击": {
+    "TASK-A-OPT-3-检测点击屏幕进入游戏并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [0, 0, 100, 100], "template": ["通用界面按钮/左上角返回键2-蓝底白色折线.png"]}
+            "param": {
+                "roi": [0, 0, 100, 100],
+                "template": ["通用界面按钮/左上角返回键2-蓝底白色折线.png"]
+            }
         },
         "action": {"type": "Click", "param": {"target": [513, 533, 285, 145]}},
         "post_delay": 8000,
@@ -286,66 +421,96 @@
         "rate_limit": 1500,
         "next": [
             "STATUS-处于庭院初始状态",
-            "[JumpBack]ACT-检测到还在加载中等待3秒",
+            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
             "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
-            "[JumpBack]ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
-            "[JumpBack]ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
             "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
             "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
-            "[JumpBack]ACT-检测到邮箱图标点一下",
+            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测到邮箱图标点一下",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": [],
         "_doc": "出错情况可能是游戏维护了等情况登录不进游戏"
     },
-    "INT-检测到进入游戏四个字并点一下-最多3次": {
+    "TASK-A-INT-检测到进入游戏四个字并点一下-最多3次": {
         "recognition": {
             "type": "Custom",
             "param": {
                 "custom_recognition": "Count",
                 "custom_recognition_param": {
-                    "target": 3,
-                    "recognition": {"type": "OCR", "roi": [545, 563, 185, 65], "expected": "游戏"}
+                    "target": 5,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [545, 563, 185, 65], "expected": "游戏"}
+                    }
                 }
             }
         },
         "action": {"type": "Click", "param": {"target": [558, 570, 160, 45]}},
         "post_delay": 8000
     },
-    "ACT-检测到还在加载中等待3秒": {
-        "recognition": {"type": "OCR", "param": {"roi": [530, 660, 210, 45], "expected": "加载", "only_rec": true}},
-        "action": {"type": "DoNothing"},
+    "TASK-A-ACT-检测到还在加载中等待3秒": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [530, 660, 210, 45],
+                "expected": "加载",
+                "only_rec": true
+            }
+        },
         "post_delay": 3000
     },
-    "ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗": {
+    "TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [758, 580, 96, 61], "template": "庭院/个性化推荐弹窗确认按钮.png"}
+            "param": {
+                "roi": [758, 580, 96, 61],
+                "template": "庭院/个性化推荐弹窗确认按钮.png"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 800
     },
-    "ACT-检测绑定手机弹窗并关闭": {
+    "TASK-A-ACT-检测绑定手机弹窗并关闭": {
         "desc": "按一下ESC即可关闭",
-        "recognition": {"type": "TemplateMatch", "param": {"roi": [968, 454, 81, 81], "template": "庭院/前往绑定.png"}},
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [968, 454, 81, 81],
+                "template": "庭院/前往绑定.png"
+            }
+        },
         "action": {"type": "ClickKey", "param": {"key": 111}},
         "post_delay": 800
     },
-    "ACT-检测到邮箱图标点一下": {
-        "recognition": {"type": "TemplateMatch", "param": {"roi": [1132, 26, 44, 38], "template": "签到/邮件图标.png"}},
+    "TASK-A-ACT-检测到邮箱图标点一下": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [1132, 26, 44, 38],
+                "template": "签到/邮件图标.png"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 800
     },
     "INT-无条件按一下Esc键-最多4次": {
         "recognition": {
             "type": "Custom",
-            "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 4}}
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 5
+                }
+            }
         },
         "action": {"type": "ClickKey", "param": {"key": 111}},
         "post_delay": 500
     },
+
     "ENTRY-退出登录某角色": {
         "timeout": 10000,
         "rate_limit": 1500,
@@ -362,57 +527,90 @@
             }
         },
         "rate_limit": 1000,
-        "next": ["TASK-B-1检测用户中心按钮并点击", "[JumpBack]ACT-点击庭院左上角头像"]
+        "next": ["TASK-B-1检测用户中心按钮并点击", "[JumpBack]TASK-B-ACT-点击庭院左上角头像"]
     },
-    "ACT-点击庭院左上角头像": {"action": {"type": "Click", "param": {"target": [28, 37, 37, 39]}}, "post_delay": 1000},
+    "TASK-B-ACT-点击庭院左上角头像": {
+        "action": {"type": "Click", "param": {"target": [28, 37, 37, 39]}},
+        "post_delay": 1000
+    },
     "TASK-B-1检测用户中心按钮并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [216, 481, 67, 69], "roi_offset": [-200, -200, 400, 400], "template": "庭院/用户中心.png"}
+            "param": {
+                "roi": [216, 481, 67, 69],
+                "roi_offset": [-200, -200, 400, 400],
+                "template": "庭院/用户中心.png"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 2000,
         "next": [
             "TASK-B-2检测切换账号按钮并点击回到登录界面",
-            "[JumpBack]ACT-检测点击一下用户中心按钮",
-            "[JumpBack]INT-检测到意外点开了工具箱点左上角叉号关闭"
+            "[JumpBack]TASK-B-ACT-检测点击一下用户中心按钮",
+            "[JumpBack]TASK-B-INT-检测到意外点开了工具箱点左上角叉号关闭"
         ]
     },
-    "ACT-检测点击一下用户中心按钮": {
+    "TASK-B-ACT-检测点击一下用户中心按钮": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [216, 481, 67, 69], "roi_offset": [-200, -200, 400, 400], "template": "庭院/用户中心.png"}
+            "param": {
+                "roi": [216, 481, 67, 69],
+                "roi_offset": [-200, -200, 400, 400],
+                "template": "庭院/用户中心.png"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 1500
     },
-    "INT-检测到意外点开了工具箱点左上角叉号关闭": {
+    "TASK-B-INT-检测到意外点开了工具箱点左上角叉号关闭": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [18, 52, 47, 48], "template": "平台区服/百宝箱左上角叉号.png"}
+            "param": {
+                "roi": [18, 52, 47, 48],
+                "template": "平台区服/百宝箱左上角叉号.png"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 1000
     },
     "TASK-B-2检测切换账号按钮并点击回到登录界面": {
-        "recognition": {"type": "OCR", "param": {"roi": [940, 184, 127, 49], "expected": "切换账号"}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [940, 184, 127, 49],
+                "expected": "切换账号"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 3000,
         "rate_limit": 3000,
         "next": [
             "STATUS-检测游戏已经启动到登录界面了",
-            "[JumpBack]INT-检测到意外点开了工具箱点左上角叉号关闭",
-            "[JumpBack]ACT-检测到账号登录弹窗点击叉号",
-            "[JumpBack]ACT-检测点击一下切换账号按钮"
+            "[JumpBack]TASK-B-INT-检测到意外点开了工具箱点左上角叉号关闭",
+            "[JumpBack]TASK-B-ACT-检测到账号登录弹窗点击叉号",
+            "[JumpBack]TASK-B-ACT-检测点击一下切换账号按钮"
         ]
     },
-    "ACT-检测到账号登录弹窗点击叉号": {
-        "recognition": {"type": "OCR", "param": {"roi": [596, 422, 87, 47], "expected": ["登录"], "only_rec": true}},
+    "TASK-B-ACT-检测到账号登录弹窗点击叉号": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [596, 422, 87, 47],
+                "expected": ["登录"],
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click", "param": {"target": [893, 163, 32, 30]}},
         "post_delay": 1500
     },
-    "ACT-检测点击一下切换账号按钮": {
-        "recognition": {"type": "OCR", "param": {"roi": [940, 184, 127, 49], "expected": "切换账号"}},
+    "TASK-B-ACT-检测点击一下切换账号按钮": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [940, 184, 127, 49],
+                "expected": "切换账号"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 2000
     }

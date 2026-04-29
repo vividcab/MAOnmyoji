@@ -11,6 +11,42 @@
     "task": [
         {"name": "启动游戏", "entry": "TASK-启动游戏到登录界面"},
         {"name": "关闭游戏", "entry": "TASK-关闭游戏"},
-        {"name": "截图测试", "entry": "Screenshot"}
-    ]
+        {"name": "截图测试", "entry": "Screenshot"},
+        {
+            "name": "多角色-查看悬赏",
+            "entry": "ENTRY-多角色任务模板",
+            "option": [
+                "输入角色名列表"
+            ]
+        }
+    ],
+    "option": {
+        "输入角色名列表": {
+            "type": "input",
+            "label": "输入角色名列表",
+            "inputs": [
+                {
+                    "name": "角色名列表",
+                    "pipeline_type": "string",
+                    "default": "ALL,"
+                }
+            ],
+            "pipeline_override": {
+                "ENTRY-多角色任务模板": {
+                    "action": {
+                        "param": {
+                            "custom_action_param": {
+                                "rolenames": "{角色名列表}",
+                                "tasks": [
+                                    {"taskname": "ENTRY-登录某角色", "wait": 0.5},
+                                    {"taskname": "11-购买商店每周黑蛋寄售券", "wait": 0.5},
+                                    {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

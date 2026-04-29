@@ -1,6 +1,6 @@
 [remote.github]
 owner = "vividcab"
-repo = "MAAProjectTemplateFromM9A"
+repo = "MAOnmyoji"
 
 [changelog]
 # 标题
@@ -61,8 +61,25 @@ body = """
 
 # 尾部
 footer = """
+{%- macro remote_url() -%}
+  https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}
+{%- endmacro -%}
 
-[已有 Mirror酱 CDK？点击前往高速下载](https://mirrorchyan.com/zh/projects?rid=&source=)
+{%- set latest_version = "" -%}
+{%- for release in releases -%}
+  {%- if release.version and latest_version == "" -%}
+    {%- set_global latest_version = release.version -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% if latest_version -%}
+**绝大部分用户请下载 [MAOnmyoji-win-x86_64-{{ latest_version }}-MFAA.zip]({{ self::remote_url() }}/releases/download/{{ latest_version }}/MAOnmyoji-win-x86_64-{{ latest_version }}-MFAA.zip)**
+{%- else -%}
+**绝大部分用户请下载  MAOnmyoji-win-x86_64-vx.x.x-MFAA.zip，没找到的请点 show all x assets**
+{%- endif %}
+
+> MFAA = 图形界面版 | PiCLI = 命令行版
+# [已有 Mirror酱 CDK？点击前往高速下载](https://mirrorchyan.com/zh/projects?rid=&source=)
 
 <!--软件本体完全免费，若您有付费购买请立即退款并举报！-->
 """

@@ -80,23 +80,26 @@ class ForRolesToRunTask(CustomAction):
                 pass
 
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            logger.info(f"{now} 当前任务角色 {rolename}, {index}/{all_num}")
+            logger.info(f"{now} 当前任务角色 {rolename}, {index+1}/{all_num}")
             info = find_role_info(rolename)
             if not info:
                 continue
 
             context.override_pipeline(
                 {
-                    "重写账号角色信息": {
+                    "TASK-A-OPT-需要指定账号重写账号角色信息": {
+                        "enabled": True,
                         "custom_action_param": {
                             "account": info["account"],
                             "platform": info["platform"],
                             "servername": info["servername"],
                             "rolename": rolename,
-                        }
+                        },
                     }
                 }
             )
+
+            last_role_task_begin_time = datetime.now().timestamp()
 
             for task in tasks:
                 try:
@@ -113,6 +116,12 @@ class ForRolesToRunTask(CustomAction):
                 task_detail = context.run_task(task["taskname"])
                 # print("##Task Detail##", task_detail)
                 sleep(task["wait"])
+
+            if datetime.now().timestamp() - last_role_task_begin_time < 10:
+                logger.error(
+                    "检测到本角色执行任务时间不足10秒，应该是手动中断了多角色任务，后续角色任务也终止"
+                )
+                break
 
         if len(rolenames) >= 3:
             context.run_task("TASK-关闭游戏")

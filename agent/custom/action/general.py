@@ -67,7 +67,7 @@ class Screenshot(CustomAction):
             img = img.convert("L")
 
         # 文件名
-        node_info = context.get_node_data("重写账号角色信息")
+        node_info = context.get_node_data("TASK-A-OPT-需要指定账号重写账号角色信息")
         account_info_dict = node_info["action"]["param"]["custom_action_param"]
         now = datetime.now()
         ext = "jpg" if img_format == "jpeg" else "png"

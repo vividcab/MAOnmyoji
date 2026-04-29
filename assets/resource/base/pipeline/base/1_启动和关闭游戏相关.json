@@ -1,29 +1,54 @@
 {
     "STATUS-处于模拟器桌面": {
-        "recognition": {"type": "OCR", "param": {"roi": [755, 169, 93, 42], "expected": "游戏中心"}}
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    {"recognition": "OCR", "roi": [755, 169, 93, 42], "expected": "游戏中心"},
+                    {
+                        "recognition": "TemplateMatch",
+                        "roi": [213, 616, 874, 86],
+                        "template": "平台区服/MUMU模拟器桌面dock栏设置按钮.png"
+                    }
+                ]
+            }
+        },
+        "_doc": "检测到了桌面上的游戏中心或者状态栏"
     },
     "STATUS-检测游戏已经启动到登录界面了": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [6, 516, 270, 137], "template": ["平台区服/适龄提示.png"], "threshold": 0.9}
+            "param": {
+                "roi": [6, 516, 270, 137],
+                "template": ["平台区服/适龄提示.png"],
+                "threshold": 0.9
+            }
         },
-        "action": {"type": "DoNothing"},
         "post_delay": 2000
     },
     "TASK-启动游戏到登录界面": {
-        "action": {"type": "StartApp", "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}},
+        "action": {
+            "type": "StartApp",
+            "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
+        },
         "post_delay": 5000,
         "timeout": 100000,
         "rate_limit": 5000,
         "next": ["STATUS-检测游戏已经启动到登录界面了"]
     },
     "TASK-关闭游戏": {
-        "action": {"type": "StopApp", "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}},
-        "post_delay": 3000
+        "action": {
+            "type": "StopApp",
+            "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
+        },
+        "post_delay": 4000
     },
     "TASK-重新启动游戏": {
-        "action": {"type": "StopApp", "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}},
-        "post_delay": 3000,
+        "action": {
+            "type": "StopApp",
+            "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
+        },
+        "post_delay": 4000,
         "next": ["TASK-启动游戏到登录界面"]
     }
 }

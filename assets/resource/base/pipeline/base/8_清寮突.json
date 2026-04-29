@@ -1,0 +1,207 @@
+{
+    "ENTRY-清寮突破": {
+        "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
+        "timeout": 2000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-3-检测已经处于寮突界面",
+            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突",
+            "TASK-T-1从探索到结界突破界面-寮突",
+            "TASK-T-0从庭院到探索界面-寮突"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"],
+        "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
+    },
+    "TASK-T-0从庭院到探索界面-寮突": {
+        "recognition": {"type": "OCR", "param": {"roi": [630, 130, 48, 46], "expected": "索"}},
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-1从探索到结界突破界面-寮突"]
+    },
+    "TASK-T-1从探索到结界突破界面-寮突": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [226, 615, 114, 97], "template": "突破/探索界面下栏结界突破按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 20,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [1093, 10, 45, 39], "template": "突破/右上角突破券图标.png"}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click", "param": {"target": [10, 7, 690, 94]}},
+        "post_delay": 1200,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-3-检测已经处于寮突界面",
+            "[JumpBack]ACT-检测点击寮突标签页"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "ACT-检测点击寮突标签页": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 20,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [1209, 437, 38, 32], "expected": "阳", "only_rec": true}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800
+    },
+    "TASK-T-3-检测已经处于寮突界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [39, 659, 109, 44], "expected": "记录", "only_rec": true}},
+        "post_delay": 800,
+        "timeout": 3000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-END检测到没寮突次数了停止",
+            "TASK-END检测到突破进度100了停止",
+            "TASK-T-4检测到阵容锁定的话点击解锁-寮突",
+            "TASK-T-6检测结界突破进攻按钮并点击",
+            "TASK-T-5在左边一列检测一个突破并点击",
+            "TASK-T-5在右边一列检测一个突破并点击",
+            "[JumpBack]ACT-划动一下找下面的寮突-最多3次"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "ACT-划动一下找下面的寮突-最多3次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {"target": 3, "recognition": {"type": "DirectHit"}}
+            }
+        },
+        "action": {"type": "Swipe", "param": {"begin": [673, 615, 37, 32], "end": [662, 83, 30, 26], "duration": 2400}},
+        "post_delay": 1000
+    },
+    "TASK-T-4检测到阵容锁定的话点击解锁-寮突": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [194, 591, 43, 51], "template": ["突破/阵容锁定.png", "突破/阵容锁定-2.png"]}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "timeout": 2000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-5在左边一列检测一个突破并点击",
+            "TASK-T-5在右边一列检测一个突破并点击"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "TASK-END检测到没寮突次数了停止": {
+        "recognition": {"type": "OCR", "param": {"roi": [264, 552, 60, 44], "expected": "^0", "only_rec": true}},
+        "action": {"type": "DoNothing"},
+        "next": ["TASK-END清寮突任务结束"]
+    },
+    "TASK-END检测到突破进度100了停止": {
+        "recognition": {"type": "OCR", "param": {"roi": [198, 364, 109, 50], "expected": "^100", "only_rec": true}},
+        "action": {"type": "DoNothing"},
+        "next": ["TASK-END清寮突任务结束"]
+    },
+    "TASK-END清寮突任务结束": {
+        "next": ["TASK-尝试从任意界面回到庭院"],
+        "_doc": "结束后就停在这个界面还是返回庭院：TASK-尝试从任意界面回到庭院"
+    },
+    "TASK-T-5在左边一列检测一个突破并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [653, 124, 106, 530], "template": "突破/寮突识别测试.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "timeout": 5000,
+        "next": ["TASK-T-6检测结界突破进攻按钮并点击", "TASK-T-3-检测已经处于寮突界面"],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "TASK-T-5在右边一列检测一个突破并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [993, 121, 108, 538], "template": "突破/寮突识别测试.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "timeout": 5000,
+        "next": ["TASK-T-6检测结界突破进攻按钮并点击", "TASK-T-3-检测已经处于寮突界面"],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "TASK-T-6检测结界突破进攻按钮并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [580, 319, 520, 393], "template": "突破/突破进攻按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "timeout": 13000,
+        "rate_limit": 1500,
+        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-12检测到进入战斗并加载完毕-寮突"]
+    },
+    "TASK-T-12检测到进入战斗并加载完毕-寮突": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [0, 0, 70, 70],
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+            }
+        },
+        "post_delay": 500,
+        "timeout": 5000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
+            "TASK-T-13检测已经开始战斗等待8秒-寮突"
+        ]
+    },
+    "TASK-T-13检测已经开始战斗等待8秒-寮突": {
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
+        "post_delay": 7000,
+        "timeout": 6000,
+        "rate_limit": 1200,
+        "next": [
+            "TASK-T-3-检测已经处于寮突界面",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
+        ]
+    },
+    "尝试回到庭院然后继续清寮突任务": {
+        "timeout": 2000,
+        "next": ["TASK-T-E回到庭院然后重新开始清寮突任务", "[JumpBack]INT-尝试从任意界面回到庭院"],
+        "on_error": ["TASK-关闭游戏"]
+    },
+    "TASK-T-E回到庭院然后重新开始清寮突任务": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "next": ["ENTRY-清寮突破"]
+    }
+}

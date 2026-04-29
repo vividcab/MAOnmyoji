@@ -1,0 +1,545 @@
+{
+    "ENTRY-领取庭院中的日常奖励": {
+        "next": ["TASK-领取日常奖励", "[JumpBack]INT-尝试从任意界面回到庭院"],
+        "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
+    },
+    "TASK-领取日常奖励": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "RunTaskList",
+                "custom_action_param": {
+                    "tasks": [
+                        {"taskname": "1-每日签到", "wait": 0.3},
+                        {"taskname": "2-领取御魂加成", "wait": 0.3},
+                        {"taskname": "3-领取寮包", "wait": 0.3},
+                        {"taskname": "4-领取体力", "wait": 0.3},
+                        {"taskname": "5-领取勾玉", "wait": 0.3},
+                        {"taskname": "6-领邮件", "wait": 0.3},
+                        {"taskname": "7-查看悬赏", "wait": 0.3},
+                        {"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
+                        {"taskname": "9-每日免费抽卡", "wait": 0.3},
+                        {"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
+                    ]
+                }
+            }
+        },
+        "_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的"
+    },
+
+    "1-每日签到": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [290, 508, 36, 42], "roi_offset": [-60, -20, 80, 40], "template": "签到/签到.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 2000,
+        "next": ["1-1检测已经打开了抽签", "[JumpBack]1-ACT-检测点击签到小纸人"],
+        "on_error": []
+    },
+    "1-ACT-检测点击签到小纸人": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [290, 508, 36, 42], "roi_offset": [-60, -20, 80, 40], "template": "签到/签到.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1500
+    },
+    "1-1检测已经打开了抽签": {
+        "recognition": {"type": "OCR", "param": {"roi": [606, 186, 62, 85], "expected": "每"}},
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "timeout": 5000,
+        "next": [
+            "1-2检测到已经解签然后截图记录",
+            "[JumpBack]1-ACT-检测到没签到的每日一签并点击",
+            "[JumpBack]1-ACT-检测到解签按钮并点击"
+        ],
+        "on_error": ["ACT-检测各类右上部分叉号并点一下"]
+    },
+    "1-ACT-检测到没签到的每日一签并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [606, 186, 62, 85], "expected": "每"}},
+        "action": {"type": "Click"},
+        "post_delay": 1500
+    },
+    "1-ACT-检测到解签按钮并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [866, 449, 67, 41], "expected": "解签", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 1500
+    },
+    "1-2检测到已经解签然后截图记录": {
+        "recognition": {"type": "OCR", "param": {"roi": [866, 449, 67, 41], "expected": "分享", "only_rec": true}},
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/签到记录"}}
+        },
+        "next": ["ACT-检测各类右上部分叉号并点一下"]
+    },
+
+    "2-领取御魂加成": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [279, 501, 53, 48], "roi_offset": [-60, -60, 120, 120], "template": "签到/御魂加成.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 300,
+        "next": ["ACT-无条件按一下Esc"]
+    },
+
+    "3-领取寮包": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [279, 501, 53, 48], "roi_offset": [-60, -60, 120, 120], "template": "签到/寮包.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "timeout": 300,
+        "next": ["3-1领取寮包截图"],
+        "on_error": []
+    },
+    "3-1领取寮包截图": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/寮包记录"}}
+        },
+        "next": ["ACT-无条件按一下Esc"]
+    },
+
+    "4-领取体力": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [903, 504, 43, 46], "roi_offset": [-200, -50, 300, 100], "template": "签到/领体力.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 300,
+        "next": ["ACT-无条件按一下Esc"]
+    },
+
+    "5-领取勾玉": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [897, 500, 51, 54], "roi_offset": [-200, -50, 300, 100], "template": "签到/领勾玉.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 300,
+        "next": ["ACT-无条件按一下Esc"]
+    },
+
+    "6-领邮件": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1132, 26, 44, 38], "template": "签到/邮件图标.png"}},
+        "action": {"type": "Click"},
+        "timeout": 500,
+        "next": ["6-1点击一键已读"],
+        "on_error": ["ACT-无条件按一下Esc"]
+    },
+    "6-1点击一键已读": {
+        "recognition": {"type": "OCR", "param": {"roi": [184, 610, 107, 33], "expected": "已读", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "timeout": 500,
+        "next": ["6-2点击一键领取"],
+        "on_error": ["ACT-无条件按一下Esc"]
+    },
+    "6-2点击一键领取": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [50, 604, 59, 55], "template": "签到/一键领取.png"}},
+        "action": {"type": "Click"},
+        "timeout": 500,
+        "next": ["6-3确定领取或御魂爆仓确认按钮"],
+        "on_error": ["TASK-连续按ESC关闭弹窗直到出现退出游戏弹窗"]
+    },
+    "6-3确定领取或御魂爆仓确认按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [585, 397, 276, 210], "template": "签到/确定领取全部邮件.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测右上角跳过按钮并点击",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ]
+    },
+
+    "7-查看悬赏": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [186, 356, 45, 40],
+                "roi_offset": [0, -30, 60, 30],
+                "template": ["签到/悬赏封印.png", "签到/悬赏封印2.png"]
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1200,
+        "timeout": 5000,
+        "next": ["7-1检测悬赏任务加载成功"],
+        "on_error": ["ACT-检测各类右上部分叉号并点一下"]
+    },
+    "7-1检测悬赏任务加载成功": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [178, 497, 968, 97],
+                "template": ["签到/检测协作金币.png", "签到/检测协作觉醒.png", "签到/勾协.png"]
+            }
+        },
+        "timeout": 300,
+        "next": ["7-2检测到勾协就截图保存"],
+        "on_error": ["ACT-检测各类右上部分叉号并点一下"]
+    },
+    "7-2检测到勾协就截图保存": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [178, 497, 968, 97], "template": "签到/勾协.png"}},
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/悬赏封印"}}
+        },
+        "next": ["ACT-检测各类右上部分叉号并点一下"]
+    },
+
+    "8-领取商店每日黑蛋": {
+        "timeout": 2000,
+        "next": ["8-1检测点击商店图标", "[JumpBack]检测处于庭院点右下角打开底部卷轴"],
+        "on_error": []
+    },
+    "检测处于庭院点右下角打开底部卷轴": {
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    {"recognition": "TemplateMatch", "roi": [35, 596, 77, 59], "template": "庭院/闲庭图标.png"},
+                    {
+                        "recognition": "TemplateMatch",
+                        "roi": [680, 220, 240, 100],
+                        "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                        "threshold": [0.9, 0.9]
+                    }
+                ]
+            }
+        },
+        "action": {"type": "Click", "param": {"target": [1223, 632, 26, 49]}},
+        "post_delay": 1000
+    },
+    "8-1检测点击商店图标": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [645, 620, 72, 45], "template": "签到/商店图标.png", "threshold": 0.4}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2500,
+        "timeout": 5000,
+        "next": ["8-2检测点击礼包屋"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "8-2检测点击礼包屋": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1132, 636, 52, 52], "template": "签到/礼包屋.png", "threshold": 0.6}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2000,
+        "timeout": 4000,
+        "next": [
+            "8-3检测点击日常",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "8-ACT-检测点击礼包屋按钮": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1132, 636, 52, 52], "template": "签到/礼包屋.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 1200
+    },
+    "8-3检测点击日常": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1181, 85, 55, 480], "template": "签到/日常.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 2000,
+        "next": ["8-4检测点击黑蛋"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "8-4检测点击黑蛋": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [217, 197, 51, 40], "template": "签到/黑蛋.png", "threshold": 0.5}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+
+    "9-每日免费抽卡": {"timeout": 5000, "next": ["9-1枫色秋庭找召唤物灯笼", "9-1初始庭院找召唤灯笼"], "on_error": []},
+    "9-1枫色秋庭找召唤物灯笼": {
+        "recognition": {"type": "OCR", "param": {"roi": [1091, 157, 43, 46], "expected": "召", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 2000,
+        "timeout": 5000,
+        "next": ["9-2检测处于召唤屋抽卡页面"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-1初始庭院找召唤灯笼": {
+        "recognition": {"type": "OCR", "param": {"roi": [1076, 162, 50, 46], "expected": "召", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 2000,
+        "timeout": 5000,
+        "next": ["9-2检测处于召唤屋抽卡页面"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-2检测处于召唤屋抽卡页面": {
+        "recognition": {"type": "OCR", "param": {"roi": [113, 5, 92, 55], "expected": "^召唤$", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 1500,
+        "next": ["9-3检测底部是神秘召唤则没有免费抽卡资格", "9-4检测底部免费抽卡"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-3检测底部是神秘召唤则没有免费抽卡资格": {
+        "recognition": {"type": "OCR", "param": {"roi": [566, 675, 112, 43], "expected": "神秘", "only_rec": true}},
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-4检测底部免费抽卡": {
+        "recognition": {"type": "OCR", "param": {"roi": [570, 671, 108, 47], "expected": "免", "only_rec": true}},
+        "action": {"type": "DoNothing"},
+        "timeout": 300,
+        "next": ["9-5检测是否还有免费抽数"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-5检测是否还有免费抽数": {
+        "recognition": {"type": "OCR", "param": {"roi": [625, 674, 54, 43], "expected": "1/1", "only_rec": true}},
+        "action": {"type": "Click", "param": {"target": [603, 611, 49, 43]}},
+        "timeout": 300,
+        "next": ["9-6检测打开了画画抽卡界面"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "9-6检测打开了画画抽卡界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [393, 650, 80, 50], "expected": "单抽", "only_rec": true}},
+        "action": {
+            "type": "Swipe",
+            "param": {"begin": [473, 383, 97, 84], "end": [626, 180, 141, 127], "duration": 500}
+        },
+        "post_delay": 10000,
+        "timeout": 300000,
+        "next": [
+            "9-7检测抽完卡的确定按钮并点击",
+            "[JumpBack]检测到抽出SSR后右下角截图分享按钮并点击空白处",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测到抽出SSR后右下角截图分享按钮并点击空白处": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1151, 619, 124, 97], "template": "召唤屋抽卡/抽到SSR后右下角的截图分享按钮.png"}
+        },
+        "action": {"type": "Click", "param": {"target": [1123, 70, 64, 57]}},
+        "post_delay": 2000
+    },
+    "9-7检测抽完卡的确定按钮并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [455, 626, 94, 43], "expected": "确定", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+
+    "10-查看神秘商店并截图记录": {
+        "timeout": 2000,
+        "next": ["10-1检测点击商店图标之后打开神秘商店", "[JumpBack]检测处于庭院点右下角打开底部卷轴"],
+        "on_error": []
+    },
+    "10-1检测点击商店图标之后打开神秘商店": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [645, 620, 72, 45], "template": "签到/商店图标.png", "threshold": 0.4}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2000,
+        "timeout": 4000,
+        "rate_limit": 1500,
+        "next": ["10-2检测神秘商店点击", "[JumpBack]10-ACT-检测到左边栏折叠按钮点开"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "10-2检测神秘商店点击": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [7, 83, 209, 430], "template": "签到/神秘商店.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "next": ["10-3神秘商店截第一张图"]
+    },
+    "10-ACT-检测到左边栏折叠按钮点开": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [0, 477, 132, 140], "template": "签到/商店左边栏折叠按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800
+    },
+    "10-3神秘商店截第一张图": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/神秘商店"}}
+        },
+        "post_delay": 500,
+        "next": ["10-4划动一下之后再截第二张"]
+    },
+    "10-4划动一下之后再截第二张": {
+        "action": {
+            "type": "Swipe",
+            "param": {"begin": [570, 455, 20, 20], "end": [592, 151, 20, 20], "duration": 1000}
+        },
+        "post_delay": 500,
+        "next": ["10-5神秘商店截第二张图"]
+    },
+    "10-5神秘商店截第二张图": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/神秘商店"}}
+        },
+        "post_delay": 500,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+
+    "11-购买商店每周黑蛋寄售券": {
+        "timeout": 2000,
+        "next": ["11-1检测点击商店图标", "[JumpBack]检测处于庭院点右下角打开底部卷轴"],
+        "on_error": []
+    },
+    "11-1检测点击商店图标": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [645, 620, 72, 45], "template": "签到/商店图标.png", "threshold": 0.4}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2500,
+        "timeout": 5000,
+        "next": ["11-2检测点击杂货铺"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "11-2检测点击杂货铺": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [832, 610, 137, 110], "template": "签到/杂货铺.png", "threshold": 0.6}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "timeout": 4000,
+        "next": [
+            "11-3检测点击勋章",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]11-ACT-检测点击杂货铺-最多3次"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "11-ACT-检测点击杂货铺-最多3次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [832, 610, 137, 110], "template": "签到/杂货铺.png", "threshold": 0.6}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000
+    },
+    "11-3检测点击勋章": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1166, 351, 89, 279], "template": "签到/勋章.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 2000,
+        "next": ["11-4检测点击480勋章价格的黑蛋"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "11-4检测点击480勋章价格的黑蛋": {
+        "recognition": {"type": "OCR", "param": {"roi": [644, 229, 151, 137], "expected": "480"}},
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "next": ["11-5检测点击480勋章购买按钮", "11-6检测点击寄售屋"]
+    },
+    "11-5检测点击480勋章购买按钮": {
+        "recognition": {"type": "OCR", "param": {"roi": [587, 462, 160, 143], "expected": "480"}},
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "next": ["11-6检测点击寄售屋"]
+    },
+    "11-6检测点击寄售屋": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [170, 597, 143, 123], "template": "签到/寄售屋.png", "threshold": 0.6}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "timeout": 4000,
+        "next": [
+            "11-7检测点击兑换",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]11-ACT-检测点击寄售屋-最多3次"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "11-ACT-检测点击寄售屋-最多3次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [170, 597, 143, 123], "template": "签到/寄售屋.png", "threshold": 0.6}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 3000
+    },
+    "11-7检测点击兑换": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1168, 216, 81, 253], "template": "签到/兑换.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 2000,
+        "next": ["11-8检测点击寄售券"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "11-8检测点击寄售券": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [646, 233, 201, 167], "template": "签到/寄售券.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "next": ["11-9检测点击最大购买数量按钮"]
+    },
+    "11-9检测点击最大购买数量按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [715, 382, 142, 143], "template": "签到/最大购买数量按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 800,
+        "next": ["11-10检测点击带勾玉的购买按钮"]
+    },
+    "11-10检测点击带勾玉的购买按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [543, 480, 149, 143], "template": "签到/购买按钮上的勾玉.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    }
+}

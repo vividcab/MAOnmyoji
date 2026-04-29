@@ -42,13 +42,15 @@ class OverrideLoginInfo(CustomAction):
             {"TASK-A-7-0识别到当前区服就是要登录的区服": {"expected": servername}}
         )
         context.override_pipeline(
-            {"TASK-A-9-0在已有角色界面查找目标服务器名": {"expected": servername}}
+            {"TASK-A-9在已有角色界面查找目标服务器名": {"expected": servername}}
         )
 
         context.override_pipeline(
-            {"检测侧边栏要登录的角色信息并点击": {"expected": servername}}
+            {"TASK-A-OPT-2-检测侧边栏要登录的角色信息并点击": {"expected": servername}}
         )
 
-        # logger.info(f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}")
+        logger.info(
+            f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}"
+        )
 
         return CustomAction.RunResult(success=True)

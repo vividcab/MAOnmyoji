@@ -1,12 +1,18 @@
 {
     "ACT-检测各类左上角返回按钮并点一下": {
-        "recognition": {"type": "TemplateMatch", "param": {"roi": [0, 0, 100, 100], "template": [
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [0, 0, 100, 100],
+                "template": [
                     "通用界面按钮/左上角返回键1-白底黄色折线.png",
                     "通用界面按钮/左上角返回键2-蓝底白色折线.png",
                     "通用界面按钮/左上角返回键3-黑底黄色折线.png",
                     "通用界面按钮/左上角U形退出按钮.png",
                     "通用界面按钮/左上角U形退出按钮-1.png"
-                ]}},
+                ]
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 3000
     },
@@ -42,49 +48,91 @@
         "post_delay": 1200
     },
     "ACT-检测右上角跳过按钮并点击": {
-        "recognition": {"type": "OCR", "param": {"roi": [1163, 32, 68, 38], "expected": "跳过", "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [1163, 32, 68, 38],
+                "expected": "跳过",
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 1000
     },
     "ACT-检测带确定按钮的弹窗并点击确定": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [580, 350, 280, 250], "expected": ["确定", "确认"], "order_by": "Vertical"}
+            "param": {
+                "roi": [580, 350, 280, 250],
+                "expected": ["确定", "确认"],
+                "order_by": "Vertical"
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 800,
         "_doc": "有时候会有连续两层弹窗，后弹出来的窗口更小，确定按钮位置更靠上，所以用 Vertical 排序"
     },
     "ACT-检测带取消按钮的弹窗并点击取消": {
-        "recognition": {"type": "OCR", "param": {"roi": [430, 350, 200, 250], "expected": "取消"}},
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [430, 350, 200, 250],
+                "expected": "取消"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 800
     },
     "ACT-检测带不再提示勾选框的弹窗并点击确定": {
-        "recognition": {"type": "OCR", "param": {"roi": [500, 300, 280, 140], "expected": "不再提示"}},
+        "desc": "用于以下情况：1. 逢魔点集结挑战 Boss 之后，提示一天只能挑战一次的弹窗",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [500, 300, 280, 140],
+                "expected": "不再提"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 500,
-        "timeout": 1000,
-        "rate_limit": 300,
-        "next": ["ACT-检测带确定按钮的弹窗并点击确定"],
-        "_doc": "用于以下情况：1. 逢魔点集结挑战 Boss 之后，提示一天只能挑战一次的弹窗"
+        "timeout": 2000,
+        "rate_limit": 800,
+        "next": ["ACT-检测带确定按钮的弹窗并点击确定"]
     },
     "ACT-检测带不再提示勾选框的弹窗并点击取消": {
-        "desc": "用于以下情况：1. 刚登录后出现的下载插画的弹窗(不再提示)、2. 清理客户端缓存提醒(不再提醒)",
-        "recognition": {"type": "OCR", "param": {"roi": [500, 300, 280, 140], "expected": "不再提"}},
+        "desc": "用于以下情况：1. 刚登录后出现的下载插画的弹窗(不再提示)；2. 清理客户端缓存提醒(不再提醒)",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [500, 300, 280, 140],
+                "expected": "不再提"
+            }
+        },
         "action": {"type": "Click"},
         "post_delay": 500,
-        "timeout": 1000,
-        "rate_limit": 300,
+        "timeout": 2000,
+        "rate_limit": 800,
         "next": ["ACT-检测带取消按钮的弹窗并点击取消"]
     },
     "ACT-检测到退出游戏弹窗并点一下取消": {
-        "recognition": {"type": "OCR", "param": {"roi": [399, 266, 140, 44], "expected": "退出游戏", "only_rec": true}},
+        "desc": "用于处理：连续按 ESC 多次后弹出的退出游戏弹窗",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [399, 266, 140, 44],
+                "expected": "退出游戏",
+                "only_rec": true
+            }
+        },
         "action": {"type": "Click", "param": {"target": [780, 424, 49, 30]}},
         "post_delay": 600
     },
-    "ACT-无条件按一下Esc": {"action": {"type": "ClickKey", "param": {"key": 111}}, "post_delay": 500},
+    "ACT-无条件按一下Esc": {
+        "action": {"type": "ClickKey", "param": {"key": 111}},
+        "post_delay": 800
+    },
+
     "STATUS-处于庭院初始状态": {
+        "desc": "一般用于某任务执行完成后，回到庭院的检测，是任务的最后一个节点。例如：登录角色、",
         "recognition": {
             "type": "TemplateMatch",
             "param": {
@@ -92,11 +140,7 @@
                 "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
                 "threshold": [0.9, 0.9]
             }
-        },
-        "timeout": 1500,
-        "next": ["ACT-检测带取消按钮的弹窗并点击取消"],
-        "on_error": [],
-        "_doc": "一般用于某任务执行完成后，回到庭院的检测，是任务的最后一个节点。例如：登录角色、"
+        }
     },
     "ACT-从组队状态回到庭院": {
         "timeout": 5000,
@@ -107,22 +151,61 @@
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下"
         ],
-        "_doc": "注意 Interrupt 队列中，需要先检测处理优先级高的弹窗"
+        "_doc": "注意 JumpBack 队列中，需要先检测处理优先级高的弹窗"
     },
     "ACT-检测到悬赏协作并处理": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [516, 153, 38, 38], "template": "通用界面按钮/检测悬赏协作弹窗.png"}
+            "param": {
+                "roi": [503, 143, 71, 61],
+                "template": ["通用界面按钮/检测悬赏协作弹窗.png", "通用界面按钮/现世悬赏协作弹窗.png"]
+            }
         },
         "action": {"type": "DoNothing"},
-        "timeout": 2000,
+        "timeout": 1000,
         "next": ["检测到是勾协就接", "拒绝接受协作"],
         "on_error": ["ACT-检测各类右上部分叉号并点一下"]
     },
     "检测到是勾协就接": {
-        "recognition": {"type": "TemplateMatch", "param": {"roi": [556, 452, 165, 72], "template": "签到/勾协.png"}},
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [556, 452, 165, 72], "template": "签到/勾协.png"}
+        },
         "action": {"type": "Click", "param": {"target": [827, 395, 53, 44]}},
         "post_delay": 1000
     },
-    "拒绝接受协作": {"action": {"type": "Click", "param": {"target": [825, 497, 52, 44]}}, "post_delay": 1000}
+    "拒绝接受协作": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [848, 450, 188, 140], "expected": "拒绝", "only_rec": true}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000
+    },
+
+    "ACT-检测右下角有准备按钮就点击一下": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1130, 561, 95, 54], "template": "组队战斗/准备按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000
+    },
+    "ACT-检测还在战斗中再等3秒": {
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
+        "action": {"type": "DoNothing"},
+        "post_delay": 3000
+    },
+    "ACT-检测不到左上角返回按钮之后就模拟点击一下左上角": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [0, 0, 70, 70],
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+            }
+        },
+        "inverse": true,
+        "action": {"type": "Click", "param": {"target": [20, 20, 120, 70]}},
+        "post_delay": 800
+    }
 }

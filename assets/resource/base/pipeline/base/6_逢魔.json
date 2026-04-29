@@ -1,0 +1,276 @@
+{
+    "ENTRY-逢魔任务": {
+        "next": ["TASK-F-0从庭院进入町中", "[JumpBack]INT-尝试从任意界面回到庭院"],
+        "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
+    },
+    "TASK-逢魔任务": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "RunTaskList",
+                "custom_action_param": {
+                    "tasks": [
+                        {"taskname": "1-每日签到", "wait": 0.3},
+                        {"taskname": "2-领取御魂加成", "wait": 0.3},
+                        {"taskname": "3-领取寮包", "wait": 0.3},
+                        {"taskname": "4-领取体力", "wait": 0.3},
+                        {"taskname": "5-领取勾玉", "wait": 0.3},
+                        {"taskname": "6-领邮件", "wait": 0.3},
+                        {"taskname": "7-查看悬赏", "wait": 0.3},
+                        {"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
+                        {"taskname": "9-读未读邮件", "wait": 0.3},
+                        {"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
+                    ]
+                }
+            }
+        },
+        "_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的"
+    },
+
+    "TASK-F-0从庭院进入町中": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [484, 194, 531, 276],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2000,
+        "next": ["F-1从町中进入逢魔地图"]
+    },
+    "F-1从町中进入逢魔地图": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [616, 136, 54, 73], "template": "逢魔/逢魔灯笼.png"}},
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "timeout": 4000,
+        "rate_limit": 3000,
+        "next": [
+            "F-2从逢魔地图到点完4次现世逢魔",
+            "F-5-0开始打逢魔BOSS任务",
+            "[JumpBack]ACT-检测逢魔灯笼并点击-最多3次"
+        ]
+    },
+    "ACT-检测逢魔灯笼并点击-最多3次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"template": "逢魔/逢魔灯笼.png", "roi": [616, 136, 54, 73]}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000
+    },
+    "F-2从逢魔地图到点完4次现世逢魔": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 4,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [1139, 590, 85, 50], "template": "逢魔/现世逢魔.png"}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 5000,
+        "rate_limit": 5000,
+        "next": [
+            "F-3检测到已经点完4次逢魔转为判断是否需要领取达摩宝箱",
+            "[JumpBack]ACT-如果检测到弹出的挑战小鬼王的弹窗则关闭",
+            "[JumpBack]ACT-再逢一次-最多5次",
+            "F-5-0开始打逢魔BOSS任务"
+        ],
+        "_doc": "加上点击最多次数限制，避免网络问题引起的实际点完4次了图标没刷新还在一直点"
+    },
+    "ACT-如果检测到弹出的挑战小鬼王的弹窗则关闭": {
+        "recognition": {"type": "OCR", "param": {"roi": [1059, 568, 108, 64], "expected": "挑战", "only_rec": true}},
+        "action": {"type": "Click", "param": {"target": [1122, 57, 36, 37]}},
+        "post_delay": 1000
+    },
+    "ACT-再逢一次-最多5次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 5,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [1139, 590, 85, 50], "template": "逢魔/现世逢魔.png"}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click", "param": {"target": "F-2从逢魔地图到点完4次现世逢魔"}},
+        "post_delay": 4000
+    },
+    "F-3检测到已经点完4次逢魔转为判断是否需要领取达摩宝箱": {
+        "recognition": {"type": "OCR", "param": {"roi": [1102, 678, 156, 42], "expected": "逢魔0"}},
+        "timeout": 4000,
+        "next": ["F-4-1检测到未领取达摩宝箱", "F-4-2检测到已领取达摩宝箱则开始打逢魔BOSS任务"]
+    },
+    "F-4-1检测到未领取达摩宝箱": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1198, 195, 73, 67], "template": "逢魔/逢魔4次达摩.png", "threshold": 0.4}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "next": ["F-4-3点一下空白处关闭奖励"]
+    },
+    "F-4-2检测到已领取达摩宝箱则开始打逢魔BOSS任务": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1198, 195, 73, 67], "template": "逢魔/逢魔4次达摩-已领取.png"}
+        },
+        "post_delay": 1500,
+        "rate_limit": 1000,
+        "next": ["F-5-0开始打逢魔BOSS任务"]
+    },
+    "F-4-3点一下空白处关闭奖励": {
+        "action": {"type": "Click", "param": {"target": [529, 7, 188, 56]}},
+        "post_delay": 800,
+        "next": ["F-4-4截个图记录然后开始找车"]
+    },
+    "F-4-4截个图记录然后开始找车": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/逢魔记录"}}
+        },
+        "rate_limit": 1000,
+        "next": ["F-5-0开始打逢魔BOSS任务"]
+    },
+
+    "ACT-点击一下逢魔找boss的按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1000, 651, 43, 44], "template": "逢魔/逢魔找boss按钮.png"}
+        },
+        "pre_delay": 3500,
+        "action": {"type": "Click"},
+        "post_delay": 3000
+    },
+    "F-5-0开始打逢魔BOSS任务": {
+        "next": [
+            "F-5从地图界面开始找逢魔boss并点击打开集结弹窗",
+            "F-6检测到boss集结弹窗并点击进入逢魔广场",
+            "F-7从逢魔广场等待开车",
+            "F-8如果一直找不到车可以手动介入让界面返回到町中这样就终止任务了",
+            "[JumpBack]ACT-如果检测到弹出的挑战小鬼王的弹窗则关闭",
+            "[JumpBack]ACT-点击一下逢魔找boss的按钮"
+        ]
+    },
+    "F-5从地图界面开始找逢魔boss并点击打开集结弹窗": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [116, 95, 1078, 484],
+                "template": [
+                    "逢魔/鬼灵歌姬.png",
+                    "逢魔/蜃气楼.png",
+                    "逢魔/土蜘蛛.png",
+                    "逢魔/荒骷髅.png",
+                    "逢魔/地震鲶.png",
+                    "逢魔/胧车.png",
+                    "逢魔/夜荒魂.png"
+                ]
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "timeout": 3000,
+        "next": ["F-6检测到boss集结弹窗并点击进入逢魔广场"],
+        "on_error": ["F-5-0开始打逢魔BOSS任务"]
+    },
+    "F-6检测到boss集结弹窗并点击进入逢魔广场": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1042, 572, 140, 54], "template": "逢魔/集结挑战boss按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "timeout": 800,
+        "next": [
+            "F-7从逢魔广场等待开车",
+            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击确定",
+            "[JumpBack]ACT-车满了关闭这个Boss的集结弹窗"
+        ],
+        "on_error": ["F-5-0开始打逢魔BOSS任务"]
+    },
+    "ACT-处理每天只能打一次是否进入的弹窗提示": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [542, 340, 96, 38], "template": "逢魔/上车不再提示勾选框.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000,
+        "next": ["ACT-点一下确定"]
+    },
+    "ACT-点一下确定": {"action": {"type": "Click", "param": {"target": [695, 413, 123, 37]}}, "post_delay": 3000},
+    "ACT-车满了关闭这个Boss的集结弹窗": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1115, 51, 44, 43], "template": "逢魔/boss集结弹窗叉号.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000
+    },
+    "F-7从逢魔广场等待开车": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [24, 482, 80, 62], "template": "逢魔/逢魔广场集结按钮.png"}
+        },
+        "action": {"type": "DoNothing"},
+        "timeout": 300000,
+        "rate_limit": 10000,
+        "next": ["F-6进入战斗点击准备按钮", "F-6-1检测已经开始自动战斗"],
+        "on_error": ["F-7截图然后杀后台退出游戏"]
+    },
+    "F-6进入战斗点击准备按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1126, 558, 99, 58], "template": "逢魔/战斗准备按钮.png"}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 6000,
+        "next": ["F-7截图然后杀后台退出游戏"]
+    },
+    "F-6-1检测已经开始自动战斗": {
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
+        "action": {"type": "DoNothing"},
+        "next": ["F-7截图然后杀后台退出游戏"]
+    },
+    "F-7截图然后杀后台退出游戏": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/逢魔记录"}}
+        },
+        "post_delay": 500,
+        "next": ["TASK-关闭游戏"]
+    },
+    "F-8如果一直找不到车可以手动介入让界面返回到町中这样就终止任务了": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [616, 136, 54, 73], "template": "逢魔/逢魔灯笼.png"}},
+        "action": {"type": "DoNothing"},
+        "next": []
+    }
+}
