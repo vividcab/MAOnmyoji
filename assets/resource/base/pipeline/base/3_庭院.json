@@ -28,6 +28,7 @@
         "post_delay": 800
     },
     "TASK-尝试从任意界面回到庭院": {
+        "recognition": {"type": "DirectHit"},
         "timeout": 20000,
         "rate_limit": 2000,
         "next": ["STATUS-处于庭院初始状态", "[JumpBack]INT-尝试从任意界面回到庭院"]
@@ -40,6 +41,7 @@
         "timeout": 5000,
         "rate_limit": 2000,
         "next": [
+            "STATUS-处于庭院初始状态",
             "ACT-检测到当前界面是加载插画等待3秒",
             "ACT-检测左上角直接返回庭院按钮然后点击一下",
             "ACT-检测到退出游戏弹窗并点一下取消",
@@ -62,7 +64,7 @@
                 "template": "通用界面按钮/加载插画底部中间图标.png"
             }
         },
-        "post_delay": 3000
+        "post_delay": 2000
     },
     "ACT-检测左上角直接返回庭院按钮然后点击一下": {
         "recognition": {

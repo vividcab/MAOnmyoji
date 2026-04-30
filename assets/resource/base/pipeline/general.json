@@ -1,11 +1,11 @@
 {
-    "默认错误处理方式-截图并关闭游戏": {
+    "错误处理方式-截图并关闭游戏": {
         "action": {
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "debug/error"}}
         },
         "next": ["TASK-关闭游戏"],
-        "focus": {"start": "[color:red]任务运行出错，截图后关闭游戏[/color]"}
+        "focus": {"start": "[color:red]任务运行出错，截图记录后关闭游戏[/color]"}
     },
     "Screenshot": {
         "action": {
@@ -15,7 +15,15 @@
     },
     "任务出错-写日志记录一下": {
         "action": {"type": "Custom", "param": {"custom_action": "LogAnError", "custom_action_param": {}}},
-        "next": ["STATUS-处于模拟器桌面", "默认错误处理方式-截图并关闭游戏"],
+        "next": ["STATUS-处于模拟器桌面", "错误处理方式-截图记录"],
         "focus": {"start": "[color:red]任务运行出错，记录到user_data/error.log中，将终止后续角色任务[/color]"}
+    },
+    "错误处理方式-截图记录": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "debug/error"}}
+        },
+        "next": [],
+        "focus": {"start": "[color:red]任务运行出错，截图记录（不关闭游戏）[/color]"}
     }
 }

@@ -1,0 +1,14 @@
+{
+    "task": [
+        {
+            "name": "启动游戏到登录界面",
+            "entry": "TASK-启动游戏到登录界面",
+            "group": ["daily"]
+        },
+        {
+            "name": "关闭游戏",
+            "entry": "TASK-关闭游戏",
+            "group": ["daily"]
+        }
+    ]
+}

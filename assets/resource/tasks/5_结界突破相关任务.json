@@ -1,0 +1,87 @@
+{
+    "task": [
+        {
+            "name": "清结界突破券",
+            "label": "清结界突破券",
+            "description": "注意事项：1、执行本任务前，游戏处于庭院（【枫色秋庭皮肤】）或【探索地图界面】或【结界突破界面】\n2、注意提前换好比较稳的自动突破阵容和御魂，目前不会红绿标\n3、无论成功或失败，每打完一局都会重新识别当前突破状态，兼容性较高",
+            "entry": "ENTRY-清结界突破券",
+            "group": ["standalone"],
+            "option": [
+                "输入清突破任务设置",
+                "清突破完成后是否返回庭院"
+            ]
+        },
+        {
+            "name": "清寮突",
+            "label": "清寮突",
+            "description": "没有挑战次数或者已经全部攻破的情况会结束任务。注意事项：1、执行本任务前，游戏处于庭院（【枫色秋庭皮肤】）或【探索地图界面】或【结界突破界面】或【寮突破界面】\n2、注意提前换好比较稳的自动突破阵容和御魂，目前不会红绿标",
+            "entry": "ENTRY-清寮突破",
+            "group": ["standalone"],
+            "option": [
+                "清寮突完成后是否返回庭院"
+            ]
+        }
+    ],
+    "option": {
+        "输入清突破任务设置": {
+            "type": "input",
+            "label": "输入清突破任务设置",
+            "description": "输入纯数字",
+            "inputs": [
+                {
+                    "name": "清到剩余几张突破券就停止",
+                    "label": "清到剩余几张突破券就停止",
+                    "description": "输入0到30之间的整数",
+                    "pipeline_type": "string",
+                    "verify": "^([0-9]|[12][0-9]|30)$",
+                    "default": "0"
+                },
+                {
+                    "name": "每轮最后一个结界退几次",
+                    "label": "每轮最后一个结界退几次",
+                    "description": "输入0到15之间的整数，默认 4 次一般情况下可以保持对手等级稳定",
+                    "pipeline_type": "int",
+                    "verify": "^([0-9]|[1][0-5])$",
+                    "default": "4"
+                }
+            ],
+            "pipeline_override": {
+                "TASK-END检测到没突破券了停止": {
+                    "recognition": {"expected": "^{清到剩余几张突破券就停止}$"}
+                },
+                "TASK-T-8退这个突破X次": {
+                    "custom_recognition_param": {
+                        "target": "{每轮最后一个结界退几次}",
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": "突破/突破进攻按钮.png",
+                                "roi": [241, 333, 923, 381]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "清突破完成后是否返回庭院": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "清突破完成后是否返回庭院",
+            "description": "目前适配【初始庭院皮肤】和签到100天送的【枫色秋庭】皮肤",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {}},
+                {"name": "No", "pipeline_override": {"TASK-END检测到没突破券了停止": {"next": []}}}
+            ]
+        },
+        "清寮突完成后是否返回庭院": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "清寮突完成后是否返回庭院",
+            "description": "目前适配【初始庭院皮肤】和签到100天送的【枫色秋庭】皮肤",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {}},
+                {"name": "No", "pipeline_override": {"TASK-END清寮突任务结束": {"next": []}}}
+            ]
+        }
+    }
+}

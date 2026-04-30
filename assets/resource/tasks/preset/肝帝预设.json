@@ -1,0 +1,21 @@
+{
+    "preset": [
+        {
+            "name": "肝-任务预设",
+            "task": [
+                {
+                    "name": "单刷各种副本",
+                    "enabled": false
+                },
+                {
+                    "name": "清结界突破券",
+                    "enabled": true
+                },
+                {
+                    "name": "清寮突",
+                    "enabled": false
+                }
+            ]
+        }
+    ]
+}

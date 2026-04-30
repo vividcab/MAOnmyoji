@@ -1,19 +1,22 @@
 {
     "ENTRY-清结界突破券": {
+        "recognition": {"type": "DirectHit"},
         "timeout": 2000,
         "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
-            "TASK-T-1从探索到结界突破界面",
-            "TASK-T-0从庭院到探索界面",
+            "[JumpBack]TASK-T-1从探索到结界突破界面",
+            "[JumpBack]TASK-T-0从庭院到探索界面",
             "[JumpBack]INT-尝试从任意界面回到庭院"
         ],
+        "on_error": ["错误处理方式-截图记录"],
         "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
     },
     "TASK-T-0从庭院到探索界面": {
-        "recognition": {"type": "OCR", "param": {"roi": [630, 130, 48, 46], "expected": "索"}},
+        "recognition": {"type": "OCR", "param": {"roi": [587, 105, 178, 86], "expected": "索"}},
         "action": {"type": "Click"},
-        "post_delay": 1500,
-        "next": ["TASK-T-1从探索到结界突破界面"]
+        "post_delay": 2000
     },
     "TASK-T-1从探索到结界突破界面": {
         "recognition": {
@@ -21,21 +24,21 @@
             "param": {"roi": [226, 615, 114, 97], "template": "突破/探索界面下栏结界突破按钮.png"}
         },
         "action": {"type": "Click"},
-        "post_delay": 1500,
-        "next": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"]
+        "post_delay": 1500
     },
     "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {"roi": [1093, 10, 45, 39], "template": "突破/右上角突破券图标.png"}
         },
-        "action": {"type": "Click", "param": {"target": [31, 22, 46, 42]}},
+        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
         "post_delay": 1200,
         "next": [
-            "TASK-T-2-1检测到如果有弹窗挡住5号结界则再点击一下左上角",
-            "TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]TASK-T-2-1检测到如果有弹窗挡住5号结界则再点击一下左上角",
+            "[JumpBack]TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角",
             "TASK-END检测到没突破券了停止",
-            "TASK-T-3检测到阵容锁定的话点击解锁",
+            "[JumpBack]TASK-T-3检测到阵容锁定的话点击解锁",
             "TASK-T-4初始化突破状态记录"
         ]
     },
@@ -50,14 +53,8 @@
             "param": {"roi": [562, 339, 180, 57], "template": ["突破/勋章.png", "突破/空勋章.png"]}
         },
         "inverse": true,
-        "action": {"type": "Click", "param": {"target": [31, 22, 46, 42]}},
-        "post_delay": 1200,
-        "next": [
-            "TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角",
-            "TASK-END检测到没突破券了停止",
-            "TASK-T-3检测到阵容锁定的话点击解锁",
-            "TASK-T-4初始化突破状态记录"
-        ]
+        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
+        "post_delay": 1200
     },
     "TASK-T-2-2检测到如果有弹窗挡住8号结界则再点击一下左上角": {
         "recognition": {
@@ -65,9 +62,8 @@
             "param": {"roi": [561, 472, 216, 61], "template": ["突破/勋章.png", "突破/空勋章.png"]}
         },
         "inverse": true,
-        "action": {"type": "Click", "param": {"target": [31, 22, 46, 42]}},
-        "post_delay": 1200,
-        "next": ["TASK-END检测到没突破券了停止", "TASK-T-3检测到阵容锁定的话点击解锁", "TASK-T-4初始化突破状态记录"]
+        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
+        "post_delay": 1200
     },
     "TASK-T-3检测到阵容锁定的话点击解锁": {
         "recognition": {
@@ -75,21 +71,25 @@
             "param": {"roi": [815, 573, 38, 52], "template": ["突破/阵容锁定.png"]}
         },
         "action": {"type": "Click"},
-        "post_delay": 1000,
-        "next": ["TASK-T-4初始化突破状态记录"]
+        "post_delay": 1000
     },
     "TASK-T-4初始化突破状态记录": {
         "recognition": {"type": "Custom", "param": {"custom_recognition": "InitTuPoStatus"}},
         "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
-        "next": ["TASK-T-5检测是否最后一个突破", "TASK-T-6不是最后一个则获取下一个要突破的结界"]
+        "timeout": 3000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-5检测是否最后一个突破",
+            "TASK-T-6不是最后一个则获取下一个要突破的结界"
+        ]
     },
     "TASK-T-5检测是否最后一个突破": {
         "recognition": {"type": "Custom", "param": {"custom_recognition": "IsLastTuPo"}},
         "action": {"type": "Click"},
         "post_delay": 1000,
         "timeout": 1000,
-        "next": ["TASK-T-8退这个突破X次", "TASK-T-11挑战结界直到挑战结束"],
-        "on_error": []
+        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-8退这个突破X次"],
+        "on_error": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"]
     },
     "TASK-T-8退这个突破X次": {
         "recognition": {
@@ -106,11 +106,12 @@
             }
         },
         "action": {"type": "Click"},
-        "post_delay": 2000,
+        "repeat": 2,
+        "post_delay": 1000,
         "timeout": 13000,
         "rate_limit": 1500,
-        "next": ["TASK-T-9检测到左上角退出突破按钮就点击一下"],
-        "on_error": []
+        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-9检测到左上角退出突破按钮就点击一下"],
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-9检测到左上角退出突破按钮就点击一下": {
         "recognition": {
@@ -124,8 +125,8 @@
         "post_delay": 1500,
         "rate_limit": 2000,
         "next": [
-            "TASK-T-10检测到返回到了突破主界面",
             "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-10检测到返回到了突破主界面",
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
             "[JumpBack]ACT-检测到再次挑战按钮点击下方中间",
             "[JumpBack]ACT-再点击一下左上角退突破按钮"
@@ -160,8 +161,8 @@
         "post_delay": 3000,
         "timeout": 13000,
         "rate_limit": 1500,
-        "next": ["TASK-T-12检测到进入战斗并加载完毕"],
-        "on_error": []
+        "next": ["TASK-T-12检测到进入战斗并加载完毕", "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"],
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-12检测到进入战斗并加载完毕": {
         "recognition": {
@@ -179,21 +180,21 @@
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测右下角有准备按钮就点击一下"
         ],
-        "on_error": []
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-13检测已经开始战斗等待8秒": {
         "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
         "action": {"type": "DoNothing"},
         "post_delay": 7000,
         "timeout": 6000,
-        "rate_limit": 1200,
+        "rate_limit": 1500,
         "next": [
             "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
         ],
-        "on_error": []
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-6不是最后一个则获取下一个要突破的结界": {
         "recognition": {"type": "Custom", "param": {"custom_recognition": "GetNextTuPo"}},

@@ -1,38 +1,8 @@
 {
     "ENTRY-逢魔任务": {
+        "recognition": {"type": "DirectHit"},
         "next": ["TASK-F-0从庭院进入町中", "[JumpBack]INT-尝试从任意界面回到庭院"],
         "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
-    },
-    "TASK-逢魔任务": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {
-                "roi": [680, 220, 240, 100],
-                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
-                "threshold": [0.9, 0.9]
-            }
-        },
-        "action": {
-            "type": "Custom",
-            "param": {
-                "custom_action": "RunTaskList",
-                "custom_action_param": {
-                    "tasks": [
-                        {"taskname": "1-每日签到", "wait": 0.3},
-                        {"taskname": "2-领取御魂加成", "wait": 0.3},
-                        {"taskname": "3-领取寮包", "wait": 0.3},
-                        {"taskname": "4-领取体力", "wait": 0.3},
-                        {"taskname": "5-领取勾玉", "wait": 0.3},
-                        {"taskname": "6-领邮件", "wait": 0.3},
-                        {"taskname": "7-查看悬赏", "wait": 0.3},
-                        {"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
-                        {"taskname": "9-读未读邮件", "wait": 0.3},
-                        {"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
-                    ]
-                }
-            }
-        },
-        "_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的"
     },
 
     "TASK-F-0从庭院进入町中": {
@@ -171,14 +141,21 @@
         "post_delay": 3000
     },
     "F-5-0开始打逢魔BOSS任务": {
+        "recognition": {"type": "DirectHit"},
+        "timeout": 4000,
+        "rate_limit": 2000,
         "next": [
             "F-5从地图界面开始找逢魔boss并点击打开集结弹窗",
             "F-6检测到boss集结弹窗并点击进入逢魔广场",
             "F-7从逢魔广场等待开车",
             "F-8如果一直找不到车可以手动介入让界面返回到町中这样就终止任务了",
+            "F-9进入战斗点击准备按钮",
+            "F-9-1检测已经开始自动战斗",
             "[JumpBack]ACT-如果检测到弹出的挑战小鬼王的弹窗则关闭",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-点击一下逢魔找boss的按钮"
-        ]
+        ],
+        "on_error": ["错误处理方式-截图并关闭游戏"]
     },
     "F-5从地图界面开始找逢魔boss并点击打开集结弹窗": {
         "recognition": {
@@ -243,24 +220,24 @@
         "action": {"type": "DoNothing"},
         "timeout": 300000,
         "rate_limit": 10000,
-        "next": ["F-6进入战斗点击准备按钮", "F-6-1检测已经开始自动战斗"],
-        "on_error": ["F-7截图然后杀后台退出游戏"]
+        "next": ["F-9进入战斗点击准备按钮", "F-9-1检测已经开始自动战斗"],
+        "on_error": ["F-10截图然后杀后台退出游戏"]
     },
-    "F-6进入战斗点击准备按钮": {
+    "F-9进入战斗点击准备按钮": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {"roi": [1126, 558, 99, 58], "template": "逢魔/战斗准备按钮.png"}
         },
         "action": {"type": "Click"},
         "post_delay": 6000,
-        "next": ["F-7截图然后杀后台退出游戏"]
+        "next": ["F-10截图然后杀后台退出游戏"]
     },
-    "F-6-1检测已经开始自动战斗": {
+    "F-9-1检测已经开始自动战斗": {
         "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
         "action": {"type": "DoNothing"},
-        "next": ["F-7截图然后杀后台退出游戏"]
+        "next": ["F-10截图然后杀后台退出游戏"]
     },
-    "F-7截图然后杀后台退出游戏": {
+    "F-10截图然后杀后台退出游戏": {
         "action": {
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/逢魔记录"}}

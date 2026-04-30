@@ -32,58 +32,55 @@ class InitTuPoStatus(CustomRecognition):
                     argv.image,
                     {
                         "RCO-检测突破成功": {
-                            "roi_offset": [self.delta_x * i, self.delta_y * j, 0, 0]
+                            "roi": [403, 169, 54, 54],
+                            "roi_offset": [self.delta_x * i, self.delta_y * j, 0, 0],
+                            "template": "突破/突破成功.png",
                         }
                     },
                 )
                 # logger.debug(reco_detail1)
-                if reco_detail1:
-                    InitTuPoStatus.topu_status[i + 3 * j] = 1
+                if reco_detail1.best_result:
+                    self.topu_status[i + 3 * j] = 1
                     continue
-
-                # try:
-                #     result1 = reco_detail1.best_result
-                #     logger.debug(result1)
-                # except:
-                #     pass
 
                 reco_detail2 = context.run_recognition(
                     "RCO-检测突破失败",
                     argv.image,
                     {
                         "RCO-检测突破失败": {
-                            "roi_offset": [self.delta_x * i, self.delta_y * j, 0, 0]
+                            "roi": [398, 142, 70, 40],
+                            "roi_offset": [self.delta_x * i, self.delta_y * j, 0, 0],
+                            "template": "突破/突破失败.png",
                         }
                     },
                 )
                 # logger.debug(reco_detail2)
-                if reco_detail2:
-                    InitTuPoStatus.topu_status[i + 3 * j] = -1
+                if reco_detail2.best_result:
+                    self.topu_status[i + 3 * j] = -1
                     continue
                 else:
-                    InitTuPoStatus.topu_status[i + 3 * j] = 0
-                # try:
-                #     result2 = reco_detail2.best_result
-                #     logger.debug(result2)
-                # except:
-                #     pass
-        logger.debug(InitTuPoStatus.topu_status)
-        return CustomRecognition.AnalyzeResult(box=[0, 0, 0, 0], detail="")
+                    self.topu_status[i + 3 * j] = 0
+
+        # 0表示未进攻、1突破成功、-1突破失败
+        logger.debug(self.topu_status)
+        return CustomRecognition.AnalyzeResult(box=[0, 0, 10, 10], detail={})
 
     @classmethod
     def get_next_tupo(self):
-        index = None
+        index = -1
         for i, v in enumerate(self.topu_status):
             if v != 1:
                 index = i
                 break
 
+        if index < 0:
+            return None
         j = index // 3
         i = index % 3
         roi = [307 + i * self.delta_x, 170 + j * self.delta_y, 123, 74]
-        # logger.debug(roi)
-        # logger.debug(f"{i}, {j}")
-        return CustomRecognition.AnalyzeResult(roi, f"({i}, {j})")
+        logger.debug(roi)
+        logger.debug(f"row: {j+1}, col: {i+1}")
+        return CustomRecognition.AnalyzeResult(roi, {"row": j + 1, "col": i + 1})
 
 
 @AgentServer.custom_recognition("IsLastTuPo")
@@ -93,8 +90,8 @@ class IsLastTuPo(InitTuPoStatus):
         context: Context,
         argv: CustomRecognition.AnalyzeArg,
     ) -> Union[CustomRecognition.AnalyzeResult, Optional[RectType]]:
-        if IsLastTuPo.topu_status.count(1) >= 8:
-            return IsLastTuPo.get_next_tupo()
+        if self.topu_status.count(1) >= 8:
+            return self.get_next_tupo()
         else:
             return None
 
@@ -106,4 +103,4 @@ class GetNextTuPo(InitTuPoStatus):
         context: Context,
         argv: CustomRecognition.AnalyzeArg,
     ) -> Union[CustomRecognition.AnalyzeResult, Optional[RectType]]:
-        return GetNextTuPo.get_next_tupo()
+        return self.get_next_tupo()

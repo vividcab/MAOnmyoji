@@ -2,19 +2,45 @@
     "ENTRY-登录某角色": {
         "desc": "执行此任务的时候，游戏应当已经启动到登录界面了；但是也要考虑其他情况，做异常处理",
         "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
-        "timeout": 10000,
+        "timeout": 5000,
         "next": [
             "TASK-A-2检测到登录框",
             "TASK-A-1检测到用户中心弹窗并点击切换账号按钮",
             "TASK-A-0检测到没有任何弹窗的空的游戏登录界面",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]INT-检测到非处于MuMu模拟器桌面就等3秒-最多4次",
-            "[JumpBack]TASK-重新启动游戏"
+            "[JumpBack]INT-检测到处于MuMu模拟器桌面就启动游戏",
+            "[JumpBack]INT-检测到非处于MuMu模拟器桌面就提示用户然后重启游戏"
         ],
         "on_error": [],
         "_doc": "还是使用旧的 custon_action 实现的计数器，因为多角色任务会共享 context 共享计数次数，节点命中到达 max_hit 次数后剩余角色的任务无法执行节点"
     },
-    "INT-检测到非处于MuMu模拟器桌面就等3秒-最多4次": {
+    "INT-检测到处于MuMu模拟器桌面就启动游戏": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 20,
+                    "recognition": {
+                        "type": "Or",
+                        "param": {
+                            "any_of": [
+                                {"recognition": "OCR", "roi": [755, 169, 93, 42], "expected": "游戏中心"},
+                                {
+                                    "recognition": "TemplateMatch",
+                                    "roi": [213, 616, 874, 86],
+                                    "template": "平台区服/MUMU模拟器桌面dock栏设置按钮.png"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "next": ["TASK-启动游戏到登录界面"],
+        "focus": {"succeeded": "[color:red]识别到当前模拟器处于桌面，将启动游戏[/color]"}
+    },
+    "INT-检测到非处于MuMu模拟器桌面就提示用户然后重启游戏": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -38,7 +64,8 @@
             }
         },
         "inverse": true,
-        "post_delay": 3000
+        "next": ["TASK-重新启动游戏"],
+        "focus": {"succeeded": "[color:red]识别到当前模拟器画面非游戏登录界面，将重启游戏[/color]"}
     },
     "TASK-A-0检测到没有任何弹窗的空的游戏登录界面": {
         "recognition": {
@@ -298,7 +325,12 @@
         "action": {"type": "Click"},
         "post_delay": 800,
         "timeout": 6000,
-        "next": ["TASK-A-9在已有角色界面查找目标服务器名", "[JumpBack]TASK-A-9-INT检测新区集结弹窗并点击取消"]
+        "next": [
+            "TASK-A-9在已有角色界面查找目标服务器名",
+            "[JumpBack]TASK-A-9-INT检测新区集结弹窗并点击取消",
+            "[JumpBack]TASK-A-INT-在已有角色栏上滑一次-最多划3次",
+            "TASK-A-END3没有目标区服的角色"
+        ]
     },
     "TASK-A-9-INT检测新区集结弹窗并点击取消": {
         "recognition": {
@@ -323,8 +355,7 @@
         "post_delay": 1000,
         "next": [
             "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态",
-            "[JumpBack]TASK-A-INT-在已有角色栏上滑一次-最多划3次",
-            "[JumpBack]TASK-A-END3没有目标区服的角色"
+            "TASK-A-9在已有角色界面查找目标服务器名"
         ]
     },
     "TASK-A-INT-在已有角色栏上滑一次-最多划3次": {
@@ -351,7 +382,56 @@
         }
     },
     "TASK-A-END3没有目标区服的角色": {
-        "focus": {"succeeded": "[color:red]查找了 3 次未找到目标区服[/color]"}
+        "next": [],
+        "focus": {"succeeded": "[color:red]查找多次未找到匹配的目标服务器名称或角色名称[/color]"}
+    },
+    "TASK-A-END4等待游戏进入庭院状态": {
+        "recognition": {"type": "DirectHit"},
+        "timeout": 5000,
+        "rate_limit": 2000,
+        "next": [
+            "TASK-A-END4-1第一次检测到处于庭院",
+            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
+            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
+            "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
+            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
+            "[JumpBack]ACT-检测到强制弹出的优惠券广告点一下一键领取",
+            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
+            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]INT-无条件按一下Esc键-最多4次"
+        ],
+        "on_error": ["错误处理方式-截图记录"]
+    },
+    "TASK-A-END4-1第一次检测到处于庭院": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "post_delay": 5000,
+        "timeout": 5000,
+        "rate_limit": 2000,
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
+            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
+            "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
+            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
+            "[JumpBack]ACT-检测到强制弹出的优惠券广告点一下一键领取",
+            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
+            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]INT-无条件按一下Esc键-最多4次"
+        ],
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态": {
         "recognition": {
@@ -363,25 +443,7 @@
         },
         "action": {"type": "Click", "param": {"target": [558, 570, 160, 45]}},
         "post_delay": 4000,
-        "timeout": 30000,
-        "rate_limit": 1500,
-        "next": [
-            "TASK-A-OPT-1-检测到需要在侧边选择同区不同角色",
-            "STATUS-处于庭院初始状态",
-            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
-            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
-            "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
-            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
-            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
-            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
-            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
-            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
-            "[JumpBack]TASK-A-ACT-检测到邮箱图标点一下",
-            "[JumpBack]INT-无条件按一下Esc键-最多4次"
-        ],
-        "on_error": [],
-        "_doc": "出错情况可能是游戏维护了等情况登录不进游戏"
+        "next": ["TASK-A-OPT-1-检测到需要在侧边选择同区不同角色", "TASK-A-END4等待游戏进入庭院状态"]
     },
     "TASK-A-OPT-1-检测到需要在侧边选择同区不同角色": {
         "recognition": {
@@ -416,24 +478,8 @@
             }
         },
         "action": {"type": "Click", "param": {"target": [513, 533, 285, 145]}},
-        "post_delay": 8000,
-        "timeout": 30000,
-        "rate_limit": 1500,
-        "next": [
-            "STATUS-处于庭院初始状态",
-            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
-            "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
-            "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
-            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
-            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
-            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
-            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
-            "[JumpBack]TASK-A-ACT-检测到邮箱图标点一下",
-            "[JumpBack]INT-无条件按一下Esc键-最多4次"
-        ],
-        "on_error": [],
-        "_doc": "出错情况可能是游戏维护了等情况登录不进游戏"
+        "post_delay": 4000,
+        "next": ["TASK-A-END4等待游戏进入庭院状态"]
     },
     "TASK-A-INT-检测到进入游戏四个字并点一下-最多3次": {
         "recognition": {
@@ -455,11 +501,7 @@
     "TASK-A-ACT-检测到还在加载中等待3秒": {
         "recognition": {
             "type": "OCR",
-            "param": {
-                "roi": [530, 660, 210, 45],
-                "expected": "加载",
-                "only_rec": true
-            }
+            "param": {"roi": [530, 660, 210, 45], "expected": "加载"}
         },
         "post_delay": 3000
     },
@@ -475,7 +517,6 @@
         "post_delay": 800
     },
     "TASK-A-ACT-检测绑定手机弹窗并关闭": {
-        "desc": "按一下ESC即可关闭",
         "recognition": {
             "type": "TemplateMatch",
             "param": {
@@ -484,7 +525,8 @@
             }
         },
         "action": {"type": "ClickKey", "param": {"key": 111}},
-        "post_delay": 800
+        "post_delay": 800,
+        "_doc": "按一下ESC即可关闭"
     },
     "TASK-A-ACT-检测到邮箱图标点一下": {
         "recognition": {

@@ -8,10 +8,33 @@
     "controller": [{"name": "ADB 默认方式", "type": "Adb"}],
     "resource": [{"name": "官服", "path": ["{PROJECT_DIR}/resource/base"]}],
     "agent": {"child_exec": "python", "child_args": ["-u", "{PROJECT_DIR}/../agent/main.py"]},
+    "group": [
+        {
+            "name": "daily",
+            "label": "日常任务"
+        },
+        {
+            "name": "standalone",
+            "label": "独立任务"
+        },
+        {
+            "name": "multi_role",
+            "label": "多角色任务"
+        }
+    ],
+    "import": [
+        "resource/tasks/preset/日常长草预设.json",
+        "resource/tasks/preset/肝帝预设.json",
+        "resource/tasks/preset/多角色任务预设.json",
+        "resource/tasks/1_启动和关闭游戏相关任务.json",
+        "resource/tasks/2_登录和退出登录角色相关任务.json",
+        "resource/tasks/3_庭院日常奖励领取相关任务.json",
+        "resource/tasks/4_刷副本相关任务.json",
+        "resource/tasks/5_结界突破相关任务.json",
+        "resource/tasks/6_多角色任务.json"
+    ],
     "task": [
-        {"name": "启动游戏", "entry": "TASK-启动游戏到登录界面"},
-        {"name": "关闭游戏", "entry": "TASK-关闭游戏"},
-        {"name": "截图测试", "entry": "Screenshot"},
+        {"name": "截图测试", "entry": "Screenshot", "group": ["standalone"]},
         {
             "name": "多角色-查看悬赏",
             "entry": "ENTRY-多角色任务模板",

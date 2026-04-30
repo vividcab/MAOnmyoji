@@ -207,5 +207,16 @@
         "inverse": true,
         "action": {"type": "Click", "param": {"target": [20, 20, 120, 70]}},
         "post_delay": 800
+    },
+    "ACT-检测到强制弹出的优惠券广告点一下一键领取": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [674, 388, 224, 139],
+                "expected": "一键领取"
+            }
+        },
+        "action": {"type": "Click"},
+        "post_delay": 1000
     }
 }

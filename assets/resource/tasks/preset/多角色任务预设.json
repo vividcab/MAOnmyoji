@@ -1,0 +1,33 @@
+{
+    "preset": [
+        {
+            "name": "多角色-任务预设",
+            "task": [
+                {
+                    "name": "多角色-日常签到领商店",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-只查看悬赏",
+                    "enabled": true
+                },
+                {
+                    "name": "多角色-只查看神秘商店",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-看悬赏混个逢魔",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-看悬赏寮三十和结界寄养",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-商店每周购买黑蛋寄售券",
+                    "enabled": false
+                }
+            ]
+        }
+    ]
+}

@@ -58,7 +58,7 @@
         "recognition": {"type": "OCR", "param": {"roi": [606, 186, 62, 85], "expected": "每"}},
         "action": {"type": "Click"},
         "post_delay": 1500,
-        "timeout": 5000,
+        "timeout": 3000,
         "next": [
             "1-2检测到已经解签然后截图记录",
             "[JumpBack]1-ACT-检测到没签到的每日一签并点击",
@@ -112,7 +112,10 @@
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/寮包记录"}}
         },
-        "next": ["ACT-无条件按一下Esc"]
+        "next": ["ACT-无条件按一下Esc"],
+        "focus": {
+            "Node.Recognition.Succeeded": "[color:green]检测到领取寮包成功，截图记录[/color]"
+        }
     },
 
     "4-领取体力": {
@@ -207,7 +210,10 @@
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/悬赏封印"}}
         },
-        "next": ["ACT-检测各类右上部分叉号并点一下"]
+        "next": ["ACT-检测各类右上部分叉号并点一下"],
+        "focus": {
+            "Node.Recognition.Succeeded": "[color:green]检测到有勾玉悬赏任务[/color]"
+        }
     },
 
     "8-领取商店每日黑蛋": {

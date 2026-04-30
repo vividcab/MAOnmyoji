@@ -663,7 +663,10 @@ class Count(CustomRecognition):
                         f"Count识别成功: {node_name}, 当前计数: {Count.record[node_name]['count']}"
                     )
                     return CustomRecognition.AnalyzeResult(
-                        box=reco_detail.box, detail=f"Count({node_name})"
+                        box=reco_detail.box,
+                        detail={
+                            f"NowCount-{node_name}": Count.record[node_name]["count"]
+                        },
                     )
                 else:
                     # 识别失败

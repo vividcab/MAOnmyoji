@@ -11,6 +11,7 @@
             "type": "Custom",
             "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 3}}
         },
+        "action": {"type": "DoNothing"},
         "next": ["检测挑战按钮然后点击"]
     },
     "检测挑战按钮然后点击": {
@@ -50,7 +51,7 @@
         ],
         "on_error": []
     },
-    
+
     "检测已经开始战斗等待X秒": {
         "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
         "action": {"type": "DoNothing"},
@@ -69,7 +70,7 @@
         ],
         "on_error": []
     },
-    
+
     "ACT-检测有御魂满了的弹窗就关闭": {
         "recognition": {"type": "OCR", "param": {"roi": [684, 398, 82, 50], "expected": "知道", "only_rec": true}},
         "action": {"type": "Click"},
@@ -87,7 +88,7 @@
         "action": {"type": "Click", "param": {"target": [30, 150, 180, 400]}},
         "post_delay": 800
     },
-    
+
     "ACT-检测到刷英杰试炼选择技能的界面-点击确定": {
         "recognition": {"type": "OCR", "param": {"roi": [596, 634, 83, 36], "expected": "定", "only_rec": true}},
         "action": {"type": "Click"},

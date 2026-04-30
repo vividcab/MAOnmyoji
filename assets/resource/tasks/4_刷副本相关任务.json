@@ -1,0 +1,69 @@
+{
+    "task": [
+        {
+            "name": "单刷各种副本",
+            "label": "单刷各种副本",
+            "description": "支持【活动爬塔】【御魂】【御灵】【业原火】【觉醒】【秘闻】【英杰经验】【英杰技能（自动选第一个技能）】等页面右下角有【挑战】按钮的副本\n执行本任务前，需要已经处于副本界面。\n请先手动刷一把，确认阵容配置正确，可以记录大致通关时间（通关时右上角记录的时间）\n请在任务设置处输入自动挑战的次数和每局预计通关时间",
+            "entry": "TASK-检测副本界面",
+            "group": ["standalone"],
+            "option": [
+                "输入挑战次数和通关时间",
+                "是否使用随机等待"
+            ]
+        }
+    ],
+    "option": {
+        "输入挑战次数和通关时间": {
+            "type": "input",
+            "label": "输入挑战次数和通关时间",
+            "description": "输入纯数字",
+            "inputs": [
+                {
+                    "name": "挑战次数",
+                    "label": "挑战次数",
+                    "description": "请输入整数。结合自身平时肝度设置，一般来说别搞通宵自动刷几小时问题都不大",
+                    "pipeline_type": "int",
+                    "verify": "^[0-9]+$",
+                    "default": "3"
+                },
+                {
+                    "name": "预计每局通关时间",
+                    "label": "预计每局通关时间",
+                    "description": "请输入整数，单位是毫秒。挑战开始后第一次等待的时间，这个计时结束之后会每隔一段时间再检测是否通关。设置此参数只是减少几次检测，省一点点点性能，不在乎的话保持默认 5000（5秒）即可。",
+                    "pipeline_type": "int",
+                    "verify": "^[0-9]+$",
+                    "default": "5000"
+                }
+            ],
+            "pipeline_override": {
+                "检测挑战次数是否超过设置的次数": {
+                    "recognition": {
+                        "type": "Custom",
+                        "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": "{挑战次数}"}}
+                    }
+                },
+                "检测已经开始战斗等待X秒": {"post_delay": "{预计每局通关时间}"}
+            }
+        },
+        "是否使用随机等待": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "是否使用随机等待",
+            "description": "模拟手动刷副本过程中，玩家可能中途离开去做别的事情：大部分时候等待间隔较短，有小概率情况间隔很久。不开启此选项也问题不大，由于任务过程有等待，每局通关时间本身也是不固定的。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "ACT-检测还在战斗中再等3秒": {"action": "Custom", "custom_action": "RandomSleep"}
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "ACT-检测还在战斗中再等3秒": {"action": "DoNothing"}
+                    }
+                }
+            ]
+        }
+    }
+}

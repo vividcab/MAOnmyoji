@@ -1,0 +1,108 @@
+{
+    "task": [
+        {
+            "name": "登录角色到庭院",
+            "description": "目前适配【初始庭院皮肤】和签到100天送的【枫色秋庭】皮肤，使用其他皮肤可以进入游戏但可能导致任务执行失败",
+            "entry": "ENTRY-登录某角色",
+            "group": ["daily"],
+            "option": [
+                "游戏平台选项",
+                "是否使用上次登录",
+                "输入指定账号和区服或角色名"
+            ]
+        },
+        {
+            "name": "退出当前登录的角色",
+            "description": "目前适配【初始庭院皮肤】和签到100天送的【枫色秋庭】皮肤",
+            "entry": "ENTRY-退出登录某角色",
+            "group": ["daily"]
+        },
+        {
+            "name": "尝试从任意界面回到庭院",
+            "description": "目前适配【初始庭院皮肤】和签到100天送的【枫色秋庭】皮肤",
+            "entry": "TASK-尝试从任意界面回到庭院",
+            "group": ["daily"]
+        }
+    ],
+    "option": {
+        "游戏平台选项": {
+            "type": "select",
+            "label": "选择游戏平台",
+            "description": "必选项，默认安卓",
+            "default_case": "安卓端",
+            "cases": [
+                {
+                    "name": "安卓端",
+                    "pipeline_override": {
+                        "TASK-A-6检测平台按钮并点击": {"template": "平台区服/安卓端.png"}
+                    }
+                },
+                {
+                    "name": "苹果端",
+                    "pipeline_override": {
+                        "TASK-A-6检测平台按钮并点击": {"template": "平台区服/苹果端.png"}
+                    }
+                }
+            ]
+        },
+        "是否使用上次登录": {
+            "type": "switch",
+            "default_case": "Yes",
+            "label": "是否使用上次登录的账号和区服",
+            "description": "如果选择“是”，无需在下方输入要识别的账号和区服名称",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "TASK-A-OPT-需要指定账号重写账号角色信息": {"enabled": false}
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "TASK-A-OPT-需要指定账号重写账号角色信息": {"enabled": true}
+                    }
+                }
+            ]
+        },
+        "输入指定账号和区服或角色名": {
+            "type": "input",
+            "label": "-----在下方手动指定要登录的角色信息-----",
+            "description": "当【是否使用上次登录】选项关闭的时候，下面的输入才生效",
+            "inputs": [
+                {
+                    "name": "要匹配的账号",
+                    "label": "要匹配的账号",
+                    "description": "注意：程序在【游戏登录界面的账号选择下拉列表】中按此输入进行查找，可以输入完整的账号或者部分特异子字符串。\n例如：账号是abcdef@163.com，可以输入abcdef@163.com、cdef@16、bcde等均可。\n可避免输入小写字母的L等可能引起识别错误的相似字符(使用1280*720p及更高分辨率情况一般不会出错，分辨率太低可能无法正确区分数字1和字母l)",
+                    "pipeline_type": "string",
+                    "default": "@163.com"
+                },
+                {
+                    "name": "平台选择",
+                    "label": "平台选择",
+                    "description": "必须严格输入：“安卓端”或者“苹果端”三个汉字，不用带引号",
+                    "pipeline_type": "string",
+                    "default": "安卓端",
+                    "verify": "^((安卓|苹果)端)$"
+                },
+                {
+                    "name": "服务器名称或者角色昵称",
+                    "label": "服务器名称或者角色昵称",
+                    "description": "注意：程序在【游戏登录界面弹出的已有角色页面】按此输入进行查找，可以输入完整的服务器名称，例如：“春之樱”、“夏之蝉”，或者你自己的游戏角色昵称。为识别准确，避免输入特殊符号",
+                    "pipeline_type": "string",
+                    "default": "*"
+                }
+            ],
+            "pipeline_override": {
+                "TASK-A-OPT-需要指定账号重写账号角色信息": {
+                    "custom_action_param": {
+                        "account": "{要匹配的账号}",
+                        "platform": "{平台选择}",
+                        "servername": "{服务器名称或者角色昵称}",
+                        "rolename": "角色昵称"
+                    }
+                }
+            }
+        }
+    }
+}

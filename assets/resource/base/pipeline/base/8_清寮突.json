@@ -13,7 +13,7 @@
         "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
     },
     "TASK-T-0从庭院到探索界面-寮突": {
-        "recognition": {"type": "OCR", "param": {"roi": [630, 130, 48, 46], "expected": "索"}},
+        "recognition": {"type": "OCR", "param": {"roi": [587, 105, 178, 86], "expected": "索"}},
         "action": {"type": "Click"},
         "post_delay": 1500,
         "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-1从探索到结界突破界面-寮突"]
@@ -45,7 +45,7 @@
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [10, 7, 690, 94]}},
+        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
         "post_delay": 1200,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
