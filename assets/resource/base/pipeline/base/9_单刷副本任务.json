@@ -63,7 +63,7 @@
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
-            "[JumpBack]ACT-检测到刷英杰试炼选择技能的界面-点击确定",
+            "ACT-检测到刷英杰试炼选择技能的界面-点击第一个技能",
             "[JumpBack]ACT-检测到契灵结契失败点放弃结契",
             "[JumpBack]ACT-检测到刷探查发现首领契灵点稍后集结",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟右手拇指点击一下屏幕"
@@ -89,18 +89,19 @@
         "post_delay": 800
     },
 
-    "ACT-检测到刷英杰试炼选择技能的界面-点击确定": {
-        "recognition": {"type": "OCR", "param": {"roi": [596, 634, 83, 36], "expected": "定", "only_rec": true}},
-        "action": {"type": "Click"},
-        "post_delay": 1200,
-        "timeout": 500,
-        "next": ["ACT-检测到刷英杰试炼选择技能的界面-点击第一个技能"],
-        "on_error": []
-    },
     "ACT-检测到刷英杰试炼选择技能的界面-点击第一个技能": {
         "recognition": {"type": "OCR", "param": {"roi": [596, 634, 83, 36], "expected": "定", "only_rec": true}},
         "action": {"type": "Click", "param": {"target": [69, 429, 204, 149]}},
-        "post_delay": 1000
+        "post_delay": 1000,
+        "timeout": 6000,
+        "next": ["ACT-检测到刷英杰试炼选择技能的界面-点击确定"]
+    },
+    "ACT-检测到刷英杰试炼选择技能的界面-点击确定": {
+        "recognition": {"type": "OCR", "param": {"roi": [596, 634, 83, 36], "expected": "定", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 2500,
+        "timeout": 6000,
+        "next": ["TASK-检测副本界面"]
     },
     "ACT-检测到契灵结契失败点放弃结契": {
         "recognition": {"type": "OCR", "param": {"roi": [430, 607, 124, 38], "expected": "放弃", "only_rec": true}},
