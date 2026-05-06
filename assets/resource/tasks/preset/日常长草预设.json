@@ -5,47 +5,60 @@
             "description": "",
             "task": [
                 {
-                    "name": "启动游戏到登录界面"
+                    "name": "启动游戏到登录界面",
+                    "enabled": true
                 },
                 {
-                    "name": "登录角色到庭院"
+                    "name": "登录角色到庭院",
+                    "enabled": true
                 },
                 {
-                    "name": "1-每日签到"
+                    "name": "1-每日签到",
+                    "enabled": true
                 },
                 {
-                    "name": "2-领取御魂加成"
+                    "name": "2-领取御魂加成",
+                    "enabled": true
                 },
                 {
-                    "name": "3-领取寮包"
+                    "name": "3-领取寮包",
+                    "enabled": true
                 },
                 {
-                    "name": "4-领取体力"
+                    "name": "4-领取体力",
+                    "enabled": true
                 },
                 {
-                    "name": "5-领取勾玉"
+                    "name": "5-领取勾玉",
+                    "enabled": true
                 },
                 {
-                    "name": "6-领邮件"
+                    "name": "6-领邮件",
+                    "enabled": true
                 },
                 {
-                    "name": "7-查看悬赏"
+                    "name": "7-查看悬赏",
+                    "enabled": true
                 },
                 {
-                    "name": "8-商店每日免费购买"
+                    "name": "8-商店每日免费购买",
+                    "enabled": true
                 },
                 {
-                    "name": "9-每日免费抽卡"
+                    "name": "9-每日免费抽卡",
+                    "enabled": true
                 },
                 {
-                    "name": "10-查看神秘商店并截图记录"
+                    "name": "10-查看神秘商店并截图记录",
+                    "enabled": true
                 },
                 {
                     "name": "11-商店每周购买黑蛋和寄售券",
                     "enabled": false
                 },
                 {
-                    "name": "退出当前登录的角色"
+                    "name": "退出当前登录的角色",
+                    "enabled": true
                 },
                 {
                     "name": "关闭游戏",

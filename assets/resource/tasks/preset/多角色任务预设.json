@@ -9,7 +9,7 @@
                 },
                 {
                     "name": "多角色-只查看悬赏",
-                    "enabled": true
+                    "enabled": false
                 },
                 {
                     "name": "多角色-只查看神秘商店",

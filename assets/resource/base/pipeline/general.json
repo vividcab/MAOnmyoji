@@ -11,7 +11,8 @@
         "action": {
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data"}}
-        }
+        },
+        "focus": {"succeeded": "[color:green]截图测试完成，保存到 user_data 文件夹[/color]"}
     },
     "任务出错-写日志记录一下": {
         "action": {"type": "Custom", "param": {"custom_action": "LogAnError", "custom_action_param": {}}},

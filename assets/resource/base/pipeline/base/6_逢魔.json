@@ -141,7 +141,13 @@
         "post_delay": 3000
     },
     "F-5-0开始打逢魔BOSS任务": {
-        "recognition": {"type": "DirectHit"},
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1000, 651, 43, 44], "template": "逢魔/逢魔找boss按钮.png"}
+        },
+        "pre_delay": 1500,
+        "action": {"type": "Click"},
+        "post_delay": 3500,
         "timeout": 4000,
         "rate_limit": 2000,
         "next": [
