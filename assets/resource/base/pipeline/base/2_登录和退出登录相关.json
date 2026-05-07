@@ -353,10 +353,7 @@
         },
         "action": {"type": "Click"},
         "post_delay": 1000,
-        "next": [
-            "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态",
-            "TASK-A-9在已有角色界面查找目标服务器名"
-        ]
+        "next": ["TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态", "TASK-A-9在已有角色界面查找目标服务器名"]
     },
     "TASK-A-INT-在已有角色栏上滑一次-最多划3次": {
         "recognition": {
@@ -391,7 +388,7 @@
         "rate_limit": 2000,
         "next": [
             "TASK-A-END4-1第一次检测到处于庭院",
-            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
+            "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态",
             "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
             "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
             "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
@@ -401,6 +398,7 @@
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": ["错误处理方式-截图记录"]
@@ -419,8 +417,6 @@
         "rate_limit": 2000,
         "next": [
             "STATUS-处于庭院初始状态",
-            "[JumpBack]TASK-A-INT-检测到进入游戏四个字并点一下-最多3次",
-            "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
             "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
             "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
             "[JumpBack]ACT-检测到强制弹出的优惠券广告点一下一键领取",
@@ -429,6 +425,7 @@
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
+            "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": ["错误处理方式-截图记录"]
@@ -438,10 +435,10 @@
             "type": "OCR",
             "param": {
                 "roi": [545, 563, 185, 65],
-                "expected": "游戏"
+                "expected": "进|入|游|戏"
             }
         },
-        "action": {"type": "Click", "param": {"target": [558, 570, 160, 45]}},
+        "action": {"type": "LongPress", "param": {"target": [558, 570, 160, 45], "duration": 800}},
         "post_delay": 4000,
         "next": ["TASK-A-OPT-1-检测到需要在侧边选择同区不同角色", "TASK-A-END4等待游戏进入庭院状态"]
     },
@@ -490,12 +487,12 @@
                     "target": 5,
                     "recognition": {
                         "type": "OCR",
-                        "param": {"roi": [545, 563, 185, 65], "expected": "游戏"}
+                        "param": {"roi": [545, 563, 185, 65], "expected": "进|入|游|戏"}
                     }
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [558, 570, 160, 45]}},
+        "action": {"type": "LongPress", "param": {"target": [558, 570, 160, 45], "duration": 800}},
         "post_delay": 8000
     },
     "TASK-A-ACT-检测到还在加载中等待3秒": {
@@ -527,6 +524,18 @@
         "action": {"type": "ClickKey", "param": {"key": 111}},
         "post_delay": 800,
         "_doc": "按一下ESC即可关闭"
+    },
+    "TASK-A-ACT-检测的获得印记弹窗点一下空白处": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [524, 192, 233, 80],
+                "expected": "印记获得",
+                "only_rec": true
+            }
+        },
+        "action": {"type": "Click", "param": {"target": [1177, 604, 56, 89]}},
+        "post_delay": 1000
     },
     "TASK-A-ACT-检测到邮箱图标点一下": {
         "recognition": {

@@ -3,6 +3,7 @@
         {
             "name": "多角色-日常签到领商店",
             "entry": "ENTRY-多角色任务模板",
+            "description": "登录、领取庭院中的日常奖励、退出登录",
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表1",

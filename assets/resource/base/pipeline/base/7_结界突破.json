@@ -21,7 +21,7 @@
     "TASK-T-1从探索到结界突破界面": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [226, 615, 114, 97], "template": "突破/探索界面下栏结界突破按钮.png"}
+            "param": {"roi": [31, 617, 1076, 94], "template": "突破/探索界面下栏结界突破按钮.png"}
         },
         "action": {"type": "Click"},
         "post_delay": 1500
