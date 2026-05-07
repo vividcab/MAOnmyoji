@@ -196,6 +196,11 @@
         "action": {"type": "DoNothing"},
         "post_delay": 3000
     },
+    "ACT-检测到手动战斗则切换成自动": {
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "手动"}},
+        "action": {"type": "Click"},
+        "post_delay": 3000
+    },
     "ACT-检测不到左上角返回按钮之后就模拟点击一下左上角": {
         "recognition": {
             "type": "TemplateMatch",
