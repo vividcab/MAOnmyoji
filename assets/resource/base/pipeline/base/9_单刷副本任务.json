@@ -85,6 +85,7 @@
         "rate_limit": 1500,
         "next": [
             "TASK-检测副本界面",
+            "[JumpBack]ACT-检测到断网则等待5秒",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -119,7 +120,7 @@
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [1082, 165, 175, 534]}},
+        "action": {"type": "Click", "param": {"target": [1150, 165, 1120, 534]}},
         "post_delay": 1000
     },
     "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次": {
@@ -134,14 +135,14 @@
                         "param": {
                             "roi": [0, 0, 70, 70],
                             "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
-                        },
-                        "inverse": true
-                    }
+                        }
+                    },
+                    "is_inverse": true
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [20, 130, 130, 450]}},
-        "post_delay": 800
+        "action": {"type": "Click", "param": {"target": [10, 130, 100, 450]}},
+        "post_delay": 1000
     },
 
     "ACT-检测到刷英杰试炼选择技能的界面-点击第一个技能": {

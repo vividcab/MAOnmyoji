@@ -585,7 +585,8 @@ class Count(CustomRecognition):
     参数格式:
     {
         "target": int,
-        "recognition": dict
+        "recognition": dict,
+        "is_inverse": bool
     }
 
     字段说明:
@@ -633,6 +634,7 @@ class Count(CustomRecognition):
                 params = {"target": sys.maxsize, "recognition": {"type": "DirectHit"}}
             target_count = params.get("target", sys.maxsize)
             recognition = params.get("recognition", {"type": "DirectHit"})
+            is_inverse = params.get("is_inverse", False)
 
             if not isinstance(target_count, int) or target_count < 0:
                 logger.error(f"无效的target值: {target_count}")
@@ -655,22 +657,46 @@ class Count(CustomRecognition):
                     {self._identifier: {"recognition": recognition}}
                 )
                 reco_detail = context.run_recognition(self._identifier, argv.image)
+                # logger.debug(reco_detail)
 
-                # 识别成功
-                if reco_detail is not None and reco_detail.box is not None:
-                    Count.record[node_name]["count"] += 1
-                    logger.debug(
-                        f"Count识别成功: {node_name}, 当前计数: {Count.record[node_name]['count']}"
-                    )
-                    return CustomRecognition.AnalyzeResult(
-                        box=reco_detail.box,
-                        detail={
-                            f"NowCount-{node_name}": Count.record[node_name]["count"]
-                        },
-                    )
+                # 不反转识别结果，识别到了就是识别成功，加1
+                if not is_inverse:
+                    # 识别成功
+                    if reco_detail is not None and reco_detail.box is not None:
+                        Count.record[node_name]["count"] += 1
+                        logger.debug(
+                            f"Count识别成功: {node_name}, 当前计数: {Count.record[node_name]['count']}"
+                        )
+                        return CustomRecognition.AnalyzeResult(
+                            box=reco_detail.box,
+                            detail={
+                                f"NowCount-{node_name}": Count.record[node_name][
+                                    "count"
+                                ]
+                            },
+                        )
+                    else:
+                        # 识别失败
+                        return None
+                # 反转识别结果，没识别到认为识别成功，加1
                 else:
-                    # 识别失败
-                    return None
+                    # 识别成功
+                    if reco_detail is not None and reco_detail.box is None:
+                        Count.record[node_name]["count"] += 1
+                        logger.debug(
+                            f"Count识别成功(反转): {node_name}, 当前计数: {Count.record[node_name]['count']}"
+                        )
+                        return CustomRecognition.AnalyzeResult(
+                            box=[114, 514, 100, 100],
+                            detail={
+                                f"NowCount-{node_name}": Count.record[node_name][
+                                    "count"
+                                ]
+                            },
+                        )
+                    else:
+                        # 识别失败
+                        return None
             else:
                 # 已达指定次数
                 return None

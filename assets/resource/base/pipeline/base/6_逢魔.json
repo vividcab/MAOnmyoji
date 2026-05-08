@@ -181,8 +181,12 @@
         },
         "action": {"type": "Click"},
         "post_delay": 1000,
-        "timeout": 3000,
-        "next": ["F-6检测到boss集结弹窗并点击进入逢魔广场"],
+        "timeout": 2000,
+        "next": [
+            "F-6检测到boss集结弹窗并点击进入逢魔广场",
+            "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ],
         "on_error": ["F-5-0开始打逢魔BOSS任务"]
     },
     "F-6检测到boss集结弹窗并点击进入逢魔广场": {
@@ -196,7 +200,7 @@
         "next": [
             "F-7从逢魔广场等待开车",
             "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击确定",
-            "[JumpBack]ACT-车满了关闭这个Boss的集结弹窗"
+            "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗"
         ],
         "on_error": ["F-5-0开始打逢魔BOSS任务"]
     },
@@ -210,13 +214,14 @@
         "next": ["ACT-点一下确定"]
     },
     "ACT-点一下确定": {"action": {"type": "Click", "param": {"target": [695, 413, 123, 37]}}, "post_delay": 3000},
-    "ACT-车满了关闭这个Boss的集结弹窗": {
+    "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {"roi": [1115, 51, 44, 43], "template": "逢魔/boss集结弹窗叉号.png"}
         },
         "action": {"type": "Click"},
-        "post_delay": 1000
+        "post_delay": 1000,
+        "next": ["F-5-0开始打逢魔BOSS任务"]
     },
     "F-7从逢魔广场等待开车": {
         "recognition": {

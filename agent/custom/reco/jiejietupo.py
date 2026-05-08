@@ -78,8 +78,8 @@ class InitTuPoStatus(CustomRecognition):
         j = index // 3
         i = index % 3
         roi = [307 + i * self.delta_x, 170 + j * self.delta_y, 123, 74]
-        logger.debug(roi)
-        logger.debug(f"row: {j+1}, col: {i+1}")
+        # logger.debug(roi)
+        logger.debug(f"获取下一个要进攻的结界：row: {j+1}, col: {i+1}")
         return CustomRecognition.AnalyzeResult(roi, {"row": j + 1, "col": i + 1})
 
 

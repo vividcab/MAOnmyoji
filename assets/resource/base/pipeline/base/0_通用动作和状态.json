@@ -192,14 +192,29 @@
         "post_delay": 1000
     },
     "ACT-检测还在战斗中再等3秒": {
-        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动", "only_rec": true}},
         "action": {"type": "DoNothing"},
         "post_delay": 3000
     },
     "ACT-检测到手动战斗则切换成自动": {
-        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "手动"}},
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "手动", "only_rec": true}},
         "action": {"type": "Click"},
         "post_delay": 3000
+    },
+    "ACT-检测到断网则等待5秒": {
+        "recognition": {"type": "OCR", "param": {"roi": [614, 342, 105, 37], "expected": "正在连接", "only_rec": true}},
+        "action": {"type": "DoNothing"},
+        "post_delay": 5000
+    },
+    "检测到已断开游戏服务器弹窗": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [437, 301, 220, 50], "expected": "已断开游戏服务器", "only_rec": true}
+        },
+        "action": {"type": "DoNothing"},
+        "post_delay": 5000,
+        "next": [],
+        "focus": {"succeeded": "[color:red]识别到与服务器连接断开，任务结束[/color]"}
     },
     "ACT-检测不到左上角返回按钮之后就模拟点击一下左上角": {
         "recognition": {

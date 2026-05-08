@@ -1,11 +1,10 @@
 {
     "ENTRY-清寮突破": {
-        "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
         "timeout": 2000,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "TASK-T-3-检测已经处于寮突界面",
-            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突",
+            "TASK-T-2检测到结界突破界面然后点击寮突标签页以取消可能存在的弹窗-寮突",
             "TASK-T-1从探索到结界突破界面-寮突",
             "TASK-T-0从庭院到探索界面-寮突"
         ],
@@ -16,7 +15,11 @@
         "recognition": {"type": "OCR", "param": {"roi": [587, 105, 178, 86], "expected": "索"}},
         "action": {"type": "Click"},
         "post_delay": 1500,
-        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-1从探索到结界突破界面-寮突"]
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "TASK-T-1从探索到结界突破界面-寮突"
+        ]
     },
     "TASK-T-1从探索到结界突破界面-寮突": {
         "recognition": {
@@ -27,11 +30,11 @@
         "post_delay": 1500,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
-            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突"
+            "TASK-T-2检测到结界突破界面然后点击寮突标签页以取消可能存在的弹窗-寮突"
         ],
         "on_error": ["尝试回到庭院然后继续清寮突任务"]
     },
-    "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗-寮突": {
+    "TASK-T-2检测到结界突破界面然后点击寮突标签页以取消可能存在的弹窗-寮突": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -45,7 +48,7 @@
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
+        "action": {"type": "Click", "param": {"target": [1209, 411, 45, 90]}},
         "post_delay": 1200,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -72,7 +75,38 @@
         "post_delay": 800
     },
     "TASK-T-3-检测已经处于寮突界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [563, 74, 144, 44], "expected": "结界突破", "only_rec": true}},
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ResetCount",
+                "custom_action_param": {
+                    "node_name_list": [
+                        "ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+                        "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
+                    ]
+                }
+            }
+        },
+        "post_delay": 800,
+        "timeout": 10000,
+        "next": [
+            "TASK-T-3-1-检测寮突信息和结界已经加载出来",
+            "ACT-识别并点一下个人结界突破"
+        ],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "ACT-识别并点一下个人结界突破": {
+        "recognition": {"type": "OCR", "param": {"roi": [1211, 294, 40, 72], "expected": "个", "only_rec": true}},
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "timeout": 10000,
+        "next": ["TASK-T-2检测到结界突破界面然后点击寮突标签页以取消可能存在的弹窗-寮突"],
+        "on_error": ["尝试回到庭院然后继续清寮突任务"]
+    },
+    "TASK-T-3-1-检测寮突信息和结界已经加载出来": {
         "recognition": {"type": "OCR", "param": {"roi": [39, 659, 109, 44], "expected": "记录", "only_rec": true}},
+        "action": {"type": "DoNothing"},
         "post_delay": 800,
         "timeout": 3000,
         "next": [
@@ -158,7 +192,11 @@
         "post_delay": 3000,
         "timeout": 13000,
         "rate_limit": 1500,
-        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-12检测到进入战斗并加载完毕-寮突"]
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "TASK-T-12检测到进入战斗并加载完毕-寮突"
+        ]
     },
     "TASK-T-12检测到进入战斗并加载完毕-寮突": {
         "recognition": {
@@ -180,12 +218,16 @@
         "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动"}},
         "post_delay": 7000,
         "timeout": 6000,
-        "rate_limit": 1200,
+        "rate_limit": 1500,
         "next": [
+            "[JumpBack]ACT-检测到断网则等待5秒",
             "TASK-T-3-检测已经处于寮突界面",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测到悬赏协作并处理",
-            "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ]
     },
     "尝试回到庭院然后继续清寮突任务": {

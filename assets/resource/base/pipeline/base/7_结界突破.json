@@ -5,7 +5,7 @@
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
-            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
+            "TASK-T-2检测到结界突破界面重置计数器",
             "[JumpBack]TASK-T-1从探索到结界突破界面",
             "[JumpBack]TASK-T-0从庭院到探索界面",
             "[JumpBack]INT-尝试从任意界面回到庭院"
@@ -26,12 +26,24 @@
         "action": {"type": "Click"},
         "post_delay": 1500
     },
-    "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗": {
+    "TASK-T-2检测到结界突破界面重置计数器": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {"roi": [1093, 10, 45, 39], "template": "突破/右上角突破券图标.png"}
         },
-        "action": {"type": "Click", "param": {"target": [12, 7, 402, 95]}},
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ResetCount",
+                "custom_action_param": {
+                    "node_name_list": [
+                        "TASK-T-8退这个突破X次",
+                        "ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+                        "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
+                    ]
+                }
+            }
+        },
         "post_delay": 1200,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -75,21 +87,21 @@
     },
     "TASK-T-4初始化突破状态记录": {
         "recognition": {"type": "Custom", "param": {"custom_recognition": "InitTuPoStatus"}},
-        "action": {"type": "Custom", "param": {"custom_action": "ResetCount"}},
+        "action": {"type": "DoNothing"},
         "timeout": 3000,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
-            "TASK-T-5检测是否最后一个突破",
+            "TASK-T-5检测是最后一个突破",
             "TASK-T-6不是最后一个则获取下一个要突破的结界"
         ]
     },
-    "TASK-T-5检测是否最后一个突破": {
+    "TASK-T-5检测是最后一个突破": {
         "recognition": {"type": "Custom", "param": {"custom_recognition": "IsLastTuPo"}},
         "action": {"type": "Click"},
         "post_delay": 1000,
         "timeout": 1000,
-        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-8退这个突破X次"],
-        "on_error": ["TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"]
+        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-8退这个突破X次", "TASK-T-11挑战结界直到挑战结束"],
+        "on_error": ["TASK-T-2检测到结界突破界面重置计数器"]
     },
     "TASK-T-8退这个突破X次": {
         "recognition": {
@@ -110,7 +122,11 @@
         "post_delay": 1000,
         "timeout": 13000,
         "rate_limit": 1500,
-        "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-9检测到左上角退出突破按钮就点击一下"],
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "TASK-T-9检测到左上角退出突破按钮就点击一下"
+        ],
         "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-9检测到左上角退出突破按钮就点击一下": {
@@ -129,6 +145,7 @@
             "TASK-T-10检测到返回到了突破主界面",
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
             "[JumpBack]ACT-检测到再次挑战按钮点击下方中间",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-再点击一下左上角退突破按钮"
         ]
     },
@@ -150,7 +167,7 @@
         },
         "action": {"type": "DoNothing"},
         "post_delay": 1000,
-        "next": ["TASK-T-5检测是否最后一个突破"]
+        "next": ["TASK-T-5检测是最后一个突破"]
     },
     "TASK-T-11挑战结界直到挑战结束": {
         "recognition": {
@@ -161,7 +178,7 @@
         "post_delay": 3000,
         "timeout": 13000,
         "rate_limit": 1500,
-        "next": ["TASK-T-12检测到进入战斗并加载完毕", "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗"],
+        "next": ["[JumpBack]ACT-检测到当前界面是加载插画等待3秒", "TASK-T-12检测到进入战斗并加载完毕"],
         "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-T-12检测到进入战斗并加载完毕": {
@@ -189,10 +206,13 @@
         "timeout": 6000,
         "rate_limit": 1500,
         "next": [
-            "TASK-T-2检测到结界突破界面然后点击左上角以取消可能存在的弹窗",
+            "TASK-T-2检测到结界突破界面重置计数器",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测到悬赏协作并处理",
-            "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下左上角"
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ],
         "on_error": ["错误处理方式-截图记录"]
     },
@@ -200,7 +220,7 @@
         "recognition": {"type": "Custom", "param": {"custom_recognition": "GetNextTuPo"}},
         "action": {"type": "Click"},
         "post_delay": 1000,
-        "next": ["TASK-T-11挑战结界直到挑战结束"]
+        "next": ["TASK-T-11挑战结界直到挑战结束", "TASK-T-12检测到进入战斗并加载完毕"]
     },
     "RCO-检测突破成功": {
         "recognition": {
