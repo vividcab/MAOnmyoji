@@ -31,7 +31,8 @@
         "resource/tasks/3_庭院日常奖励领取相关任务.json",
         "resource/tasks/4_刷副本相关任务.json",
         "resource/tasks/5_结界突破相关任务.json",
-        "resource/tasks/6_多角色任务.json"
+        "resource/tasks/6_多角色任务.json",
+        "resource/tasks/7_组队刷副本任务.json"
     ],
     "task": [
         {"name": "截图测试", "entry": "Screenshot", "group": ["standalone"]}

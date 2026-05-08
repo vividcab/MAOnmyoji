@@ -14,6 +14,10 @@
                 {
                     "name": "清寮突",
                     "enabled": false
+                },
+                {
+                    "name": "组队刷副本",
+                    "enabled": false
                 }
             ]
         }

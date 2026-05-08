@@ -204,16 +204,6 @@
         ],
         "on_error": ["F-5-0开始打逢魔BOSS任务"]
     },
-    "ACT-处理每天只能打一次是否进入的弹窗提示": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [542, 340, 96, 38], "template": "逢魔/上车不再提示勾选框.png"}
-        },
-        "action": {"type": "Click"},
-        "post_delay": 1000,
-        "next": ["ACT-点一下确定"]
-    },
-    "ACT-点一下确定": {"action": {"type": "Click", "param": {"target": [695, 413, 123, 37]}}, "post_delay": 3000},
     "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗": {
         "recognition": {
             "type": "TemplateMatch",
