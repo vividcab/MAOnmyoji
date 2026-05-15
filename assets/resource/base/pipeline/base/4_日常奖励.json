@@ -205,7 +205,14 @@
         "on_error": ["ACT-检测各类右上部分叉号并点一下"]
     },
     "7-2检测到勾协就截图保存": {
-        "recognition": {"type": "TemplateMatch", "param": {"roi": [178, 497, 968, 97], "template": "签到/勾协.png"}},
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [140, 260, 1000, 100],
+                "template": ["通用界面按钮/检测悬赏协作弹窗.png", "通用界面按钮/现世悬赏协作弹窗.png"],
+                "threshold": [0.8, 0.8]
+            }
+        },
         "action": {
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/悬赏封印"}}
@@ -546,6 +553,64 @@
         },
         "action": {"type": "Click"},
         "post_delay": 1000,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+
+    "12-一键完成庭院事务": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [750, 400, 280, 100], "template": "签到/庭院一键托管.png"}
+        },
+        "action": "Click",
+        "post_delay": 1000,
+        "timeout": 3000,
+        "next": ["12-1检测一键完成按钮并点击"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "12-1检测一键完成按钮并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [1111, 632, 100, 57], "expected": "完成", "only_rec": true}},
+        "action": "Click",
+        "post_delay": 3000,
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
+    },
+
+    "13-给好友点赞": {
+        "timeout": 2000,
+        "next": ["13-1检测点击好友图标", "[JumpBack]检测处于庭院点右下角打开底部卷轴"],
+        "on_error": []
+    },
+    "13-1检测点击好友图标": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [831, 577, 151, 142], "template": "签到/好友图标.png", "threshold": 0.4}
+        },
+        "action": {"type": "Click"},
+        "post_delay": 2500,
+        "timeout": 1000,
+        "next": ["13-2查找好友然后点击", "13-3没找到好友则点击一下跨区好友"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "13-3没找到好友则点击一下跨区好友": {
+        "recognition": {"type": "OCR", "param": {"roi": [215, 155, 215, 464], "expected": "跨区好友"}},
+        "action": "Click",
+        "post_delay": 1000,
+        "timeout": 1000,
+        "next": ["13-2查找好友然后点击"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "13-2查找好友然后点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [219, 196, 159, 420], "expected": "姜修"}},
+        "action": "Click",
+        "next": ["13-4给好友点赞"]
+    },
+    "13-4给好友点赞": {
+        "action": "Click",
+        "target": [624, 147, 98, 23],
         "next": ["TASK-尝试从任意界面回到庭院"]
     }
 }

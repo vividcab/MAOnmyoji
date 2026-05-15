@@ -1,6 +1,7 @@
 {
     "ENTRY-组队刷副本任务入口": {
-        "timeout": 30000,
+        "timeout": 100000,
+        "rate_limit": 3000,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "TASK-组队刷图-检测在组队界面",
@@ -9,6 +10,7 @@
             "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
             "[JumpBack]ACT-检测到默认邀请队友弹窗点击选项再点确定",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次"
         ]
     },
@@ -18,7 +20,7 @@
             "param": {
                 "any_of": [
                     {"recognition": "OCR", "roi": [85, 16, 138, 50], "expected": "队伍"},
-                    {"recognition": "OCR", "roi": [556, 21, 125, 40], "expected": "永生之海"}
+                    {"recognition": "OCR", "roi": [556, 21, 125, 40], "expected": "永生"}
                 ]
             }
         },
@@ -30,7 +32,8 @@
                     "node_name_list": [
                         "ACT-什么都不做等待3秒-最多60秒",
                         "ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
-                        "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
+                        "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次",
+                        "ACT-检测魂海组队挑战按钮然后点击-每局最多20次"
                     ]
                 }
             }
@@ -101,13 +104,13 @@
         "rate_limit": 3000,
         "next": [
             "检测已经进入战斗并且加载完毕-组队",
-            "[JumpBack]ACT-检测魂海组队挑战按钮然后点击-最多20次",
+            "[JumpBack]ACT-检测魂海组队挑战按钮然后点击-每局最多20次",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测到悬赏协作并处理"
         ],
         "on_error": []
     },
-    "ACT-检测魂海组队挑战按钮然后点击-最多20次": {
+    "ACT-检测魂海组队挑战按钮然后点击-每局最多20次": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -160,9 +163,19 @@
 
     "检测已经进入战斗并且加载完毕-组队": {
         "desc": "队长和队员任务流程都会执行到这一步",
-        "recognition": "TemplateMatch",
-        "roi": [0, 0, 70, 70],
-        "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [0, 0, 70, 70],
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [22, 339, 79, 180],
+                "template": ["组队战斗/组队战斗界面左边中间表情按钮.png", "组队战斗/组队战斗界面左边中间表情按钮-1.png"]
+            }
+        ],
         "action": "DoNothing",
         "post_delay": 500,
         "timeout": 5000,
@@ -178,9 +191,9 @@
         "roi": [17, 630, 85, 62],
         "expected": "自动",
         "action": "DoNothing",
-        "post_delay": 10000,
-        "timeout": 20000,
-        "rate_limit": 1200,
+        "post_delay": 25000,
+        "timeout": 40000,
+        "rate_limit": 1500,
         "next": [
             "TASK-组队刷图-检测在组队界面",
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -188,8 +201,10 @@
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
+            "[JumpBack]ACT-检测到发现宝藏弹窗就关闭",
             "[JumpBack]ACT-检测到默认邀请队友弹窗点击选项再点确定",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "[JumpBack]ACT-检测到自动接受组队邀请按钮就点击",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ],
         "on_error": []
@@ -206,8 +221,7 @@
         "action": {"type": "Click"},
         "post_delay": 500,
         "timeout": 1000,
-        "rate_limit": 800,
-        "next": ["ACT-检测带确定按钮的弹窗并点击确定"]
+        "next": ["ACT-检测带确定按钮的弹窗并点击确定", "ACT-什么都不做等待3秒-最多60秒"]
     },
     "ACT-检测到自动接受组队邀请按钮就点击": {
         "recognition": {

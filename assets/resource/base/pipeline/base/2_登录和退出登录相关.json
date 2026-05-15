@@ -196,8 +196,12 @@
             }
         },
         "action": {"type": "Click"},
-        "post_delay": 1200,
-        "next": ["TASK-A-5检测登录按钮并点击"]
+        "post_delay": 1500,
+        "next": [
+            "TASK-A-3-0识别到当前账号就是要登录的账号",
+            "TASK-A-3-1检测已经打开了账号选择列表开始查找账号",
+            "[JumpBack]TASK-A-ACT-检测到没打开账号选择栏点击一下账号选择栏"
+        ]
     },
     "TASK-A-END1检测划到底部了": {
         "recognition": {
@@ -308,9 +312,9 @@
         "action": {"type": "Click"},
         "post_delay": 1800,
         "timeout": 6000,
-        "rate_limit": 2000,
-        "next": ["TASK-A-8检测打开了区服选择界面且有角色"],
-        "on_error": ["TASK-A-END2没有角色"]
+        "rate_limit": 3000,
+        "next": ["TASK-A-8检测打开了区服选择界面且有角色", "TASK-A-7-2检测切换区服按钮并点击"],
+        "on_error": []
     },
     "TASK-A-END2没有角色": {"action": {"type": "DoNothing"}},
     "TASK-A-8检测打开了区服选择界面且有角色": {
