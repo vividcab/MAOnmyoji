@@ -149,9 +149,8 @@
         "recognition": {
             "type": "OCR",
             "param": {
-                "roi": [464, 292, 386, 42],
-                "expected": [".*", "账号信息--在代码里设置"],
-                "only_rec": true
+                "roi": [464, 290, 386, 44],
+                "expected": [".*", "账号信息--在代码里设置"]
             }
         },
         "post_delay": 500,

@@ -19,14 +19,11 @@
                 "custom_action_param": {
                     "tasks": [
                         {"taskname": "1-每日签到", "wait": 0.3},
-                        {"taskname": "2-领取御魂加成", "wait": 0.3},
-                        {"taskname": "3-领取寮包", "wait": 0.3},
-                        {"taskname": "4-领取体力", "wait": 0.3},
-                        {"taskname": "5-领取勾玉", "wait": 0.3},
+                        {"taskname": "12-一键完成庭院事务", "wait": 0.3},
+                        {"taskname": "13-给好友点赞", "wait": 0.3},
                         {"taskname": "6-领邮件", "wait": 0.3},
                         {"taskname": "7-查看悬赏", "wait": 0.3},
                         {"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
-                        {"taskname": "9-每日免费抽卡", "wait": 0.3},
                         {"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
                     ]
                 }
