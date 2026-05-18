@@ -14,7 +14,7 @@
                 "threshold": [0.9, 0.9]
             }
         },
-        "action": {"type": "Click"},
+        "action": {"type": "Click", "param": {"target_offset": [23, 23, 0, 0]}},
         "post_delay": 2000,
         "next": ["F-1从町中进入逢魔地图"]
     },
@@ -187,7 +187,7 @@
             "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下"
         ],
-        "on_error": ["F-5-0开始打逢魔BOSS任务"]
+        "on_error": ["F-5-0开始打逢魔BOSS任务", "F-7从逢魔广场等待开车"]
     },
     "F-6检测到boss集结弹窗并点击进入逢魔广场": {
         "recognition": {
@@ -195,14 +195,14 @@
             "param": {"roi": [1042, 572, 140, 54], "template": "逢魔/集结挑战boss按钮.png"}
         },
         "action": {"type": "Click"},
-        "post_delay": 1500,
-        "timeout": 800,
+        "post_delay": 3000,
+        "timeout": 4000,
+        "rate_limit": 2000,
         "next": [
             "F-7从逢魔广场等待开车",
-            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击确定",
-            "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗"
+            "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击确定"
         ],
-        "on_error": ["F-5-0开始打逢魔BOSS任务"]
+        "on_error": ["F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗", "F-5-0开始打逢魔BOSS任务"]
     },
     "F-6-1-车满了或者已经发车关闭这个Boss的集结弹窗": {
         "recognition": {
