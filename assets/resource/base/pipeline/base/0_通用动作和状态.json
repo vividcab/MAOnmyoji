@@ -169,7 +169,10 @@
     "检测到是勾协就接": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [556, 452, 165, 72], "template": "签到/勾协.png"}
+            "param": {
+                "roi": [533, 439, 214, 105],
+                "template": ["签到/勾协.png", "签到/检测协作狗粮.png", "签到/检测协作猫粮.png"]
+            }
         },
         "action": {"type": "Click", "param": {"target": [827, 395, 53, 44]}},
         "post_delay": 1000
