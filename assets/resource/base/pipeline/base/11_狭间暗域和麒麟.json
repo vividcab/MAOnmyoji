@@ -1,0 +1,258 @@
+{
+    "ENTRY-单刷狭间暗域任务": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [551, 13, 175, 39], "expected": "暗域"}
+        },
+        "timeout": 5000,
+        "rate_limit": 3000,
+        "next": ["检测到已经开始进攻中-在暗域地图中", "检测到还在集结中等待10秒"]
+    },
+    "检测到已经开始进攻中-在暗域地图中": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [578, 60, 149, 34], "expected": "进攻"}
+        },
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ResetCount",
+                "custom_action_param": {
+                    "node_name_list": [
+                        "ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "检测已经打开了战报-怪物分布弹窗",
+            "[JumpBack]检测点击右边栏战报按钮",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ]
+    },
+    "检测到还在集结中等待10秒": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [578, 60, 149, 34], "expected": "集结"}
+        },
+        "post_delay": 10000
+    },
+    "检测点击右边栏战报按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1187, 353, 74, 86], "template": "狭间暗域/战报按钮.png"}
+        },
+        "action": "Click",
+        "post_delay": 1500
+    },
+    "检测已经打开了战报-怪物分布弹窗": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [303, 145, 181, 53], "expected": "怪物分布"}
+        },
+        "next": ["识别领主暗域并点击", "要进攻的暗域均已被封印"]
+    },
+    "识别领主暗域并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [105, 119, 118, 528], "template": ["狭间暗域/白藏主暗域.png", "狭间暗域/孔雀暗域.png"]}
+        },
+        "action": "Click",
+        "next": ["识别精英并点击", "识别副将并点击", "识别首领并点击"]
+    },
+    "要进攻的暗域均已被封印": {},
+    "识别精英并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [422, 401, 602, 107],
+                "template": ["狭间暗域/白精1.png", "狭间暗域/白精2.png", "狭间暗域/白精3.png"],
+                "threshold": [0.9, 0.9, 0.9],
+                "index": -1
+            }
+        },
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["检测到进攻按钮并点击", "检测到前往按钮并点击", "检测已经打开了战报-怪物分布弹窗"]
+    },
+    "识别副将并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [515, 275, 425, 114],
+                "template": ["狭间暗域/白副1.png", "狭间暗域/白副2.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["检测到进攻按钮并点击", "检测到前往按钮并点击", "检测已经打开了战报-怪物分布弹窗"]
+    },
+    "识别首领并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [661, 136, 115, 111], "template": ["狭间暗域/白首.png"], "threshold": [0.9]}
+        },
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["检测到进攻按钮并点击", "检测到前往按钮并点击", "检测已经打开了战报-怪物分布弹窗"]
+    },
+    "检测到前往按钮并点击": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [1116, 602, 86, 56], "expected": "前往"}
+        },
+        "action": "Click",
+        "timeout": 20000,
+        "rate_limit": 2500,
+        "next": ["检测到进攻按钮并点击", "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定"],
+        "on_error": ["检测已经打开了战报-怪物分布弹窗", "检测到已经开始进攻中-在暗域地图中"]
+    },
+    "检测到进攻按钮并点击": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [1116, 602, 86, 56], "expected": "挑战"}
+        },
+        "action": "Click",
+        "post_delay": 3000,
+        "timeout": 200000,
+        "rate_limit": 2000,
+        "next": [
+            "检测已经开始战斗等待X秒-狭间暗域",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
+            "[JumpBack]ACT-检测到进攻按钮并点击"
+        ],
+        "on_error": []
+    },
+    "ACT-检测到进攻按钮并点击": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [1116, 602, 86, 56], "expected": "挑战"}
+        },
+        "action": "Click",
+        "post_delay": 3000
+    },
+    "检测已经开始战斗等待X秒-狭间暗域": {
+        "recognition": "OCR",
+        "roi": [17, 630, 85, 62],
+        "expected": "自动",
+        "action": "DoNothing",
+        "post_delay": 20000,
+        "timeout": 40000,
+        "rate_limit": 5000,
+        "next": [
+            "检测到已经开始进攻中-在暗域地图中",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到手动战斗则切换成自动",
+            "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
+            "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次"
+        ],
+        "on_error": []
+    },
+
+    "ENTRY-摸一下麒麟": {
+        "next": [
+            "[JumpBack]识别到处于庭院就进入寮大厅",
+            "识别到处于寮大厅-开始摸麒麟任务",
+            "[JumpBack]INT-尝试从任意界面回到庭院"
+        ]
+    },
+    "识别到处于庭院就进入寮大厅": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "next": ["检测点击寮图标进入阴阳寮大厅", "[JumpBack]检测处于庭院点右下角打开底部卷轴"]
+    },
+    "检测点击寮图标进入阴阳寮大厅": {
+        "recognition": {"type": "OCR", "param": {"roi": [511, 649, 116, 43], "expected": "阴阳"}},
+        "action": {"type": "Click"},
+        "post_delay": 3000,
+        "next": [
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到寮大厅的种树活动弹窗点击关闭",
+            "检测已处于阴阳寮大厅"
+        ]
+    },
+    "ACT-检测到寮大厅的种树活动弹窗点击关闭": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [628, 18, 559, 296], "template": "阴阳寮/寮种树活动弹窗叉号.png"}
+        },
+        "action": {"type": "Click"}
+    },
+    "检测已处于阴阳寮大厅": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
+        }
+    },
+
+    "识别到处于寮大厅-开始摸麒麟任务": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
+        },
+        "next": ["检测到狩猎战已经挑战则结束", "检测狩猎战并点击"]
+    },
+    "检测到狩猎战已经挑战则结束": {
+        "recognition": {"type": "OCR", "param": {"roi": [7, 154, 223, 390], "expected": "已挑战\\(1/1\\)"}},
+        "next": []
+    },
+    "检测狩猎战并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [7, 154, 223, 390], "expected": "狩猎战"}},
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["检测到挑战按钮并点击", "检测到已挑战按钮结束任务"]
+    },
+    "检测到挑战按钮并点击": {
+        "recognition": {"type": "OCR", "param": {"roi": [1115, 587, 124, 72], "expected": "^挑战"}},
+        "action": "Click",
+        "post_delay": 3000,
+        "timeout": 20000,
+        "rate_limit": 3000,
+        "next": [
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "检测到开始挑战麒麟自动战斗-等待X秒再退出",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到挑战按钮就再点击一下-每局最多10次",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下"
+        ],
+        "on_error": []
+    },
+    "检测到已挑战按钮结束任务": {
+        "recognition": {"type": "OCR", "param": {"roi": [1115, 587, 124, 72], "expected": "已挑战"}},
+        "action": "Click",
+        "post_delay": 3000,
+        "next": ["ACT-检测左上角方框折线返回按钮并点一下"]
+    },
+    "检测到开始挑战麒麟自动战斗-等待X秒再退出": {
+        "recognition": "OCR",
+        "roi": [17, 630, 85, 62],
+        "expected": "自动",
+        "action": "DoNothing",
+        "post_delay": 10000,
+        "timeout": 20000,
+        "rate_limit": 3000,
+        "next": [
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
+            "检测到本次伤害显示点击一下"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测到本次伤害显示点击一下": {
+        "recognition": {"type": "OCR", "param": {"roi": [555, 328, 138, 43], "expected": "伤害"}},
+        "action": {"type": "Click", "param": {"target": [911, 241, 202, 242]}},
+        "post_delay": 3000,
+        "next": ["检测到已挑战按钮结束任务", "[JumpBack]ACT-检测到当前界面是加载插画等待3秒", "STATUS-处于庭院初始状态"]
+    }
+}

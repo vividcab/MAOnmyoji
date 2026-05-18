@@ -19,12 +19,12 @@
                 "custom_action": "RunTaskList",
                 "custom_action_param": {
                     "tasks": [
-                        {"taskname": "A-领阴阳寮体力工资做寮30捐觉醒材料", "wait": 0.3},
+                        {"taskname": "ENTRY-摸一下麒麟", "wait": 0.3},
+                        {"taskname": "A-进入阴阳寮大厅做寮30捐觉醒材料", "wait": 0.3},
                         {"taskname": "B-从阴阳寮大厅进入结界", "wait": 0.3},
                         {"taskname": "C-检测收取寄养", "wait": 0.3},
                         {"taskname": "D-检测是否可以好友寄养", "wait": 0.3},
                         {"taskname": "E-检测收取自己结界卡", "wait": 0.3},
-                        {"taskname": "F-收取食盒", "wait": 0.3},
                         {"taskname": "A-从结界退出回庭院", "wait": 0.3}
                     ]
                 }
@@ -32,7 +32,7 @@
         },
         "_doc": "在 RunTaskList 实现中再判断是否真的执行某任务。例如签到任务只需要每天执行一次，领取体力是限时的"
     },
-    "A-领阴阳寮体力工资做寮30捐觉醒材料": {
+    "A-进入阴阳寮大厅做寮30捐觉醒材料": {
         "timeout": 3000,
         "next": ["检测点击寮图标进入寮大厅", "[JumpBack]检测处于庭院点右下角打开底部卷轴"]
     },
@@ -40,7 +40,7 @@
         "recognition": {"type": "OCR", "param": {"roi": [511, 649, 116, 43], "expected": "阴阳"}},
         "action": {"type": "Click"},
         "post_delay": 3000,
-        "next": ["检测到达了寮大厅"]
+        "next": ["检测到达了寮大厅", "[JumpBack]ACT-检测到当前界面是加载插画等待3秒"]
     },
     "检测到达了寮大厅": {
         "recognition": {
@@ -48,67 +48,16 @@
             "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
         },
         "action": {"type": "DoNothing"},
-        "post_delay": 1200,
-        "next": ["检测寮种树活动弹窗并关闭", "在寮大厅划一下视角然后检测领取工资和体力"]
-    },
-    "检测寮种树活动弹窗并关闭": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [628, 18, 559, 296], "template": "阴阳寮/寮种树活动弹窗叉号.png"}
-        },
-        "action": {"type": "Click"},
-        "post_delay": 500,
-        "next": ["在寮大厅划一下视角然后检测领取工资和体力"]
-    },
-    "在寮大厅划一下视角然后检测领取工资和体力": {
-        "recognition": {"type": "DirectHit"},
-        "action": {
-            "type": "Swipe",
-            "param": {"begin": [870, 560, 10, 10], "end": [800, 500, 10, 10], "duration": 1200}
-        },
-        "post_delay": 800,
-        "timeout": 300,
-        "next": [
-            "检测寮种树活动弹窗并关闭",
-            "OPT-检测可以领取体力补给就领",
-            "OPT-检测可以领工资就领",
-            "OPT-检测到可以做寮30就捐一下"
-        ],
-        "on_error": []
-    },
-    "OPT-检测可以领工资就领": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [87, 70, 1100, 538], "template": "阴阳寮/每日工资.png", "threshold": 0.9}
-        },
-        "action": {"type": "Click"},
-        "post_delay": 1000,
-        "timeout": 2000,
-        "next": ["OPT-点击领取工资按钮"],
-        "on_error": ["B-从阴阳寮大厅进入结界"]
-    },
-    "OPT-点击领取工资按钮": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [582, 431, 109, 51], "template": "阴阳寮/领取工资.png"}
-        },
-        "action": {"type": "Click"},
-        "post_delay": 1000,
-        "next": ["点击一下左上角空白处用来关闭领奖励的结果弹窗"]
-    },
-    "OPT-检测可以领取体力补给就领": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [87, 70, 1100, 538], "template": "阴阳寮/体力补给.png", "threshold": 0.9}
-        },
-        "action": {"type": "Click"},
         "post_delay": 2000,
-        "next": ["点击一下左上角空白处用来关闭领奖励的结果弹窗"]
+        "next": [
+            "[JumpBack]ACT-检测到寮大厅的种树活动弹窗点击关闭",
+            "OPT-检测到可以做寮30就捐一下",
+            "如果不做寮三十则进入此节点任务结束"
+        ]
     },
-    "点击一下左上角空白处用来关闭领奖励的结果弹窗": {
-        "action": {"type": "Click", "param": {"target": [172, 26, 144, 60]}},
-        "post_delay": 800,
-        "next": ["在寮大厅划一下视角然后检测领取工资和体力"]
+    "如果不做寮三十则进入此节点任务结束": {
+        "recognition": {"type": "DirectHit"},
+        "next": []
     },
     "OPT-检测到可以做寮30就捐一下": {
         "recognition": {"type": "OCR", "param": {"roi": [31, 160, 86, 120], "expected": "集体任务"}},
@@ -207,6 +156,7 @@
         },
         "next": []
     },
+
     "B-从阴阳寮大厅进入结界": {
         "timeout": 10000,
         "rate_limit": 3000,
@@ -228,6 +178,7 @@
         "action": {"type": "Click"},
         "post_delay": 3000
     },
+
     "C-检测收取寄养": {
         "recognition": {
             "type": "TemplateMatch",
