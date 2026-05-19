@@ -390,6 +390,7 @@
         "timeout": 5000,
         "rate_limit": 2000,
         "next": [
+            "[JumpBack]TASK-A-ACT-检测是否开启之前加成弹窗点击取消",
             "TASK-A-END4-1第一次检测到处于庭院",
             "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态",
             "[JumpBack]TASK-A-ACT-检测到还在加载中等待3秒",
@@ -419,6 +420,7 @@
         "timeout": 5000,
         "rate_limit": 2000,
         "next": [
+            "[JumpBack]TASK-A-ACT-检测是否开启之前加成弹窗点击取消",
             "STATUS-处于庭院初始状态",
             "[JumpBack]ACT-检测到退出游戏弹窗并点一下取消",
             "[JumpBack]TASK-A-ACT-检测到个性化推荐弹窗点击确认按钮关闭弹窗",
@@ -539,6 +541,10 @@
         },
         "action": {"type": "Click", "param": {"target": [1177, 604, 56, 89]}},
         "post_delay": 1000
+    },
+    "TASK-A-ACT-检测是否开启之前加成弹窗点击取消": {
+        "recognition": {"type": "OCR", "param": {"roi": [446, 274, 389, 48], "expected": "是否打开"}},
+        "next": ["ACT-检测带取消按钮的弹窗并点击取消"]
     },
     "TASK-A-ACT-检测到邮箱图标点一下": {
         "recognition": {
