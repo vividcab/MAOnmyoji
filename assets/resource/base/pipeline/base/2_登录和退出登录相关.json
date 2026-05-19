@@ -501,7 +501,7 @@
     "TASK-A-ACT-检测到还在加载中等待3秒": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [530, 660, 210, 45], "expected": "加载"}
+            "param": {"roi": [414, 662, 454, 51], "expected": "加载"}
         },
         "post_delay": 3000
     },
@@ -562,7 +562,7 @@
             }
         },
         "action": {"type": "ClickKey", "param": {"key": 111}},
-        "post_delay": 500
+        "post_delay": 800
     },
 
     "ENTRY-退出登录某角色": {

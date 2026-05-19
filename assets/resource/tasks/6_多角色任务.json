@@ -52,11 +52,13 @@
             ]
         },
         {
-            "name": "多角色-同心队刷觉醒副本",
+            "name": "多角色-同心队刷副本",
             "entry": "ENTRY-多角色任务模板",
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表7",
+                "同心队刷副本类型",
+                "同心队刷副本层数",
                 "同心队刷副本次数"
             ]
         }
@@ -282,6 +284,85 @@
                     }
                 }
             }
+        },
+        "同心队刷副本类型": {
+            "type": "select",
+            "label": "刷副本类型",
+            "description": "必选项，默认觉醒雷麒麟",
+            "default_case": "觉醒雷",
+            "cases": [
+                {
+                    "name": "觉醒雷",
+                    "pipeline_override": {
+                        "7-检测选择了目标副本": {"expected": "天雷"},
+                        "检测点击左边栏副本名称": {"expected": "天雷"}
+                    }
+                },
+                {
+                    "name": "觉醒水",
+                    "pipeline_override": {
+                        "7-检测选择了目标副本": {"expected": "水灵"},
+                        "检测点击左边栏副本名称": {"expected": "水灵"}
+                    }
+                },
+                {
+                    "name": "觉醒风",
+                    "pipeline_override": {
+                        "7-检测选择了目标副本": {"expected": "风转"},
+                        "检测点击左边栏副本名称": {"expected": "风转"}
+                    }
+                },
+                {
+                    "name": "觉醒火",
+                    "pipeline_override": {
+                        "7-检测选择了目标副本": {"expected": "业火"},
+                        "检测点击左边栏副本名称": {"expected": "业火"}
+                    }
+                },
+                {
+                    "name": "御魂",
+                    "pipeline_override": {
+                        "7-检测选择了目标副本": {"expected": "御魂"},
+                        "检测点击左边栏副本名称": {"expected": "御魂"}
+                    }
+                }
+            ]
+        },
+        "同心队刷副本层数": {
+            "type": "select",
+            "label": "刷副本层数",
+            "description": "必选项，默认拾层",
+            "default_case": "拾层",
+            "cases": [
+                {
+                    "name": "拾层",
+                    "pipeline_override": {
+                        "7-1-检测选择了目标层数": {"expected": "拾层"},
+                        "检测点击左边栏目标层数": {"expected": "拾层"}
+                    }
+                },
+                {
+                    "name": "玖层",
+                    "pipeline_override": {
+                        "7-1-检测选择了目标层数": {"expected": "玖层"},
+                        "检测点击左边栏目标层数": {"expected": "玖层"}
+                    }
+                },
+                {
+                    "name": "捌层",
+                    "pipeline_override": {
+                        "7-1-检测选择了目标层数": {"expected": "捌层"},
+                        "检测点击左边栏目标层数": {"expected": "捌层"}
+                    }
+                },
+                {
+                    "name": "柒层",
+                    "pipeline_override": {
+                        "7-1-检测选择了目标层数": {"expected": "柒层"},
+                        "检测点击左边栏目标层数": {"expected": "柒层"}
+                    }
+                }
+            ]
         },
         "同心队刷副本次数": {
             "type": "input",

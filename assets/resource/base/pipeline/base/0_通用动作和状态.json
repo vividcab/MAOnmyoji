@@ -14,7 +14,7 @@
             }
         },
         "action": {"type": "Click"},
-        "post_delay": 3000
+        "post_delay": 1200
     },
     "ACT-检测左上角方框折线返回按钮并点一下": {
         "recognition": {
@@ -28,7 +28,7 @@
             }
         },
         "action": {"type": "Click"},
-        "post_delay": 3000
+        "post_delay": 1200
     },
     "ACT-检测各类右上部分叉号并点一下": {
         "recognition": {
@@ -142,7 +142,7 @@
             }
         }
     },
-    "ACT-从组队状态回到庭院": {
+    "TASK-从组队状态回到庭院": {
         "timeout": 5000,
         "rate_limit": 1000,
         "next": [

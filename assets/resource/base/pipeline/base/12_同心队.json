@@ -20,7 +20,7 @@
         "next": ["检测点击组队图标进入组队界面", "[JumpBack]检测处于庭院点右下角打开底部卷轴"]
     },
     "检测点击组队图标进入组队界面": {
-        "recognition": {"type": "OCR", "param": {"roi": [434, 657, 48, 28], "expected": "组队"}},
+        "recognition": {"type": "OCR", "param": {"roi": [434, 657, 48, 28], "expected": "组|队|邮"}},
         "action": {"type": "Click"},
         "post_delay": 1500,
         "next": ["检测已处于组队界面"]
@@ -32,7 +32,7 @@
     },
 
     "1-识别到处于组队界面-开始刷同心队任务": {
-        "recognition": {"type": "OCR", "param": {"roi": [36, 645, 78, 31], "expected": "同心队"}},
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [13, 572, 114, 96], "template": "同心队/同心队.png"}},
         "action": "Click",
         "post_delay": 1000,
         "next": ["[JumpBack]检测预存体力按钮并点击", "2-检测打开预存界面识别一键预存按钮并点击"]
@@ -111,14 +111,22 @@
     },
     "6-检测打开了副本选择界面": {
         "recognition": {"type": "OCR", "param": {"roi": [90, 16, 85, 47], "expected": "组队"}},
-        "next": ["7-检测选择了天雷鼓副本", "[JumpBack]检测点击左边栏天雷鼓"]
+        "next": ["7-检测选择了目标副本", "[JumpBack]检测点击左边栏副本名称"]
     },
-    "7-检测选择了天雷鼓副本": {
-        "recognition": {"type": "OCR", "param": {"roi": [415, 132, 152, 43], "expected": "天雷"}},
+    "7-检测选择了目标副本": {
+        "recognition": {"type": "OCR", "param": {"roi": [409, 131, 245, 45], "expected": "天雷"}},
+        "next": ["7-1-检测选择了目标层数", "[JumpBack]检测点击左边栏目标层数"]
+    },
+    "检测点击左边栏副本名称": {
+        "recognition": {"type": "OCR", "param": {"roi": [144, 124, 224, 503], "expected": "天雷"}},
+        "action": "Click"
+    },
+    "7-1-检测选择了目标层数": {
+        "recognition": {"type": "OCR", "param": {"roi": [409, 131, 245, 45], "expected": "拾层"}},
         "next": ["[JumpBack]检测点击创建按钮", "[JumpBack]检测点击创建队伍按钮", "8-检测已经处于组好队伍的界面"]
     },
-    "检测点击左边栏天雷鼓": {
-        "recognition": {"type": "OCR", "param": {"roi": [144, 124, 224, 503], "expected": "天雷"}},
+    "检测点击左边栏目标层数": {
+        "recognition": {"type": "OCR", "param": {"roi": [400, 186, 184, 381], "expected": "拾层"}},
         "action": "Click"
     },
     "检测点击创建队伍按钮": {
@@ -264,6 +272,8 @@
             "8-检测已经处于组好队伍的界面",
             "检测到战斗失败则停止任务",
             "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]给队友1点赞",
+            "[JumpBack]给队友2点赞",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
@@ -278,12 +288,25 @@
         "post_delay": 1000,
         "next": ["TASK-尝试从任意界面回到庭院"]
     },
+    "给队友1点赞": {
+        "max_hit": 1,
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [472, 539, 278, 67], "template": ["同心队/点赞队友.png", "同心队/已赞队友.png"]}
+        },
+        "action": "Click"
+    },
+    "给队友2点赞": {
+        "max_hit": 1,
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [728, 540, 77, 63], "template": ["同心队/点赞队友.png", "同心队/已赞队友.png"]}
+        },
+        "action": "Click"
+    },
     "刷同心队战斗次数够了": {
         "next": [
-            "STATUS-处于庭院初始状态",
-            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
-            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+            "TASK-从组队状态回到庭院"
         ]
     },
     "9-检测返回到了同心队界面": {
