@@ -1,0 +1,293 @@
+{
+    "ENTRY-刷同心队": {
+        "timeout": 4000,
+        "rate_limit": 2000,
+        "next": [
+            "[JumpBack]识别到处于庭院就进入组队界面",
+            "1-识别到处于组队界面-开始刷同心队任务",
+            "[JumpBack]INT-尝试从任意界面回到庭院"
+        ]
+    },
+    "识别到处于庭院就进入组队界面": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [680, 220, 240, 100],
+                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+                "threshold": [0.9, 0.9]
+            }
+        },
+        "next": ["检测点击组队图标进入组队界面", "[JumpBack]检测处于庭院点右下角打开底部卷轴"]
+    },
+    "检测点击组队图标进入组队界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [434, 657, 48, 28], "expected": "组队"}},
+        "action": {"type": "Click"},
+        "post_delay": 1500,
+        "next": ["检测已处于组队界面"]
+    },
+    "检测已处于组队界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [90, 16, 85, 47], "expected": "组队"}},
+        "action": {"type": "DoNothing"},
+        "next": []
+    },
+
+    "1-识别到处于组队界面-开始刷同心队任务": {
+        "recognition": {"type": "OCR", "param": {"roi": [36, 645, 78, 31], "expected": "同心队"}},
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["[JumpBack]检测预存体力按钮并点击", "2-检测打开预存界面识别一键预存按钮并点击"]
+    },
+    "检测预存体力按钮并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [913, 246, 77, 315], "template": "同心队/存体力.png"}
+        },
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "2-检测打开预存界面识别一键预存按钮并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1171, 467, 99, 154], "template": "同心队/一键预存.png"}
+        },
+        "action": "Click",
+        "post_delay": 1500,
+        "rate_limit": 1000,
+        "next": [
+            "3-检测回到同心队界面识别集结按钮并点击",
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
+    },
+    "3-检测回到同心队界面识别集结按钮并点击": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1083, 601, 105, 95], "template": "同心队/同心队集结.png"}
+        },
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["4-检测打开了集结弹窗"]
+    },
+    "4-检测打开了集结弹窗": {
+        "recognition": {"type": "OCR", "param": {"roi": [534, 104, 221, 58], "expected": "集结口号"}},
+        "next": [
+            "[JumpBack]检测到有没勾选的队友勾一下-最多2次",
+            "[JumpBack]检测点击觉醒副本集结",
+            "5-检测到已经集结完成"
+        ]
+    },
+    "检测到有没勾选的队友勾一下-最多2次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "TemplateMatch",
+                        "param": {"roi": [450, 249, 398, 28], "template": "同心队/未勾选队友.png"}
+                    }
+                }
+            }
+        },
+        "action": "Click"
+    },
+    "检测点击觉醒副本集结": {
+        "recognition": {"type": "OCR", "param": {"roi": [519, 483, 224, 48], "expected": "觉醒"}},
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "5-检测到已经集结完成": {
+        "recognition": {"type": "OCR", "param": {"roi": [420, 17, 88, 37], "expected": "同心队"}},
+        "next": ["[JumpBack]检测点击副本按钮", "6-检测打开了副本选择界面"]
+    },
+    "检测点击副本按钮": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [954, 629, 82, 79], "template": "同心队/副本按钮.png"}
+        },
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "6-检测打开了副本选择界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [90, 16, 85, 47], "expected": "组队"}},
+        "next": ["7-检测选择了天雷鼓副本", "[JumpBack]检测点击左边栏天雷鼓"]
+    },
+    "7-检测选择了天雷鼓副本": {
+        "recognition": {"type": "OCR", "param": {"roi": [415, 132, 152, 43], "expected": "天雷"}},
+        "next": ["[JumpBack]检测点击创建按钮", "[JumpBack]检测点击创建队伍按钮", "8-检测已经处于组好队伍的界面"]
+    },
+    "检测点击左边栏天雷鼓": {
+        "recognition": {"type": "OCR", "param": {"roi": [144, 124, 224, 503], "expected": "天雷"}},
+        "action": "Click"
+    },
+    "检测点击创建队伍按钮": {
+        "recognition": {"type": "OCR", "param": {"roi": [1002, 606, 140, 40], "expected": "创建队伍"}},
+        "action": "Click"
+    },
+    "检测点击创建按钮": {
+        "recognition": {"type": "OCR", "param": {"roi": [835, 572, 84, 39], "expected": "创建"}},
+        "action": "Click"
+    },
+    "8-检测已经处于组好队伍的界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [85, 16, 138, 50], "expected": "队伍"}},
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ResetCount",
+                "custom_action_param": {
+                    "node_name_list": [
+                        "ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]开启队长加成",
+            "[JumpBack]开启队员1加成",
+            "[JumpBack]开启队员2加成",
+            "检测挑战次数是否超过设置的次数-同心队",
+            "刷同心队战斗次数够了"
+        ]
+    },
+    "开启队长加成": {
+        "max_hit": 1,
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [789, 31, 55, 59], "template": "同心队/加成灯笼.png"}
+        },
+        "action": "Click",
+        "next": ["检测觉醒加成没开则打开", "检测觉醒加成打开了"]
+    },
+    "开启队员1加成": {
+        "max_hit": 1,
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [730, 178, 54, 64], "template": "同心队/加成灯笼.png"}
+        },
+        "action": "Click",
+        "next": ["检测觉醒加成没开则打开", "检测觉醒加成打开了"]
+    },
+    "开启队员2加成": {
+        "max_hit": 1,
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1157, 182, 56, 61], "template": "同心队/加成灯笼.png"}
+        },
+        "action": "Click",
+        "next": ["检测觉醒加成没开则打开", "检测觉醒加成打开了"]
+    },
+    "检测觉醒加成没开则打开": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [768, 136, 36, 37],
+                "method": 40,
+                "lower": [173, 230, 175],
+                "upper": [179, 241, 192],
+                "count": 80
+            }
+        },
+        "action": "Click",
+        "next": ["ACT-点一下空白处关闭弹窗"]
+    },
+    "检测觉醒加成打开了": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [768, 136, 36, 37],
+                "method": 40,
+                "lower": [18, 255, 222],
+                "upper": [23, 255, 231],
+                "count": 80
+            }
+        },
+        "next": ["ACT-点一下空白处关闭弹窗"]
+    },
+    "ACT-点一下空白处关闭弹窗": {
+        "action": "Click",
+        "target": [278, 15, 207, 46]
+    },
+    "检测挑战次数是否超过设置的次数-同心队": {
+        "recognition": "Custom",
+        "custom_recognition": "Count",
+        "custom_recognition_param": {
+            "target": 10
+        },
+        "next": [
+            "检测已经进入战斗并且加载完毕-同心队",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到黄色挑战按钮然后点击",
+            "[JumpBack]ACT-检测到有弹窗挡住了挑战按钮点击空白处"
+        ]
+    },
+    "检测已经进入战斗并且加载完毕-同心队": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [0, 0, 70, 70],
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [22, 339, 79, 180],
+                "template": ["组队战斗/组队战斗界面左边中间表情按钮.png", "组队战斗/组队战斗界面左边中间表情按钮-1.png"]
+            }
+        ],
+        "action": "DoNothing",
+        "post_delay": 500,
+        "timeout": 5000,
+        "next": [
+            "检测战斗已经结束或者自动战斗中等待X秒-同心队",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下"
+        ],
+        "on_error": []
+    },
+    "检测战斗已经结束或者自动战斗中等待X秒-同心队": {
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    {"recognition": "OCR", "roi": [17, 630, 85, 62], "expected": "自动"},
+                    {"recognition": "OCR", "roi": [543, 669, 194, 48], "expected": "点击屏幕继续"}
+                ]
+            }
+        },
+        "action": "DoNothing",
+        "post_delay": 2000,
+        "timeout": 40000,
+        "rate_limit": 1500,
+        "next": [
+            "8-检测已经处于组好队伍的界面",
+            "检测到战斗失败则停止任务",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到手动战斗则切换成自动"
+        ],
+        "on_error": []
+    },
+    "检测到战斗失败则停止任务": {
+        "recognition": {"type": "OCR", "param": {"roi": [658, 44, 345, 185], "expected": "失败"}},
+        "action": "Click",
+        "target": [988, 395, 191, 183],
+        "post_delay": 1000,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "刷同心队战斗次数够了": {
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
+    },
+    "9-检测返回到了同心队界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [420, 17, 88, 37], "expected": "同心队"}},
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    }
+}

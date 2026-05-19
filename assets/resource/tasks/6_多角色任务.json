@@ -50,6 +50,15 @@
             "option": [
                 "输入角色名列表6"
             ]
+        },
+        {
+            "name": "多角色-同心队刷觉醒副本",
+            "entry": "ENTRY-多角色任务模板",
+            "group": ["multi_role"],
+            "option": [
+                "输入角色名列表7",
+                "同心队刷副本次数"
+            ]
         }
     ],
     "option": {
@@ -242,6 +251,57 @@
                                 ]
                             }
                         }
+                    }
+                }
+            }
+        },
+        "输入角色名列表7": {
+            "type": "input",
+            "label": "输入角色名列表7",
+            "inputs": [
+                {
+                    "name": "角色名列表",
+                    "description": "",
+                    "pipeline_type": "string",
+                    "default": "ALL,"
+                }
+            ],
+            "pipeline_override": {
+                "ENTRY-多角色任务模板": {
+                    "action": {
+                        "param": {
+                            "custom_action_param": {
+                                "rolenames": "{角色名列表}",
+                                "tasks": [
+                                    {"taskname": "ENTRY-登录某角色", "wait": 0.5},
+                                    {"taskname": "ENTRY-刷同心队", "wait": 0.5},
+                                    {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "同心队刷副本次数": {
+            "type": "input",
+            "label": "同心队刷副本次数",
+            "description": "输入纯数字",
+            "inputs": [
+                {
+                    "name": "挑战次数",
+                    "label": "挑战次数",
+                    "description": "请输入整数。",
+                    "pipeline_type": "int",
+                    "verify": "^[0-9]+$",
+                    "default": "10"
+                }
+            ],
+            "pipeline_override": {
+                "检测挑战次数是否超过设置的次数-同心队": {
+                    "recognition": {
+                        "type": "Custom",
+                        "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": "{挑战次数}"}}
                     }
                 }
             }

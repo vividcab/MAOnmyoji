@@ -146,9 +146,21 @@
             "检测已经进入战斗并且加载完毕-组队",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测到悬赏协作并处理",
-            "[JumpBack]ACT-检测到黄色挑战按钮然后点击"
+            "[JumpBack]ACT-检测到黄色挑战按钮然后点击",
+            "[JumpBack]ACT-检测到有弹窗挡住了挑战按钮点击空白处"
         ],
         "on_error": ["检测挑战按钮作为队长等待-组队"]
+    },
+    "ACT-检测到有弹窗挡住了挑战按钮点击空白处": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [1103, 540, 177, 130],
+                "template": "组队战斗/名帖切换按钮.png"
+            }
+        },
+        "action": {"type": "Click", "param": {"target": [278, 15, 207, 46]}},
+        "post_delay": 1000
     },
     "ACT-检测到黄色挑战按钮然后点击": {
         "recognition": "ColorMatch",
