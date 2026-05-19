@@ -210,6 +210,7 @@
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测结界卡上限弹窗点击不再提醒勾选框再点击取消",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
@@ -241,5 +242,13 @@
         },
         "action": {"type": "Click", "param": {"target": [542, 663, 192, 55]}},
         "post_delay": 2000
+    },
+    "ACT-检测结界卡上限弹窗点击不再提醒勾选框再点击取消": {
+        "recognition": {"type": "OCR", "param": {"roi": [573, 336, 176, 50], "expected": "不再提"}},
+        "action": {"type": "Click", "param": {"target": [542, 347, 29, 27]}},
+        "post_delay": 500,
+        "timeout": 2000,
+        "rate_limit": 800,
+        "next": ["ACT-检测带取消按钮的弹窗并点击取消"]
     }
 }
