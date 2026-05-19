@@ -463,6 +463,7 @@ config/
 
 # PRIV
 assets/user_data/account_info.csv
+assets/user_data/*.db
 assets/user_data/*/*.png
 assets/user_data/*/*.jpg
 
