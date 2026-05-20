@@ -32,9 +32,23 @@
             "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
         },
         "post_delay": 5000,
-        "timeout": 100000,
+        "timeout": 60000,
         "rate_limit": 3000,
-        "next": ["STATUS-检测游戏已经启动到登录界面了", "STATUS-处于模拟器桌面"]
+        "next": [
+            "[JumpBack]检测到游戏在下载更新加载等4秒",
+            "STATUS-检测游戏已经启动到登录界面了",
+            "STATUS-处于模拟器桌面"
+        ]
+    },
+    "检测到游戏在下载更新加载等4秒": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [386, 618, 511, 81],
+                "expected": ["正在", "下载", "加载", "关闭"]
+            }
+        },
+        "post_delay": 4000
     },
     "TASK-关闭游戏": {
         "action": {
