@@ -84,6 +84,8 @@
                                 "tasks": [
                                     {"taskname": "ENTRY-登录某角色", "wait": 0.5},
                                     {"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},
+                                    {"taskname": "ENTRY-每天领取右边栏活动页面签到奖励", "wait": 0.5},
+                                    {"taskname": "ENTRY-周年活动每日免费10抽", "wait": 0.5},
                                     {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
                                 ]
                             }

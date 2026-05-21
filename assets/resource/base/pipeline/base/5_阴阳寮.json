@@ -78,11 +78,24 @@
         "action": {"type": "DoNothing"},
         "timeout": 2000,
         "next": [
+            "[JumpBack]检测到领取奖励弹窗点击一下空白处",
+            "[JumpBack]检测到有可以领取的奖励就领取",
             "检测已经完成30次则结束",
             "检测到刷新到捐觉醒材料的任务了",
             "[JumpBack]ACT-点一下刷新寮30任务的按钮-最多15次"
         ],
         "on_error": []
+    },
+    "检测到有可以领取的奖励就领取": {
+        "recognition": {"type": "OCR", "param": {"roi": [512, 457, 553, 80], "expected": "领取奖励"}},
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "检测到领取奖励弹窗点击一下空白处": {
+        "recognition": {"type": "OCR", "param": {"roi": [460, 175, 356, 109], "expected": "获得奖励"}},
+        "action": "Click",
+        "target": [299, 21, 352, 72],
+        "post_delay": 1000
     },
     "检测已经完成30次则结束": {
         "recognition": {

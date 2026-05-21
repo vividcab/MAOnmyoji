@@ -260,7 +260,7 @@
             "type": "TemplateMatch",
             "param": {
                 "roi": [527, 373, 226, 64],
-                "template": ["平台区服/安卓端.png", "平台区服/苹果端.png"]
+                "template": ["平台区服/安卓端.png"]
             }
         },
         "action": {"type": "Click"},
@@ -329,8 +329,8 @@
         "post_delay": 800,
         "timeout": 6000,
         "next": [
-            "TASK-A-9在已有角色界面查找目标服务器名",
             "[JumpBack]TASK-A-9-INT检测新区集结弹窗并点击取消",
+            "TASK-A-9在已有角色界面查找目标服务器名",
             "[JumpBack]TASK-A-INT-在已有角色栏上滑一次-最多划3次",
             "TASK-A-END3没有目标区服的角色"
         ]

@@ -209,12 +209,12 @@
         "action": {"type": "DoNothing"},
         "post_delay": 5000
     },
-    "检测到已断开游戏服务器弹窗": {
+    "检测到已断开游戏服务器弹窗点击确定-会回到登录界面": {
         "recognition": {
             "type": "OCR",
             "param": {"roi": [437, 301, 220, 50], "expected": "已断开游戏服务器", "only_rec": true}
         },
-        "action": {"type": "DoNothing"},
+        "action": {"type": "Click", "param": {"target": [607, 384, 67, 38]}},
         "post_delay": 5000,
         "next": [],
         "focus": {"succeeded": "[color:red]识别到与服务器连接断开，任务结束[/color]"}

@@ -1,0 +1,34 @@
+{
+    "ENTRY-每天领取右边栏活动页面签到奖励": {
+        "timeout": 2000,
+        "next": ["检测识别右边栏活动入口图标"]
+    },
+    "检测识别右边栏活动入口图标": {
+        "recognition": "TemplateMatch",
+        "roi": [1162, 200, 92, 323],
+        "template": "活动/庆典签到.png",
+        "action": "Click",
+        "post_delay": 1000,
+        "timeout": 3000,
+        "next": ["检测点击左边栏欧鼠庆典礼"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测点击左边栏欧鼠庆典礼": {
+        "recognition": "OCR",
+        "roi": [8, 84, 211, 614],
+        "expected": "欧鼠庆典",
+        "action": "Click",
+        "next": [
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]检测领取奖励按钮并点击",
+            "TASK-尝试从任意界面回到庭院"
+        ]
+    },
+    "检测领取奖励按钮并点击": {
+        "recognition": "TemplateMatch",
+        "roi": [953, 470, 136, 133],
+        "template": "活动/领取奖励.png",
+        "action": "Click",
+        "post_delay": 1000
+    }
+}

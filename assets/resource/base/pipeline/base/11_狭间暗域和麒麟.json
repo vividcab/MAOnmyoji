@@ -229,7 +229,7 @@
         "on_error": []
     },
     "检测到已挑战按钮结束任务": {
-        "recognition": {"type": "OCR", "param": {"roi": [1115, 587, 124, 72], "expected": "已挑战"}},
+        "recognition": {"type": "OCR", "param": {"roi": [1115, 587, 124, 72], "expected": "挑战"}},
         "action": "Click",
         "post_delay": 3000,
         "next": ["ACT-检测左上角方框折线返回按钮并点一下"]
@@ -239,18 +239,29 @@
         "roi": [17, 630, 85, 62],
         "expected": "自动",
         "action": "DoNothing",
-        "post_delay": 10000,
+        "post_delay": 15000,
         "timeout": 20000,
         "rate_limit": 3000,
         "next": [
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
-            "检测到本次伤害显示点击一下"
+            "[JumpBack]检测到胜利或失败界面点击一下",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "检测到已挑战按钮结束任务"
         ],
         "on_error": ["TASK-尝试从任意界面回到庭院"]
     },
-    "检测到本次伤害显示点击一下": {
-        "recognition": {"type": "OCR", "param": {"roi": [555, 328, 138, 43], "expected": "伤害"}},
+    "检测到胜利或失败界面点击一下": {
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    {"recognition": "OCR", "roi": [555, 328, 138, 43], "expected": "伤害"},
+                    {"recognition": "OCR", "roi": [576, 13, 595, 353], "expected": ["胜利", "失败"]}
+                ]
+            }
+        },
         "action": {"type": "Click", "param": {"target": [911, 241, 202, 242]}},
         "post_delay": 3000,
         "next": ["检测到已挑战按钮结束任务", "[JumpBack]ACT-检测到当前界面是加载插画等待3秒", "STATUS-处于庭院初始状态"]
