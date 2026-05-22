@@ -28,7 +28,9 @@ from utils import logger
 VENV_NAME = ".venv"  # 虚拟环境目录的名称
 VENV_DIR = Path(project_root_dir) / VENV_NAME
 
-### 虚拟环境相关 ###
+# -----
+# region 虚拟环境
+# -----
 
 
 def _is_running_in_our_venv():
@@ -107,7 +109,13 @@ def ensure_venv_and_relaunch_if_needed():
     logger.info(f"正在使用虚拟环境Python重新启动")
 
     try:
-        cmd = [str(python_in_venv)] + sys.argv
+        # Use absolute path to this script when relaunching inside the venv.
+        # sys.argv[0] may be a relative path (e.g. './../agent/main.py') which
+        # resolves differently when cwd changes. Use the absolute path of
+        # the currently running file (`current_file_path`) to avoid that.
+        script_abs = current_file_path
+        args = sys.argv[1:]
+        cmd = [str(python_in_venv), str(script_abs)] + args
         logger.info(f"执行命令: {' '.join(cmd)}")
 
         result = subprocess.run(
@@ -124,7 +132,40 @@ def ensure_venv_and_relaunch_if_needed():
         sys.exit(1)
 
 
-### 配置相关 ###
+# -----
+# region 配置相关
+# -----
+
+
+def read_config(config_name: str, default_config: dict) -> dict:
+    """
+    通用配置文件读取函数
+
+    Args:
+        config_name: 配置文件名（不含.json后缀）
+        default_config: 默认配置字典
+
+    Returns:
+        配置字典
+    """
+    config_dir = Path("./config")
+    config_dir.mkdir(exist_ok=True)
+    config_path = config_dir / f"{config_name}.json"
+
+    if not config_path.exists():
+        try:
+            with open(config_path, "w", encoding="utf-8") as f:
+                json.dump(default_config, f, indent=4, ensure_ascii=False)
+        except Exception:
+            logger.debug(f"无法写入 {config_name}.json，使用默认配置")
+        return default_config
+
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        logger.exception(f"读取 {config_name}.json 失败，使用默认配置")
+        return default_config
 
 
 def read_interface_version(interface_file_name="./interface.json") -> str:
@@ -151,27 +192,50 @@ def read_interface_version(interface_file_name="./interface.json") -> str:
 
 
 def read_pip_config() -> dict:
-    config_dir = Path("./config")
-    config_dir.mkdir(exist_ok=True)
-    config_path = config_dir / "pip_config.json"
     default_config = {
         "enable_pip_install": True,
         "mirror": "https://pypi.tuna.tsinghua.edu.cn/simple",
         "backup_mirror": "https://mirrors.ustc.edu.cn/pypi/simple",
     }
-    if not config_path.exists():
-        with open(config_path, "w", encoding="utf-8") as f:
-            json.dump(default_config, f, indent=4, ensure_ascii=False)
-        return default_config
-    try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        logger.exception("读取pip配置失败，使用默认配置")
-        return default_config
+    return read_config("pip_config", default_config)
 
 
-### 依赖安装相关 ###
+def read_hot_update_config() -> dict:
+    """
+    读取热更配置
+    """
+    default_config = {"enable_hot_update": False}
+    return read_config("hot_update", default_config)
+
+
+def _format_env_value(value: str, limit: int = 300) -> str:
+    if not value:
+        return "<empty>"
+    if len(value) <= limit:
+        return value
+    return f"{value[:limit]}...(truncated, total={len(value)})"
+
+
+def log_pi_environment() -> None:
+    pi_env_keys = [
+        "PI_INTERFACE_VERSION",
+        "PI_CLIENT_NAME",
+        "PI_CLIENT_VERSION",
+        "PI_CLIENT_LANGUAGE",
+        "PI_CLIENT_MAAFW_VERSION",
+        "PI_VERSION",
+        "PI_CONTROLLER",
+        "PI_RESOURCE",
+    ]
+
+    logger.debug("PI environment snapshot:")
+    for key in pi_env_keys:
+        logger.debug(f"{key}={_format_env_value(os.getenv(key, ''))}")
+
+
+# -----
+# region 依赖安装
+# -----
 
 
 def find_local_wheels_dir():
@@ -181,7 +245,7 @@ def find_local_wheels_dir():
 
     if deps_dir.exists() and any(deps_dir.glob("*.whl")):
         whl_count = len(list(deps_dir.glob("*.whl")))
-        logger.info(f"发现本地deps目录包含 {whl_count} 个 whl 文件")
+        logger.debug(f"发现本地deps目录包含 {whl_count} 个 whl 文件")
         return deps_dir
 
     logger.debug("未找到deps目录或目录中无 whl 文件")
@@ -209,11 +273,11 @@ def _run_pip_command(cmd_args: list, operation_name: str) -> bool:
         all_output = []
 
         # 实时读取并显示输出
-        for line in iter(process.stdout.readline, ""):
-            line = line.rstrip("\n\r")
-            if line.strip():  # 只显示非空行
-                print(line)  # 实时显示到终端
-                all_output.append(line)  # 收集到列表中
+        if process.stdout:
+            for line in iter(process.stdout.readline, ""):
+                line = line.rstrip("\n\r")
+                if line.strip():  # 只显示非空行
+                    all_output.append(line)  # 收集到列表中
 
         # 等待进程结束
         return_code = process.wait()
@@ -235,7 +299,9 @@ def _run_pip_command(cmd_args: list, operation_name: str) -> bool:
         return False
 
 
-def install_requirements(req_file="requirements.txt", pip_config=None) -> bool:
+def install_requirements(
+    req_file="requirements.txt", pip_config: dict | None = None
+) -> bool:
     req_path = Path(project_root_dir) / req_file  # 确保相对于项目根目录
     if not req_path.exists():
         logger.error(f"{req_file} 文件不存在于 {req_path.resolve()}")
@@ -244,7 +310,7 @@ def install_requirements(req_file="requirements.txt", pip_config=None) -> bool:
     # 查找本地deps目录
     deps_dir = find_local_wheels_dir()
     if deps_dir:
-        logger.info(f"使用本地 whl 文件安装，目录: {deps_dir}")
+        logger.debug(f"使用本地 whl 文件安装，目录: {deps_dir}")
 
         cmd = [
             sys.executable,
@@ -267,8 +333,8 @@ def install_requirements(req_file="requirements.txt", pip_config=None) -> bool:
             logger.warning("本地deps安装失败，回退到纯在线安装")
 
     # 回退到在线安装
-    primary_mirror = pip_config.get("mirror", "")
-    backup_mirror = pip_config.get("backup_mirror", "")
+    primary_mirror = pip_config.get("mirror", "") if pip_config else ""
+    backup_mirror = pip_config.get("backup_mirror", "") if pip_config else ""
 
     if primary_mirror:
         # 使用主镜像源，只添加一个备用源避免冲突
@@ -324,7 +390,7 @@ def check_and_install_dependencies():
     pip_config = read_pip_config()
     enable_pip_install = pip_config.get("enable_pip_install", True)
 
-    logger.info(f"启用 pip 安装依赖: {enable_pip_install}")
+    logger.debug(f"启用 pip 安装依赖: {enable_pip_install}")
 
     if enable_pip_install:
         logger.info("开始安装/更新依赖")
@@ -336,7 +402,9 @@ def check_and_install_dependencies():
         logger.info("Pip 依赖安装已禁用，跳过依赖安装")
 
 
-### 核心业务 ###
+# -----
+# region 核心业务
+# -----
 
 
 def agent(is_dev_mode=False):
@@ -366,11 +434,11 @@ def agent(is_dev_mode=False):
             logger.info("开发模式：日志等级已设置为DEBUG")
 
         from maa.agent.agent_server import AgentServer
-        from maa.toolkit import Toolkit
+        from maa.tasker import Tasker
 
         import custom
 
-        Toolkit.init_option("./")
+        Tasker.set_log_dir("./debug")
 
         if len(sys.argv) < 2:
             logger.error("缺少必要的 socket_id 参数")
@@ -379,6 +447,7 @@ def agent(is_dev_mode=False):
         socket_id = sys.argv[-1]
         logger.info(f"socket_id: {socket_id}")
 
+        log_pi_environment()
         AgentServer.start_up(socket_id)
         logger.info("AgentServer启动")
         AgentServer.join()
@@ -393,7 +462,9 @@ def agent(is_dev_mode=False):
         raise
 
 
-### 程序入口 ###
+# -----
+# region 程序入口
+# -----
 
 
 def main():

@@ -57,7 +57,8 @@
     "TASK-END检测到没突破券了停止": {
         "recognition": {"type": "OCR", "param": {"roi": [1137, 17, 41, 28], "expected": "^0$", "only_rec": true}},
         "action": {"type": "DoNothing"},
-        "next": ["TASK-尝试从任意界面回到庭院"]
+        "next": ["TASK-尝试从任意界面回到庭院"],
+        "focus": {"succeeded": "[color:green]结界突破券剩余指定数量，任务完成[/color]"}
     },
     "TASK-T-2-1检测到如果有弹窗挡住5号结界则再点击一下左上角": {
         "recognition": {
@@ -101,7 +102,8 @@
         "post_delay": 1000,
         "timeout": 1000,
         "next": ["[JumpBack]ACT-检测到悬赏协作并处理", "TASK-T-8退这个突破X次", "TASK-T-11挑战结界直到挑战结束"],
-        "on_error": ["TASK-T-2检测到结界突破界面重置计数器"]
+        "on_error": ["TASK-T-2检测到结界突破界面重置计数器"],
+        "focus": {"Node.Recognition.Succeeded": "[color:blue]当轮进攻只剩最后一个结界，退指定次数再攻破[/color]"}
     },
     "TASK-T-8退这个突破X次": {
         "recognition": {

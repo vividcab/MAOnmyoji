@@ -175,7 +175,8 @@
             }
         },
         "action": {"type": "Click", "param": {"target": [827, 395, 53, 44]}},
-        "post_delay": 1000
+        "post_delay": 1000,
+        "focus": {"Node.Recognition.Succeeded": "[color:green]检测到有勾协或者食协邀请，点击接受[/color]"}
     },
     "拒绝接受协作": {
         "recognition": {
@@ -183,7 +184,8 @@
             "param": {"roi": [848, 450, 188, 140], "expected": "拒绝", "only_rec": true}
         },
         "action": {"type": "Click"},
-        "post_delay": 1000
+        "post_delay": 1000,
+        "focus": {"Node.Recognition.Succeeded": "[color:green]检测到有其他悬赏任务协作邀请，点击拒绝[/color]"}
     },
 
     "ACT-检测右下角有准备按钮就点击一下": {

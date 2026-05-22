@@ -621,7 +621,8 @@ class Count(CustomRecognition):
             del cls.record[node_name]
             logger.debug(f"重置Count计数器: {node_name}")
         else:
-            logger.debug(f"未找到要重置的Count节点: {node_name}")
+            pass
+            # logger.debug(f"未找到要重置的Count节点: {node_name}")
 
     def analyze(
         self,
@@ -664,16 +665,22 @@ class Count(CustomRecognition):
                     # 识别成功
                     if reco_detail is not None and reco_detail.box is not None:
                         Count.record[node_name]["count"] += 1
+                        now_count = Count.record[node_name]["count"]
                         logger.debug(
-                            f"Count识别成功: {node_name}, 当前计数: {Count.record[node_name]['count']}"
+                            f"Count识别成功: {node_name}, 当前计数: {now_count}"
                         )
+                        if "检测挑战次数" in node_name:
+                            if target_count < 20:
+                                interval = 1
+                            elif target_count < 100:
+                                interval = 5
+                            else:
+                                interval = 10
+                            if (now_count - 1) % interval == 0:
+                                logger.info(f"当前挑战次数：第 {now_count} 次")
                         return CustomRecognition.AnalyzeResult(
                             box=reco_detail.box,
-                            detail={
-                                f"NowCount-{node_name}": Count.record[node_name][
-                                    "count"
-                                ]
-                            },
+                            detail={f"NowCount-{node_name}": now_count},
                         )
                     else:
                         # 识别失败

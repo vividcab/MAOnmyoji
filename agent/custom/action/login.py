@@ -50,7 +50,7 @@ class OverrideLoginInfo(CustomAction):
         )
 
         logger.info(
-            f"#OverrideLoginInfoAction# 覆写登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}"
+            f"本次登录账号为：{account}, 平台：{platform}, 区服：{servername}, 角色名：{rolename}"
         )
 
         return CustomAction.RunResult(success=True)

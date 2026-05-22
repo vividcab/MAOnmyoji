@@ -19,6 +19,7 @@
                 "custom_action_param": {
                     "tasks": [
                         {"taskname": "1-每日签到", "wait": 0.3},
+                        {"taskname": "3-领取寮包", "wait": 0.3},
                         {"taskname": "12-一键完成庭院事务", "wait": 0.3},
                         {"taskname": "13-给好友点赞", "wait": 0.3},
                         {"taskname": "6-领邮件", "wait": 0.3},
@@ -100,11 +101,12 @@
         },
         "action": {"type": "Click"},
         "post_delay": 1500,
-        "timeout": 300,
+        "timeout": 3000,
         "next": ["3-1领取寮包截图"],
         "on_error": []
     },
     "3-1领取寮包截图": {
+        "recognition": {"type": "OCR", "param": {"roi": [442, 123, 412, 131], "expected": "获得奖励"}},
         "action": {
             "type": "Custom",
             "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/寮包记录"}}
@@ -178,8 +180,7 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [186, 356, 45, 40],
-                "roi_offset": [0, -30, 60, 30],
+                "roi": [79, 136, 495, 415],
                 "template": ["签到/悬赏封印.png", "签到/悬赏封印2.png"]
             }
         },
@@ -216,7 +217,7 @@
         },
         "next": ["ACT-检测各类右上部分叉号并点一下"],
         "focus": {
-            "Node.Recognition.Succeeded": "[color:green]检测到有勾玉悬赏任务[/color]"
+            "Node.Recognition.Succeeded": "[color:green]检测到有协作悬赏任务，截图保存[/color]"
         }
     },
 

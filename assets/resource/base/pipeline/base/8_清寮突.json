@@ -12,8 +12,15 @@
         "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
     },
     "TASK-T-0从庭院到探索界面-寮突": {
-        "recognition": {"type": "OCR", "param": {"roi": [587, 105, 178, 86], "expected": "索"}},
-        "action": {"type": "Click"},
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [141, 91, 1126, 190],
+                "template": "庭院/探索灯笼.png",
+                "threshold": 0.7
+            }
+        },
+        "action": "Click",
         "post_delay": 1500,
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -150,12 +157,14 @@
     "TASK-END检测到没寮突次数了停止": {
         "recognition": {"type": "OCR", "param": {"roi": [264, 552, 60, 44], "expected": "^0", "only_rec": true}},
         "action": {"type": "DoNothing"},
-        "next": ["TASK-END清寮突任务结束"]
+        "next": ["TASK-END清寮突任务结束"],
+        "focus": {"succeeded": "[color:green]没有剩余进攻次数了，清寮突完成[/color]"}
     },
     "TASK-END检测到突破进度100了停止": {
         "recognition": {"type": "OCR", "param": {"roi": [198, 364, 109, 50], "expected": "^100", "only_rec": true}},
         "action": {"type": "DoNothing"},
-        "next": ["TASK-END清寮突任务结束"]
+        "next": ["TASK-END清寮突任务结束"],
+        "focus": {"succeeded": "[color:green]寮突破进度已达100%，任务完成[/color]"}
     },
     "TASK-END清寮突任务结束": {
         "next": ["TASK-尝试从任意界面回到庭院"],
@@ -186,7 +195,7 @@
     "TASK-T-6检测结界突破进攻按钮并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [580, 319, 520, 393], "template": "突破/突破进攻按钮.png"}
+            "param": {"roi": [580, 319, 520, 393], "template": "突破/突破进攻按钮.png", "index": -1}
         },
         "action": {"type": "Click"},
         "post_delay": 3000,
@@ -236,18 +245,20 @@
     "尝试回到庭院然后继续清寮突任务": {
         "timeout": 2000,
         "next": ["TASK-T-E回到庭院然后重新开始清寮突任务", "[JumpBack]INT-尝试从任意界面回到庭院"],
-        "on_error": ["TASK-关闭游戏"]
+        "on_error": ["TASK-关闭游戏"],
+        "focus": {"start": "[color:red]任务过程中发生意外错误，尝试回到庭院然后重新执行清寮突任务[/color]"}
     },
     "TASK-T-E回到庭院然后重新开始清寮突任务": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [680, 220, 240, 100],
-                "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
-                "threshold": [0.9, 0.9]
+                "roi": [141, 91, 1126, 190],
+                "template": "庭院/探索灯笼.png",
+                "threshold": 0.7
             }
         },
-        "next": ["ENTRY-清寮突破"]
+        "next": ["ENTRY-清寮突破"],
+        "focus": {"start": "[color:blue]游戏界面已返回庭院[/color]"}
     },
     "检测到已断开游戏服务器弹窗-重新登录后再继续清寮突": {
         "recognition": {
