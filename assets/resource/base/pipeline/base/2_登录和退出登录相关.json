@@ -404,8 +404,7 @@
             "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
-        "on_error": ["错误处理方式-截图记录"],
-        "focus": {"Node.Recognition.Succeeded": "[color:green]登录完成，已经进入庭院[/color]"}
+        "on_error": ["错误处理方式-截图记录"]
     },
     "TASK-A-END4-1第一次检测到处于庭院": {
         "recognition": {
@@ -418,7 +417,7 @@
         },
         "post_delay": 3000,
         "timeout": 5000,
-        "rate_limit": 1000,
+        "rate_limit": 2000,
         "next": [
             "[JumpBack]TASK-A-ACT-检测是否开启之前加成弹窗点击取消",
             "STATUS-处于庭院初始状态",
@@ -433,7 +432,8 @@
             "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
-        "on_error": ["错误处理方式-截图记录"]
+        "on_error": ["错误处理方式-截图记录"],
+        "focus": {"Node.Recognition.Succeeded": "[color:green]登录完成，已经进入庭院[/color]"}
     },
     "TASK-A-10检测进入游戏按钮并点击直到进入庭院初始状态": {
         "recognition": {

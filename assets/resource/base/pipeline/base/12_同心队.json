@@ -1,5 +1,19 @@
 {
     "ENTRY-刷同心队": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ClearHitCount",
+                "custom_action_param": {"nodes": [
+                        "开启队长加成",
+                        "开启队员1加成",
+                        "开启队员2加成",
+                        "给队友1点赞",
+                        "给队友2点赞",
+                        "关闭队长加成"
+                    ]}
+            }
+        },
         "timeout": 4000,
         "rate_limit": 2000,
         "next": [
@@ -156,7 +170,8 @@
             "[JumpBack]开启队员2加成",
             "检测挑战次数是否超过设置的次数-同心队",
             "刷同心队战斗次数够了"
-        ]
+        ],
+        "focus": {"Node.Recognition.Succeeded": "[color:blue]同心队-组队完成，开始挑战[/color]"}
     },
     "开启队长加成": {
         "max_hit": 1,
@@ -291,7 +306,8 @@
         "action": "Click",
         "target": [988, 395, 191, 183],
         "post_delay": 1000,
-        "next": ["TASK-尝试从任意界面回到庭院"]
+        "next": ["TASK-尝试从任意界面回到庭院"],
+        "focus": {"Node.Recognition.Succeeded": "[color:red]同心队-挑战失败，请检查配置，任务结束[/color]"}
     },
     "给队友1点赞": {
         "max_hit": 1,
@@ -313,7 +329,8 @@
         "next": [
             "[JumpBack]关闭队长加成",
             "TASK-从组队状态回到庭院"
-        ]
+        ],
+        "focus": {"Node.Recognition.Succeeded": "[color:blue]同心队-刷够设定次数，将解散队伍返回庭院[/color]"}
     },
     "9-检测返回到了同心队界面": {
         "recognition": {"type": "OCR", "param": {"roi": [420, 17, 88, 37], "expected": "同心队"}},

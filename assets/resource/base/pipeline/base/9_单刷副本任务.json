@@ -39,6 +39,8 @@
         "timeout": 20000,
         "rate_limit": 1500,
         "next": [
+            "[JumpBack]ACT-检测到结契设置弹窗点击取消",
+            "[JumpBack]检测到结契所需式盘较少提示弹窗-点击不再提示后继续挑战",
             "检测已经开始战斗等待X秒",
             "检测已经进入战斗并且加载完毕",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
@@ -46,6 +48,22 @@
             "[JumpBack]ACT-检测到挑战按钮就再点击一下-每局最多10次"
         ],
         "on_error": []
+    },
+    "检测到结契所需式盘较少提示弹窗-点击不再提示后继续挑战": {
+        "recognition": {"type": "OCR", "param": {"roi": [480, 285, 318, 152], "expected": "不再提"}},
+        "action": {"type": "DoNothing"},
+        "post_delay": 500,
+        "timeout": 2000,
+        "rate_limit": 800,
+        "next": ["检测并点击继续挑战按钮"],
+        "focus": {
+            "Node.Recognition.Succeeded": "[color:orange]检测到当前结契所需式盘较少提示弹窗，建议手动购买或更换结契设置[/color]"
+        }
+    },
+    "检测并点击继续挑战按钮": {
+        "recognition": {"type": "OCR", "param": {"roi": [672, 403, 170, 58], "expected": "继续挑战"}},
+        "action": {"type": "Click"},
+        "post_delay": 3000
     },
     "ACT-检测到挑战按钮就再点击一下-每局最多10次": {
         "recognition": {

@@ -12,4 +12,5 @@ __all__ = [
     "ForRolesToRunTask",
     "RandomSleep",
     "LogAnError",
+    "ClearHitCount",
 ]
