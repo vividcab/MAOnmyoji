@@ -199,6 +199,11 @@
         "action": {"type": "DoNothing"},
         "post_delay": 3000
     },
+    "ACT-检测还在战斗中再等8秒": {
+        "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "自动", "only_rec": true}},
+        "action": {"type": "DoNothing"},
+        "post_delay": 8000
+    },
     "ACT-检测到手动战斗则切换成自动": {
         "recognition": {"type": "OCR", "param": {"roi": [17, 630, 85, 62], "expected": "手动", "only_rec": true}},
         "action": {"type": "Click"},

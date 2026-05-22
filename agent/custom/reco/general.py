@@ -621,7 +621,7 @@ class Count(CustomRecognition):
             del cls.record[node_name]
             logger.debug(f"重置Count计数器: {node_name}")
         else:
-            logger.warning(f"未找到要重置的Count节点: {node_name}")
+            logger.debug(f"未找到要重置的Count节点: {node_name}")
 
     def analyze(
         self,

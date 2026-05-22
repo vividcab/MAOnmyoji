@@ -7,7 +7,7 @@
     "mirrorchyan_multiplatform": false,
     "controller": [{"name": "ADB 默认方式", "type": "Adb"}],
     "resource": [{"name": "官服", "path": ["./resource/base"]}],
-    "agent": {"child_exec": "python", "child_args": ["-u", "./../agent/main.py"]},
+    "agent": {"child_exec": "python", "child_args": ["-u", "{PROJECT_DIR}/../agent/main.py"]},
     "group": [
         {
             "name": "daily",

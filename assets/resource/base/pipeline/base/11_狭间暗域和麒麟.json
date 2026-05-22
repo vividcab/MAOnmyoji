@@ -4,9 +4,9 @@
             "type": "OCR",
             "param": {"roi": [551, 13, 175, 39], "expected": "暗域"}
         },
-        "timeout": 5000,
-        "rate_limit": 3000,
-        "next": ["检测到已经开始进攻中-在暗域地图中", "检测到还在集结中等待10秒"]
+        "timeout": 30000,
+        "rate_limit": 5000,
+        "next": ["检测到已经开始进攻中-在暗域地图中", "[JumpBack]检测到还在集结中等待10秒"]
     },
     "检测到已经开始进攻中-在暗域地图中": {
         "recognition": {
@@ -66,7 +66,14 @@
             "type": "TemplateMatch",
             "param": {
                 "roi": [422, 401, 602, 107],
-                "template": ["狭间暗域/白精1.png", "狭间暗域/白精2.png", "狭间暗域/白精3.png"],
+                "template": [
+                    "狭间暗域/白精1.png",
+                    "狭间暗域/白精2.png",
+                    "狭间暗域/白精3.png",
+                    "狭间暗域/孔精1.png",
+                    "狭间暗域/孔精2.png",
+                    "狭间暗域/孔精3.png"
+                ],
                 "threshold": [0.9, 0.9, 0.9],
                 "index": -1
             }
@@ -80,7 +87,7 @@
             "type": "TemplateMatch",
             "param": {
                 "roi": [515, 275, 425, 114],
-                "template": ["狭间暗域/白副1.png", "狭间暗域/白副2.png"],
+                "template": ["狭间暗域/白副1.png", "狭间暗域/白副2.png", "狭间暗域/孔副1.png", "狭间暗域/孔副2.png"],
                 "threshold": [0.9, 0.9]
             }
         },
@@ -91,7 +98,11 @@
     "识别首领并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [661, 136, 115, 111], "template": ["狭间暗域/白首.png"], "threshold": [0.9]}
+            "param": {
+                "roi": [661, 136, 115, 111],
+                "template": ["狭间暗域/白首.png", "狭间暗域/孔首.png"],
+                "threshold": [0.9]
+            }
         },
         "action": "Click",
         "post_delay": 1000,
@@ -139,14 +150,14 @@
         "roi": [17, 630, 85, 62],
         "expected": "自动",
         "action": "DoNothing",
-        "post_delay": 20000,
+        "post_delay": 60000,
         "timeout": 40000,
-        "rate_limit": 5000,
+        "rate_limit": 3000,
         "next": [
             "检测到已经开始进攻中-在暗域地图中",
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
-            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测还在战斗中再等8秒",
             "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次"
