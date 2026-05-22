@@ -18,6 +18,10 @@
                 {
                     "name": "组队刷副本",
                     "enabled": false
+                },
+                {
+                    "name": "单刷狭间暗域",
+                    "enabled": false
                 }
             ]
         }

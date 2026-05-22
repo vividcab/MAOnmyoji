@@ -17,19 +17,7 @@
                     "enabled": true
                 },
                 {
-                    "name": "2-领取御魂加成",
-                    "enabled": true
-                },
-                {
-                    "name": "3-领取寮包",
-                    "enabled": true
-                },
-                {
-                    "name": "4-领取体力",
-                    "enabled": true
-                },
-                {
-                    "name": "5-领取勾玉",
+                    "name": "2-一键完成庭院事务",
                     "enabled": true
                 },
                 {
@@ -42,10 +30,6 @@
                 },
                 {
                     "name": "8-商店每日免费购买",
-                    "enabled": true
-                },
-                {
-                    "name": "9-每日免费抽卡",
                     "enabled": true
                 },
                 {

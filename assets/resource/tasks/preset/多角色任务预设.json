@@ -26,6 +26,10 @@
                 {
                     "name": "多角色-商店每周购买黑蛋寄售券",
                     "enabled": false
+                },
+                {
+                    "name": "多角色-同心队刷副本",
+                    "enabled": false
                 }
             ]
         }
