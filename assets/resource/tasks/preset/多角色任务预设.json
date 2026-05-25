@@ -20,7 +20,7 @@
                     "enabled": false
                 },
                 {
-                    "name": "多角色-看悬赏寮三十和结界寄养",
+                    "name": "多角色-看悬赏摸麒麟寮三十和结界寄养",
                     "enabled": false
                 },
                 {
@@ -29,6 +29,14 @@
                 },
                 {
                     "name": "多角色-同心队刷副本",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-活动-领取式神集结和兑换码蓝票",
+                    "enabled": false
+                },
+                {
+                    "name": "多角色-自定义任务",
                     "enabled": false
                 }
             ]

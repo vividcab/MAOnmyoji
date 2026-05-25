@@ -145,7 +145,8 @@
     },
     "检测点击创建队伍按钮": {
         "recognition": {"type": "OCR", "param": {"roi": [1002, 606, 140, 40], "expected": "创建队伍"}},
-        "action": "Click"
+        "action": "Click",
+        "focus": {"Node.Recognition.Succeeded": "[color:blue]同心队-副本选择完成，创建队伍[/color]"}
     },
     "检测点击创建按钮": {
         "recognition": {"type": "OCR", "param": {"roi": [835, 572, 84, 39], "expected": "创建"}},
@@ -170,8 +171,7 @@
             "[JumpBack]开启队员2加成",
             "检测挑战次数是否超过设置的次数-同心队",
             "刷同心队战斗次数够了"
-        ],
-        "focus": {"Node.Recognition.Succeeded": "[color:blue]同心队-组队完成，开始挑战[/color]"}
+        ]
     },
     "开启队长加成": {
         "max_hit": 1,

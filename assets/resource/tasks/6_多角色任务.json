@@ -37,6 +37,7 @@
         {
             "name": "多角色-看悬赏摸麒麟寮三十和结界寄养",
             "entry": "ENTRY-多角色任务模板",
+            "description": "任务名：ENTRY-领取阴阳寮和结界奖励（含：ENTRY-摸一下麒麟）",
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表5",
@@ -61,6 +62,23 @@
                 "同心队刷副本层数",
                 "同心队刷副本次数"
             ]
+        },
+        {
+            "name": "多角色-活动-领取式神集结和兑换码蓝票",
+            "entry": "ENTRY-多角色任务模板",
+            "group": ["multi_role"],
+            "option": [
+                "输入角色名列表8"
+            ]
+        },
+        {
+            "name": "多角色-自定义任务",
+            "entry": "ENTRY-多角色任务模板2",
+            "description": "任务字符串逗号拼接，可选项：ENTRY-领取庭院中的日常奖励（1-每日签到,3-领取寮包,12-一键完成庭院事务,13-给好友点赞,6-领邮件,7-查看悬赏,8-领取商店每日黑蛋）,10-查看神秘商店并截图记录,ENTRY-领取阴阳寮和结界奖励（含：ENTRY-摸一下麒麟）,ENTRY-刷同心队,ENTRY-逢魔任务,    11-购买商店每周黑蛋寄售券,ENTRY-周年活动每日免费10抽,ENTRY-领取新式神集结送蓝票,ENTRY-领取兑换码",
+            "group": ["multi_role"],
+            "option": [
+                "自定义多角色任务输入参数"
+            ]
         }
     ],
     "option": {
@@ -84,7 +102,6 @@
                                 "tasks": [
                                     {"taskname": "ENTRY-登录某角色", "wait": 0.5},
                                     {"taskname": "ENTRY-领取庭院中的日常奖励", "wait": 0.5},
-                                    {"taskname": "ENTRY-每天领取右边栏活动页面签到奖励", "wait": 0.5},
                                     {"taskname": "ENTRY-周年活动每日免费10抽", "wait": 0.5},
                                     {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
                                 ]
@@ -385,6 +402,65 @@
                     "recognition": {
                         "type": "Custom",
                         "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": "{挑战次数}"}}
+                    }
+                }
+            }
+        },
+        "输入角色名列表8": {
+            "type": "input",
+            "label": "输入角色名列表8",
+            "inputs": [
+                {
+                    "name": "角色名列表",
+                    "description": "",
+                    "pipeline_type": "string",
+                    "default": "ALL,"
+                }
+            ],
+            "pipeline_override": {
+                "ENTRY-多角色任务模板": {
+                    "action": {
+                        "param": {
+                            "custom_action_param": {
+                                "rolenames": "{角色名列表}",
+                                "tasks": [
+                                    {"taskname": "ENTRY-登录某角色", "wait": 0.5},
+                                    {"taskname": "ENTRY-领取新式神集结送蓝票", "wait": 0.5},
+                                    {"taskname": "ENTRY-领取兑换码", "wait": 0.5},
+                                    {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "自定义多角色任务输入参数": {
+            "type": "input",
+            "label": "自定义多角色任务输入参数",
+            "inputs": [
+                {
+                    "name": "角色名列表",
+                    "description": "",
+                    "pipeline_type": "string",
+                    "default": "ALL,"
+                },
+                {
+                    "name": "任务列表",
+                    "description": "",
+                    "pipeline_type": "string",
+                    "default": "ENTRY-领取庭院中的日常奖励"
+                }
+            ],
+            "pipeline_override": {
+                "ENTRY-多角色任务模板2": {
+                    "action": {
+                        "param": {
+                            "custom_action_param": {
+                                "rolenames": "{角色名列表}",
+                                "tasks": "{任务列表}"
+                            }
+                        }
                     }
                 }
             }

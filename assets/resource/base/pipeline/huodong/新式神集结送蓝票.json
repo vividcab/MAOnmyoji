@@ -1,0 +1,98 @@
+{
+    "ENTRY-领取新式神集结送蓝票": {
+        "action": "Custom",
+        "custom_action": "ResetCount",
+        "next": ["进入召唤屋查看是否有式神集结活动", "[JumpBack]TASK-尝试从任意界面回到庭院"],
+        "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
+    },
+    "进入召唤屋查看是否有式神集结活动": {
+        "recognition": "TemplateMatch",
+        "roi": [885, 85, 390, 251],
+        "template": "庭院/召唤灯笼.png",
+        "threshold": 0.4,
+        "action": "Click",
+        "post_delay": 2000,
+        "timeout": 3000,
+        "next": ["[JumpBack]ACT-检测到当前界面是加载插画等待3秒", "处于召唤屋检测集结送蓝票"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "处于召唤屋检测集结送蓝票": {
+        "recognition": "OCR",
+        "roi": [108, 0, 190, 148],
+        "expected": "召唤",
+        "timeout": 4000,
+        "rate_limit": 2000,
+        "next": ["检测有送蓝票的式神集结活动", "检测是有式神集结但是没送蓝票了"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测有送蓝票的式神集结活动": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "TemplateMatch", "roi": [176, 494, 128, 132], "template": "活动/新式神集结按钮.png"},
+            {"recognition": "TemplateMatch", "roi": [242, 454, 113, 79], "template": "活动/集结送蓝票.png"}
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "[JumpBack]检测稍后再议并点击",
+            "[JumpBack]检测式神对话点击空白处",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "处于相逢集结页面"
+        ]
+    },
+    "检测是有式神集结但是没送蓝票了": {
+        "recognition": "TemplateMatch",
+        "roi": [176, 494, 128, 132],
+        "template": "活动/新式神集结按钮.png",
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测式神对话点击空白处": {
+        "recognition": "OCR",
+        "roi": [376, 500, 523, 114],
+        "expected": ".*",
+        "action": "Click",
+        "post_delay": 400
+    },
+    "检测稍后再议并点击": {
+        "recognition": "OCR",
+        "roi": [988, 425, 149, 45],
+        "expected": "稍后再议",
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "处于相逢集结页面": {
+        "recognition": "OCR",
+        "roi": [43, 0, 243, 144],
+        "expected": "相逢集结",
+        "next": ["检测是否有送蓝票的试炼战斗", "检测是有试炼战斗但是没送蓝票了"]
+    },
+    "检测是否有送蓝票的试炼战斗": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "TemplateMatch", "roi": [1038, 557, 187, 112], "template": "活动/试炼战斗.png"},
+            {"recognition": "TemplateMatch", "roi": [1155, 448, 90, 80], "template": "活动/集结送蓝票.png"}
+        ],
+        "action": "Click",
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测点击任意位置继续弹窗点一下",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "处于相逢集结页面"
+        ]
+    },
+    "检测是有试炼战斗但是没送蓝票了": {
+        "recognition": "TemplateMatch",
+        "roi": [1038, 557, 187, 112],
+        "template": "活动/试炼战斗.png",
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "ACT-检测点击任意位置继续弹窗点一下": {
+        "recognition": "OCR",
+        "roi": [492, 494, 302, 224],
+        "expected": "点击",
+        "action": "Click",
+        "target": [421, 640, 233, 65]
+    }
+}

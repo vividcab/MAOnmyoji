@@ -1,0 +1,68 @@
+{
+    "ENTRY-领取兑换码": {
+        "recognition": {"type": "TemplateMatch", "param": {"roi": [1132, 26, 44, 38], "template": "签到/邮件图标.png"}},
+        "timeout": 500,
+        "next": [
+            "检测兑换码输入弹窗",
+            "[JumpBack]检测兑换码灯笼并点击一下",
+            "[JumpBack]检测到庭院灯笼架子",
+            "[JumpBack]ACT-在庭院点击一下左边往左走"
+        ]
+    },
+    "检测到庭院灯笼架子": {
+        "recognition": "TemplateMatch",
+        "roi": [91, 135, 526, 345],
+        "template": ["庭院/庭院灯笼架子.png", "庭院/庭院灯笼架子1.png"],
+        "action": "Click"
+    },
+    "ACT-在庭院点击一下左边往左走": {
+        "action": "Click",
+        "target": [7, 549, 89, 42],
+        "post_delay": 3000
+    },
+    "检测兑换码灯笼并点击一下": {
+        "recognition": "OCR",
+        "roi": [798, 70, 176, 300],
+        "expected": "换|码",
+        "action": "Click"
+    },
+    "检测兑换码输入弹窗": {
+        "recognition": "OCR",
+        "roi": [411, 241, 286, 144],
+        "expected": "请输入激活码",
+        "action": "Click",
+        "next": ["检测已经打开了输入框", "检测兑换码输入弹窗"]
+    },
+    "检测已经打开了输入框": {
+        "recognition": "OCR",
+        "roi": [997, 0, 170, 138],
+        "expected": "确定",
+        "action": "InputText",
+        "input_text": "yysshinianreai",
+        "next": ["检测点击输入确定按钮"]
+    },
+    "检测点击输入确定按钮": {
+        "recognition": "OCR",
+        "roi": [997, 0, 170, 138],
+        "expected": "确定",
+        "action": "Click",
+        "next": ["检测兑换弹窗确定按钮并点击"]
+    },
+    "检测兑换弹窗确定按钮并点击": {
+        "recognition": "OCR",
+        "roi": [707, 416, 87, 45],
+        "expected": "确定",
+        "action": "Click",
+        "next": [
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]检测处于庭院点右下角打开底部卷轴",
+            "检测到阴阳寮图标点击一下然后返回庭院初始状态"
+        ]
+    },
+    "检测到阴阳寮图标点击一下然后返回庭院初始状态": {
+        "recognition": {"type": "OCR", "param": {"roi": [511, 649, 116, 43], "expected": "阴阳"}},
+        "action": {"type": "Click"},
+        "post_delay": 4000,
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    }
+}

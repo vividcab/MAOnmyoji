@@ -15,6 +15,18 @@
             }
         }
     },
+    "ENTRY-多角色任务模板2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ForRolesToRunStrTask",
+                "custom_action_param": {
+                    "rolenames": "ALL,",
+                    "tasks": "ENTRY-领取庭院中的日常奖励"
+                }
+            }
+        }
+    },
     "ENTRY-当前角色一键爬塔": {
         "action": {
             "type": "Custom",

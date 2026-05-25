@@ -61,7 +61,7 @@
         }
     },
     "检测并点击继续挑战按钮": {
-        "recognition": {"type": "OCR", "param": {"roi": [672, 403, 170, 58], "expected": "继续挑战"}},
+        "recognition": {"type": "OCR", "param": {"roi": [672, 403, 170, 58], "expected": "挑战"}},
         "action": {"type": "Click"},
         "post_delay": 3000
     },

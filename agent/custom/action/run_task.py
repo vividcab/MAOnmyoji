@@ -125,3 +125,110 @@ class ForRolesToRunTask(CustomAction):
 
         if len(rolenames) >= 3:
             context.run_task("TASK-关闭游戏")
+
+
+@AgentServer.custom_action("ForRolesToRunStrTask")
+class ForRolesToRunStrTask(CustomAction):
+
+    def run(
+        self, context: Context, argv: CustomAction.RunArg
+    ) -> CustomAction.RunResult:
+        logger.debug(f"argv.custom_action_param: {argv.custom_action_param}")
+        cus_param = json.loads(argv.custom_action_param)
+        logger.debug(f"cus_param： {cus_param}")
+
+        tasks = cus_param["tasks"]
+        logger.info(f"#ForRolesToRunStrTask# 传入的 tasks 参数为：{tasks}")
+
+        rolenames_str = cus_param["rolenames"]
+        logger.info(
+            f"传入的 rolenames_str 参数：{rolenames_str}, 类型为：{type(rolenames_str)}"
+        )
+
+        if type(rolenames_str) == str:
+            try:
+                rolenames = eval(rolenames_str)
+                logger.debug(f"eval 成功，结果：{rolenames}")
+            except Exception as e:
+                logger.debug(
+                    f"rolenames_str 参数转换为列表失败: {str(e)}，尝试解析逗号分隔的格式",
+                    exc_info=True,
+                )
+                rolenames = rolenames_str.split(",")
+        elif type(rolenames_str) == list:
+            rolenames = rolenames_str
+        else:
+            rolenames = []
+
+        if rolenames and rolenames[0] == "ALL":
+            rolenames = get_all_rolenames()
+
+        all_num = len(rolenames)
+        logger.info(f"解析后的角色数量：{all_num}, 角色名：{rolenames}")
+
+        task_begin_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        os.makedirs("user_data", exist_ok=True)
+
+        for index, rolename in enumerate(rolenames):
+            try:
+                with open("user_data/error.log", mode="r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                    last_line = lines[-1].strip() if lines else None
+                    if last_line > task_begin_time:
+                        logger.error("检测到多角色任务执行过程出错，终止后续角色任务")
+                        return
+            except:
+                pass
+
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            logger.info(f"{now} 当前任务角色 {rolename}, {index+1}/{all_num}")
+            info = find_role_info(rolename)
+            if not info:
+                continue
+
+            context.override_pipeline(
+                {
+                    "TASK-A-OPT-需要指定账号重写账号角色信息": {
+                        "enabled": True,
+                        "custom_action_param": {
+                            "account": info["account"],
+                            "platform": info["platform"],
+                            "servername": info["servername"],
+                            "rolename": rolename,
+                        },
+                    }
+                }
+            )
+
+            last_role_task_begin_time = datetime.now().timestamp()
+
+            task_list = tasks.strip(",").split(",")
+            if task_list[0] != "ENTRY-登录某角色":
+                task_list.insert(0, "ENTRY-登录某角色")
+            if task_list[-1] != "ENTRY-退出登录某角色":
+                task_list.append("ENTRY-退出登录某角色")
+
+            for task in task_list:
+                try:
+                    with open("user_data/error.log", mode="r", encoding="utf-8") as f:
+                        lines = f.readlines()
+                        last_line = lines[-1].strip() if lines else None
+                        if last_line > task_begin_time:
+                            logger.error(
+                                "检测到多角色任务执行过程出错，终止后续角色任务"
+                            )
+                            return
+                except:
+                    pass
+                task_detail = context.run_task(task)
+                # print("##Task Detail##", task_detail)
+                sleep(1)
+
+            if datetime.now().timestamp() - last_role_task_begin_time < 10:
+                logger.error(
+                    "检测到本角色执行任务时间不足10秒，应该是手动中断了多角色任务，后续角色任务也终止"
+                )
+                break
+
+        if len(rolenames) >= 3:
+            context.run_task("TASK-关闭游戏")

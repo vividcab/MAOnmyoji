@@ -34,7 +34,7 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [730, 0, 540, 250],
+                "roi": [730, 0, 540, 350],
                 "template": [
                     "通用界面按钮/弹窗叉号1-红底白色.png",
                     "通用界面按钮/弹窗叉号2-红底白色半透明.png",

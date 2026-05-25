@@ -10,6 +10,7 @@ __all__ = [
     "OverrideLoginInfo",
     "RunTaskList",
     "ForRolesToRunTask",
+    "ForRolesToRunStrTask",
     "RandomSleep",
     "LogAnError",
     "ClearHitCount",
