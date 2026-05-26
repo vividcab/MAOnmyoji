@@ -28,8 +28,8 @@
     "检测有送蓝票的式神集结活动": {
         "recognition": "And",
         "all_of": [
-            {"recognition": "TemplateMatch", "roi": [176, 494, 128, 132], "template": "活动/新式神集结按钮.png"},
-            {"recognition": "TemplateMatch", "roi": [242, 454, 113, 79], "template": "活动/集结送蓝票.png"}
+            {"recognition": "TemplateMatch", "roi": [126, 366, 231, 263], "template": "活动/新式神集结按钮.png"},
+            {"recognition": "TemplateMatch", "roi": [240, 372, 119, 185], "template": "活动/集结送蓝票.png"}
         ],
         "action": "Click",
         "post_delay": 1500,
@@ -44,6 +44,9 @@
         "recognition": "TemplateMatch",
         "roi": [176, 494, 128, 132],
         "template": "活动/新式神集结按钮.png",
+        "action": "Custom",
+        "custom_action": "Screenshot",
+        "custom_action_param": {"save_dir": "user_data/式神集结送蓝票"},
         "next": ["TASK-尝试从任意界面回到庭院"]
     },
     "检测式神对话点击空白处": {
@@ -79,6 +82,7 @@
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测点击任意位置继续弹窗点一下",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]检测式神对话点击空白处",
             "处于相逢集结页面"
         ]
     },
@@ -86,6 +90,9 @@
         "recognition": "TemplateMatch",
         "roi": [1038, 557, 187, 112],
         "template": "活动/试炼战斗.png",
+        "action": "Custom",
+        "custom_action": "Screenshot",
+        "custom_action_param": {"save_dir": "user_data/式神集结送蓝票"},
         "next": ["TASK-尝试从任意界面回到庭院"]
     },
     "ACT-检测点击任意位置继续弹窗点一下": {

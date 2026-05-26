@@ -19,6 +19,7 @@
                 "custom_action_param": {
                     "tasks": [
                         {"taskname": "1-每日签到", "wait": 0.3},
+                        {"taskname": "2-领取同心队奖励", "wait": 0.3},
                         {"taskname": "3-领取寮包", "wait": 0.3},
                         {"taskname": "12-一键完成庭院事务", "wait": 0.3},
                         {"taskname": "13-给好友点赞", "wait": 0.3},
@@ -92,6 +93,18 @@
         "post_delay": 1000,
         "timeout": 300,
         "next": ["ACT-无条件按一下Esc"]
+    },
+
+    "2-领取同心队奖励": {
+        "recognition": "TemplateMatch",
+        "roi": [35, 254, 261, 251],
+        "template": "庭院/同心队奖励.png",
+        "threshold": 0.6,
+        "action": "Click",
+        "post_delay": 1000,
+        "timeout": 2000,
+        "next": ["ACT-检测各类右上部分叉号并点一下"],
+        "on_error": []
     },
 
     "3-领取寮包": {

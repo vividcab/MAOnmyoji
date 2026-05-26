@@ -4,16 +4,25 @@
         "timeout": 500,
         "next": [
             "检测兑换码输入弹窗",
+            "[JumpBack]检测误点击到客服网页点右下角退出按钮",
             "[JumpBack]检测兑换码灯笼并点击一下",
             "[JumpBack]检测到庭院灯笼架子",
             "[JumpBack]ACT-在庭院点击一下左边往左走"
         ]
     },
+    "检测误点击到客服网页点右下角退出按钮": {
+        "recognition": "TemplateMatch",
+        "roi": [1168, 594, 112, 126],
+        "template": "庭院/客服等网页右下角退出键.png",
+        "action": "Click",
+        "post_delay": 1000
+    },
     "检测到庭院灯笼架子": {
         "recognition": "TemplateMatch",
         "roi": [91, 135, 526, 345],
         "template": ["庭院/庭院灯笼架子.png", "庭院/庭院灯笼架子1.png"],
-        "action": "Click"
+        "action": "Click",
+        "post_delay": 1000
     },
     "ACT-在庭院点击一下左边往左走": {
         "action": "Click",
