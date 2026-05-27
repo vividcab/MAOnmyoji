@@ -1,0 +1,167 @@
+{
+    "ENTRY-活动爬塔": {
+        "rate_limit": 1500,
+        "next": ["检测处于活动爬塔界面", "从庭院到活动爬塔界面", "[JumpBack]TASK-尝试从任意界面回到庭院"]
+    },
+
+    "从庭院到活动爬塔界面": {
+        "recognition": "TemplateMatch",
+        "roi": [680, 220, 240, 100],
+        "template": ["庭院/枫叶庭院町中牌子.png", "庭院/初始庭院町中牌子.png"],
+        "threshold": [0.9, 0.9],
+        "next": [
+            "[JumpBack]检测庭院里的活动入口然后点击进入",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测活动剧情跳过按钮然后点击",
+            "[JumpBack]检测活动探索按钮然后点击进入",
+            "检测处于活动爬塔界面"
+        ]
+    },
+    "检测庭院里的活动入口然后点击进入": {
+        "recognition": "TemplateMatch",
+        "roi": [199, 196, 590, 238],
+        "template": "活动爬塔/庭院中活动快捷入口.png",
+        "action": "Click",
+        "post_delay": 3000
+    },
+    "ACT-检测活动剧情跳过按钮然后点击": {
+        "recognition": "OCR",
+        "roi": [1147, 28, 74, 40],
+        "expected": "跳过",
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "检测活动探索按钮然后点击进入": {
+        "recognition": "TemplateMatch",
+        "roi": [356, 260, 130, 230],
+        "template": "活动爬塔/活动探索入口.png",
+        "action": "Click",
+        "post_delay": 1500
+    },
+
+    "检测处于活动爬塔界面": {
+        "recognition": {"type": "OCR", "param": {"roi": [96, 0, 247, 146], "expected": "火拾"}},
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ResetCount",
+                "custom_action_param": {
+                    "node_name_list": [
+                        "ACT-检测到挑战按钮就再点击一下-每局最多10次",
+                        "HD-ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕",
+                        "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "HD-END检测没有门票了停止任务",
+            "HD-END检测没有体力次数了停止任务",
+            "HD-检测挑战次数是否超过设置的次数",
+            "HD-刷活动爬塔次数够了结束"
+        ]
+    },
+    "HD-检测挑战次数是否超过设置的次数": {
+        "recognition": {
+            "type": "Custom",
+            "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 1000}}
+        },
+        "action": {"type": "DoNothing"},
+        "next": [
+            "[JumpBack]HD-ACT-检测到阵容没锁定锁一下",
+            "[JumpBack]HD-ACT-检测到用体力爬塔切换成用门票",
+            "检测挑战按钮开始挑战"
+        ]
+    },
+    "HD-刷活动爬塔次数够了结束": {
+        "next": ["活动爬塔任务出口"],
+        "focus": {"succeeded": "[color:green]刷活动爬塔达到设定次数，任务完成[/color]"}
+    },
+    "HD-ACT-检测到阵容没锁定锁一下": {
+        "recognition": "TemplateMatch",
+        "roi": [750, 602, 123, 118],
+        "template": "活动爬塔/阵容没锁定按钮.png",
+        "action": "Click",
+        "post_delay": 800
+    },
+    "HD-ACT-检测到用体力爬塔切换成用门票": {
+        "recognition": "OCR",
+        "roi": [1107, 541, 121, 33],
+        "expected": "6|2",
+        "action": "Click",
+        "target": [1233, 545, 27, 25],
+        "post_delay": 800
+    },
+    "检测挑战按钮开始挑战": {
+        "recognition": {"type": "OCR", "param": {"roi": [1081, 549, 191, 154], "expected": "挑战"}},
+        "action": "Click",
+        "post_delay": 2000,
+        "rate_limit": 1500,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "[JumpBack]ACT-检测到挑战按钮就再点击一下-每局最多10次",
+            "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
+            "[JumpBack]HD-ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕",
+            "HD-检测到购买门票弹窗关闭弹窗",
+            "检测处于活动爬塔界面"
+        ]
+    },
+    "HD-ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 10,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [543, 669, 194, 48], "expected": "点击屏幕继续", "only_rec": true}
+                    }
+                }
+            }
+        },
+        "action": {"type": "Click", "param": {"target": [498, 631, 250, 70]}},
+        "repeat": 2,
+        "post_delay": 800
+    },
+
+    "HD-END检测没有门票了停止任务": {
+        "recognition": "OCR",
+        "roi": [759, 11, 90, 41],
+        "expected": "^0$",
+        "only_rec": true,
+        "action": "DoNothing",
+        "next": ["REC-截个图记录一下爬塔状态"],
+        "focus": {"succeeded": "[color:green]刷活动爬塔，没有门票了，任务完成[/color]"}
+    },
+    "HD-END检测没有体力次数了停止任务": {
+        "recognition": "OCR",
+        "roi": [560, 11, 101, 42],
+        "expected": "^0$",
+        "only_rec": true,
+        "action": "DoNothing",
+        "next": ["REC-截个图记录一下爬塔状态"],
+        "focus": {"succeeded": "[color:green]刷活动爬塔，没有体力次数了，任务完成[/color]"}
+    },
+    "HD-检测到购买门票弹窗关闭弹窗": {
+        "recognition": "TemplateMatch",
+        "roi": [822, 595, 71, 52],
+        "template": "活动爬塔/购买门票按钮.png",
+        "action": "Click",
+        "target": [1109, 169, 137, 138],
+        "post_delay": 800,
+        "next": ["检测处于活动爬塔界面"]
+    },
+    "REC-截个图记录一下爬塔状态": {
+        "action": "Custom",
+        "custom_action": "Screenshot",
+        "custom_action_param": {"save_dir": "user_data/爬塔记录"},
+        "next": ["活动爬塔任务出口"]
+    },
+    "活动爬塔任务出口": {
+        "next": ["TASK-尝试从任意界面回到庭院"]
+    }
+}

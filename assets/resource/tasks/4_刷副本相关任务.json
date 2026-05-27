@@ -18,6 +18,18 @@
             "description": "僵尸寮狭间，单刷孔雀和白藏主暗域",
             "entry": "ENTRY-单刷狭间暗域任务",
             "group": ["standalone"]
+        },
+        {
+            "name": "SP铃彦姬活动爬塔",
+            "label": "SP铃彦姬活动爬塔",
+            "description": "如果想直接刷直到没次数，可以把次数设置成很大的数字",
+            "entry": "ENTRY-活动爬塔",
+            "group": ["standalone"],
+            "option": [
+                "输入爬塔挑战次数",
+                "使用门票还是体力",
+                "任务完成后是否返回庭院"
+            ]
         }
     ],
     "option": {
@@ -103,6 +115,58 @@
                         "检测处于契灵之境点击要刷的契灵": {"target": [681, 488, 46, 39]}
                     }
                 }
+            ]
+        },
+        "输入爬塔挑战次数": {
+            "type": "input",
+            "label": "输入爬塔挑战次数",
+            "description": "输入纯数字",
+            "inputs": [
+                {
+                    "name": "挑战次数",
+                    "label": "挑战次数",
+                    "description": "请输入整数。结合自身平时肝度设置，一般来说别搞通宵自动刷几小时问题都不大",
+                    "pipeline_type": "int",
+                    "verify": "^[0-9]+$",
+                    "default": "3"
+                }
+            ],
+            "pipeline_override": {
+                "HD-检测挑战次数是否超过设置的次数": {
+                    "recognition": {
+                        "type": "Custom",
+                        "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": "{挑战次数}"}}
+                    }
+                }
+            }
+        },
+        "使用门票还是体力": {
+            "type": "select",
+            "label": "使用门票还是体力",
+            "default_case": "门票",
+            "cases": [
+                {
+                    "name": "门票",
+                    "pipeline_override": {
+                        "HD-END检测没有体力次数了停止任务": {"enabled": false}
+                    }
+                },
+                {
+                    "name": "体力",
+                    "pipeline_override": {
+                        "HD-END检测没有门票了停止任务": {"enabled": false},
+                        "HD-ACT-检测到用体力爬塔切换成用门票": {"inverse": true}
+                    }
+                }
+            ]
+        },
+        "任务完成后是否返回庭院": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "任务完成后是否返回庭院",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {}},
+                {"name": "No", "pipeline_override": {"活动爬塔任务出口": {"next": []}}}
             ]
         }
     }

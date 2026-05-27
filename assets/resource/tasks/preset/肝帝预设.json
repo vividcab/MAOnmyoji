@@ -22,6 +22,10 @@
                 {
                     "name": "单刷狭间暗域",
                     "enabled": false
+                },
+                {
+                    "name": "SP铃彦姬活动爬塔",
+                    "enabled": false
                 }
             ]
         }

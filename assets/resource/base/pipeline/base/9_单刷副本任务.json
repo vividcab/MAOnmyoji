@@ -170,7 +170,10 @@
     },
 
     "ACT-检测有御魂满了的弹窗就关闭": {
-        "recognition": {"type": "OCR", "param": {"roi": [684, 398, 82, 50], "expected": "知道", "only_rec": true}},
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [593, 404, 232, 40], "expected": ["知道", "确认"], "only_rec": true}
+        },
         "action": {"type": "Click"},
         "post_delay": 800
     },
@@ -193,7 +196,7 @@
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [1150, 165, 110, 534]}},
+        "action": {"type": "Click", "param": {"target": [1150, 165, 110, 334]}},
         "post_delay": 1000
     },
     "ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次": {
