@@ -46,7 +46,7 @@
         "recognition": "Custom",
         "custom_recognition": "Count",
         "custom_recognition_param": {
-            "target": 10
+            "target": 100
         },
         "next": [
             "检测挑战按钮作为队长等待-组队",
@@ -188,7 +188,13 @@
                 "template": ["组队战斗/组队战斗界面左边中间表情按钮.png", "组队战斗/组队战斗界面左边中间表情按钮-1.png"]
             }
         ],
-        "action": "DoNothing",
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ClearHitCount",
+                "custom_action_param": {"nodes": ["ACT-检测到贪吃鬼或者战斗统计按钮点击屏幕"]}
+            }
+        },
         "post_delay": 500,
         "timeout": 5000,
         "next": [
@@ -203,9 +209,9 @@
         "roi": [17, 630, 85, 62],
         "expected": "自动",
         "action": "DoNothing",
-        "post_delay": 25000,
+        "post_delay": 6000,
         "timeout": 40000,
-        "rate_limit": 1500,
+        "rate_limit": 500,
         "next": [
             "TASK-组队刷图-检测在组队界面",
             "[JumpBack]ACT-检测到悬赏协作并处理",
@@ -213,13 +219,48 @@
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
+            "[JumpBack]ACT-检测误点开御魂整理界面或式神录退出",
             "[JumpBack]ACT-检测到发现宝藏弹窗就关闭",
             "[JumpBack]ACT-检测到默认邀请队友弹窗点击选项再点确定",
+            "[JumpBack]ACT-检测到贪吃鬼或者战斗统计按钮点击屏幕",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
             "[JumpBack]ACT-检测到自动接受组队邀请按钮就点击",
+            "[JumpBack]检测到在探索地图界面什么都不做",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ],
         "on_error": []
+    },
+    "ACT-检测误点开御魂整理界面或式神录退出": {
+        "recognition": "OCR",
+        "roi": [85, 1, 243, 66],
+        "expected": ["御魂", "式神录"],
+        "action": "Click",
+        "target": [17, 8, 44, 49],
+        "post_delay": 800
+    },
+    "ACT-检测到贪吃鬼或者战斗统计按钮点击屏幕": {
+        "max_hit": 10,
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [36, 23, 89, 94],
+                "template": ["组队战斗/贪吃鬼图标.png", "组队战斗/战斗统计图标.png"]
+            },
+            {"recognition": "TemplateMatch", "roi": [34, 617, 89, 84], "template": "组队战斗/战斗统计图标.png"}
+        ],
+        "action": "Click",
+        "target": [14, 157, 163, 259],
+        "repeat": 2,
+        "repeat_delay": 200,
+        "post_delay": 300
+    },
+    "检测到在探索地图界面什么都不做": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [31, 617, 1076, 94], "template": "突破/探索界面下栏结界突破按钮.png"}
+        },
+        "post_delay": 1000
     },
     "ACT-检测到默认邀请队友弹窗点击选项再点确定": {
         "recognition": {

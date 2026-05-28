@@ -106,7 +106,7 @@
         "action": {"type": "DoNothing"},
         "post_delay": 8000,
         "timeout": 20000,
-        "rate_limit": 1500,
+        "rate_limit": 500,
         "next": [
             "[JumpBack]ACT-检测到结契设置弹窗点击取消",
             "TASK-检测副本界面",
@@ -117,12 +117,15 @@
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
+            "[JumpBack]ACT-检测误点开御魂整理界面或式神录退出",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "ACT-检测到刷英杰试炼选择技能的界面-点击第一个技能",
             "[JumpBack]ACT-检测到契灵结契失败点放弃结契",
             "[JumpBack]ACT-还能检测到左上角U形返回按钮可能是还在结契动画等待3秒",
             "[JumpBack]ACT-检测到刷探查发现首领契灵点稍后集结",
+            "[JumpBack]ACT-检测到贪吃鬼或者战斗统计按钮点击屏幕",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
+            "[JumpBack]检测到在探索地图界面什么都不做",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ],
         "on_error": []
@@ -172,10 +175,12 @@
     "ACT-检测有御魂满了的弹窗就关闭": {
         "recognition": {
             "type": "OCR",
-            "param": {"roi": [593, 404, 232, 40], "expected": ["知道", "确认"], "only_rec": true}
+            "param": {"roi": [590, 404, 240, 40], "expected": ["知道", "确认"]}
         },
         "action": {"type": "Click"},
-        "post_delay": 800
+        "repeat": 2,
+        "repeat_delay": 100,
+        "post_delay": 200
     },
     "ACT-检测到发现宝藏弹窗就关闭": {
         "recognition": {"type": "OCR", "param": {"roi": [467, 132, 352, 101], "expected": "发现", "only_rec": true}},
@@ -191,7 +196,7 @@
                     "target": 10,
                     "recognition": {
                         "type": "OCR",
-                        "param": {"roi": [543, 669, 194, 48], "expected": "点击屏幕继续", "only_rec": true}
+                        "param": {"roi": [543, 669, 194, 48], "expected": "点击屏幕继续"}
                     }
                 }
             }
@@ -217,7 +222,7 @@
                 }
             }
         },
-        "action": {"type": "Click", "param": {"target": [10, 130, 100, 450]}},
+        "action": {"type": "Click", "param": {"target": [10, 160, 100, 260]}},
         "post_delay": 1000
     },
 
