@@ -100,13 +100,13 @@
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "HD-检测到购买门票弹窗关闭弹窗",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "[JumpBack]ACT-检测到挑战按钮就再点击一下-每局最多10次",
             "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
             "[JumpBack]检测到通关奖励达摩宝箱点一下",
             "[JumpBack]HD-ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕",
-            "HD-检测到购买门票弹窗关闭弹窗",
             "检测处于活动爬塔界面"
         ]
     },
@@ -142,7 +142,7 @@
     "HD-END检测没有门票了停止任务": {
         "recognition": "OCR",
         "roi": [759, 11, 90, 41],
-        "expected": "^0$",
+        "expected": "^0|o|O$",
         "only_rec": true,
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],
@@ -151,7 +151,7 @@
     "HD-END检测没有体力次数了停止任务": {
         "recognition": "OCR",
         "roi": [560, 11, 101, 42],
-        "expected": "^0$",
+        "expected": "^0|o|O$",
         "only_rec": true,
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],

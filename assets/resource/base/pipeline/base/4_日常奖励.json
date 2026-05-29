@@ -21,11 +21,12 @@
                         {"taskname": "1-每日签到", "wait": 0.3},
                         {"taskname": "2-领取同心队奖励", "wait": 0.3},
                         {"taskname": "3-领取寮包", "wait": 0.3},
+                        {"taskname": "6-领邮件", "wait": 0.3},
                         {"taskname": "12-一键完成庭院事务", "wait": 0.3},
                         {"taskname": "13-给好友点赞", "wait": 0.3},
-                        {"taskname": "6-领邮件", "wait": 0.3},
                         {"taskname": "7-查看悬赏", "wait": 0.3},
                         {"taskname": "8-领取商店每日黑蛋", "wait": 0.3},
+                        {"taskname": "9-进入召唤屋领取召唤活动蓝票福礼免费一抽", "wait": 0.3},
                         {"taskname": "10-查看神秘商店并截图记录", "wait": 0.3}
                     ]
                 }
@@ -306,30 +307,127 @@
         "next": ["TASK-尝试从任意界面回到庭院"]
     },
 
-    "9-每日免费抽卡": {"timeout": 5000, "next": ["9-1枫色秋庭找召唤物灯笼", "9-1初始庭院找召唤灯笼"], "on_error": []},
-    "9-1枫色秋庭找召唤物灯笼": {
-        "recognition": {"type": "OCR", "param": {"roi": [1091, 157, 43, 46], "expected": "召", "only_rec": true}},
-        "action": {"type": "Click"},
+    "9-进入召唤屋领取召唤活动蓝票福礼免费一抽": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "ClearHitCount",
+                "custom_action_param": {"nodes": ["检测有3天礼包就领取", "检测到有同辉召唤新式神抽卡活动点一下新式神"]}
+            }
+        },
+        "timeout": 2000,
+        "next": ["检测点击庭院召唤灯笼"],
+        "on_error": []
+    },
+    "检测点击庭院召唤灯笼": {
+        "recognition": "TemplateMatch",
+        "roi": [885, 85, 390, 251],
+        "template": "庭院/召唤灯笼.png",
+        "threshold": 0.4,
+        "action": "Click",
         "post_delay": 2000,
         "timeout": 5000,
-        "next": ["9-2检测处于召唤屋抽卡页面"],
+        "next": [
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]检测到卡池选择弹窗点击确定",
+            "[JumpBack]检测到有同辉召唤新式神抽卡活动点一下新式神",
+            "检测到召唤活动界面",
+            "9-2检测处于召唤屋抽卡页面"
+        ],
         "on_error": ["TASK-尝试从任意界面回到庭院"]
     },
-    "9-1初始庭院找召唤灯笼": {
-        "recognition": {"type": "OCR", "param": {"roi": [1076, 162, 50, 46], "expected": "召", "only_rec": true}},
-        "action": {"type": "Click"},
-        "post_delay": 2000,
-        "timeout": 5000,
-        "next": ["9-2检测处于召唤屋抽卡页面"],
-        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    "检测到有同辉召唤新式神抽卡活动点一下新式神": {
+        "max_hit": 1,
+        "recognition": "OCR",
+        "roi": [7, 192, 28, 55],
+        "expected": "同|辉",
+        "action": "Click",
+        "target": [194, 204, 139, 126],
+        "post_delay": 800
     },
     "9-2检测处于召唤屋抽卡页面": {
-        "recognition": {"type": "OCR", "param": {"roi": [113, 5, 92, 55], "expected": "^召唤$", "only_rec": true}},
+        "recognition": {"type": "OCR", "param": {"roi": [157, 7, 88, 50], "expected": "^召唤$", "only_rec": true}},
         "action": {"type": "Click"},
-        "post_delay": 1000,
-        "timeout": 1500,
-        "next": ["9-3检测底部是神秘召唤则没有免费抽卡资格", "9-4检测底部免费抽卡"],
+        "post_delay": 1500,
+        "timeout": 5000,
+        "next": [
+            "检测到召唤活动界面",
+            "9-3检测底部是神秘召唤则没有免费抽卡资格",
+            "9-4检测底部免费抽卡"
+        ],
         "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测到卡池选择弹窗点击确定": {
+        "recognition": "Or",
+        "any_of": [
+            {"recognition": "OCR", "roi": [702, 401, 85, 43], "expected": "确定"},
+            {"recognition": "OCR", "roi": [596, 602, 86, 36], "expected": "确定"}
+        ],
+        "action": "Click",
+        "post_delay": 600
+    },
+    "检测到召唤活动界面": {
+        "recognition": "OCR",
+        "roi": [94, 11, 147, 61],
+        "expected": "召唤活动",
+        "action": "Click",
+        "timeout": 4000,
+        "next": ["检测到有分享领蓝票", "检测点击祈愿福礼"],
+        "on_error": ["ACT-检测左上角方框折线返回按钮并点一下"]
+    },
+    "检测到有分享领蓝票": {
+        "recognition": "OCR",
+        "roi": [1134, 546, 129, 36],
+        "expected": "首次分享",
+        "action": "Click",
+        "target": [1188, 639, 40, 37],
+        "post_delay": 1000,
+        "next": ["检测到朋友圈分享按钮并点击"]
+    },
+    "检测到朋友圈分享按钮并点击": {
+        "recognition": "OCR",
+        "roi": [227, 682, 75, 35],
+        "expected": "朋友",
+        "action": "Click",
+        "next": ["检测到分享二维码点击空白处"]
+    },
+    "检测到分享二维码点击空白处": {
+        "recognition": "OCR",
+        "roi": [585, 491, 79, 38],
+        "expected": "扫一扫",
+        "next": ["[JumpBack]ACT-检测各类右上部分叉号并点一下", "检测到召唤活动界面"]
+    },
+    "检测点击祈愿福礼": {
+        "recognition": "OCR",
+        "roi": [16, 307, 90, 47],
+        "expected": "福礼",
+        "action": "Click",
+        "next": [
+            "[JumpBack]检测有免费礼包就点击领取",
+            "[JumpBack]检测有3天礼包就领取",
+            "9-2检测处于召唤屋抽卡页面",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
+    },
+    "检测有免费礼包就点击领取": {
+        "recognition": "Or",
+        "any_of": [
+            {"recognition": "OCR", "roi": [587, 513, 112, 45], "expected": "免费"},
+            {"recognition": "OCR", "roi": [359, 594, 81, 36], "expected": "免费"}
+        ],
+        "action": "Click",
+        "post_delay": 800
+    },
+    "检测有3天礼包就领取": {
+        "max_hit": 3,
+        "recognition": "TemplateMatch",
+        "roi": [288, 478, 220, 79],
+        "template": ["活动/祈愿福礼1.png", "活动/祈愿福礼2.png"],
+        "threshold": [0.5, 0.5],
+        "action": "Click",
+        "repeat": 2,
+        "repeat_delay": 800,
+        "post_delay": 800
     },
     "9-3检测底部是神秘召唤则没有免费抽卡资格": {
         "recognition": {"type": "OCR", "param": {"roi": [566, 675, 112, 43], "expected": "神秘", "only_rec": true}},
@@ -337,9 +435,9 @@
     },
     "9-4检测底部免费抽卡": {
         "recognition": {"type": "OCR", "param": {"roi": [570, 671, 108, 47], "expected": "免", "only_rec": true}},
-        "action": {"type": "DoNothing"},
-        "timeout": 300,
-        "next": ["9-5检测是否还有免费抽数"],
+        "action": {"type": "Click", "param": {"target": [166, 11, 71, 41]}},
+        "timeout": 2000,
+        "next": ["检测到召唤活动界面", "9-5检测是否还有免费抽数"],
         "on_error": ["TASK-尝试从任意界面回到庭院"]
     },
     "9-5检测是否还有免费抽数": {
@@ -384,6 +482,7 @@
     },
 
     "10-查看神秘商店并截图记录": {
+        "enabled": false,
         "timeout": 2000,
         "next": [
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
@@ -597,6 +696,8 @@
             "STATUS-处于庭院初始状态",
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
             "[JumpBack]检测到抽出SSR后右下角截图分享按钮并点击空白处",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测右上角跳过按钮并点击",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
         ]

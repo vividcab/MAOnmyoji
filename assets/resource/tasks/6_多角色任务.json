@@ -115,7 +115,7 @@
             "default_case": "No",
             "label": "是否查看神秘商店",
             "cases": [
-                {"name": "Yes", "pipeline_override": {}},
+                {"name": "Yes", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": true}}},
                 {"name": "No", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": false}}}
             ]
         },

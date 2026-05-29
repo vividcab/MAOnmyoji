@@ -550,7 +550,7 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [1132, 26, 44, 38],
+                "roi": [1112, 0, 95, 72],
                 "template": "签到/邮件图标.png"
             }
         },
