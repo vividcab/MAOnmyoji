@@ -399,9 +399,9 @@
             "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
             "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
             "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": ["错误处理方式-截图记录"]
@@ -427,9 +427,9 @@
             "[JumpBack]ACT-检测带不再提示勾选框的弹窗并点击取消",
             "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
-            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
             "[JumpBack]TASK-A-ACT-检测的获得印记弹窗点一下空白处",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]INT-无条件按一下Esc键-最多4次"
         ],
         "on_error": ["错误处理方式-截图记录"],
