@@ -212,7 +212,9 @@
             "type": "TemplateMatch",
             "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
         },
-        "next": ["检测到狩猎战已经挑战则结束", "检测狩猎战并点击"]
+        "timeout": 3000,
+        "next": ["检测到狩猎战已经挑战则结束", "检测狩猎战并点击", "检测到阴界之门则今天没有狩猎战"],
+        "on_error": []
     },
     "检测到狩猎战已经挑战则结束": {
         "recognition": {"type": "OCR", "param": {"roi": [7, 154, 223, 390], "expected": "已挑战\\(1/1\\)"}},
@@ -223,6 +225,11 @@
         "action": "Click",
         "post_delay": 1000,
         "next": ["检测到挑战按钮并点击", "检测到已挑战按钮结束任务"]
+    },
+    "检测到阴界之门则今天没有狩猎战": {
+        "recognition": {"type": "OCR", "param": {"roi": [7, 154, 223, 390], "expected": "阴界"}},
+        "action": "DoNothing",
+        "next": []
     },
     "检测到挑战按钮并点击": {
         "recognition": {"type": "OCR", "param": {"roi": [1115, 587, 124, 72], "expected": "^挑战"}},

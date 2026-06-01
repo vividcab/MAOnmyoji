@@ -173,10 +173,10 @@
         "recognition": {"type": "TemplateMatch", "param": {"roi": [50, 604, 59, 55], "template": "签到/一键领取.png"}},
         "action": {"type": "Click"},
         "timeout": 500,
-        "next": ["6-3确定领取或御魂爆仓确认按钮"],
+        "next": ["6-3确定领取确认按钮", "检测到御魂爆仓提示弹窗截图然后点击知道了"],
         "on_error": ["TASK-尝试从任意界面回到庭院"]
     },
-    "6-3确定领取或御魂爆仓确认按钮": {
+    "6-3确定领取确认按钮": {
         "recognition": {
             "type": "TemplateMatch",
             "param": {"roi": [585, 397, 276, 210], "template": "签到/确定领取全部邮件.png"}
@@ -186,6 +186,23 @@
         "next": [
             "STATUS-处于庭院初始状态",
             "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测右上角跳过按钮并点击",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ]
+    },
+    "检测到御魂爆仓提示弹窗截图然后点击知道了": {
+        "recognition": {
+            "type": "OCR",
+            "param": {"roi": [590, 404, 240, 40], "expected": ["知道", "确认"]}
+        },
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/御魂爆仓"}}
+        },
+        "post_delay": 200,
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测有御魂满了的弹窗就关闭",
             "[JumpBack]ACT-检测右上角跳过按钮并点击",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下"
         ]

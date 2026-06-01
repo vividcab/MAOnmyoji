@@ -252,12 +252,17 @@
             {
                 "recognition": "TemplateMatch",
                 "roi": [0, 0, 70, 70],
-                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+                "threshold": [0.5, 0.5]
             },
             {
                 "recognition": "TemplateMatch",
                 "roi": [22, 339, 79, 180],
-                "template": ["组队战斗/组队战斗界面左边中间表情按钮.png", "组队战斗/组队战斗界面左边中间表情按钮-1.png"]
+                "template": [
+                    "组队战斗/组队战斗界面左边中间表情按钮.png",
+                    "组队战斗/组队战斗界面左边中间表情按钮-1.png"
+                ],
+                "threshold": [0.6, 0.6]
             }
         ],
         "action": "DoNothing",

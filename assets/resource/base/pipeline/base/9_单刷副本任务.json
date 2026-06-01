@@ -87,7 +87,8 @@
             "type": "TemplateMatch",
             "param": {
                 "roi": [0, 0, 70, 70],
-                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+                "threshold": [0.5, 0.5]
             }
         },
         "action": {"type": "DoNothing"},
@@ -146,7 +147,8 @@
             "type": "TemplateMatch",
             "param": {
                 "roi": [0, 0, 70, 70],
-                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+                "threshold": [0.5, 0.5]
             }
         },
         "post_delay": 3000
@@ -215,7 +217,8 @@
                         "type": "TemplateMatch",
                         "param": {
                             "roi": [0, 0, 70, 70],
-                            "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"]
+                            "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
+                            "threshold": [0.5, 0.5]
                         }
                     },
                     "is_inverse": true
