@@ -137,6 +137,7 @@
     },
     "7-1-检测选择了目标层数": {
         "recognition": {"type": "OCR", "param": {"roi": [409, 131, 245, 45], "expected": "拾层"}},
+        "rate_limit": 1300,
         "next": ["[JumpBack]检测点击创建按钮", "[JumpBack]检测点击创建队伍按钮", "8-检测已经处于组好队伍的界面"]
     },
     "检测点击左边栏目标层数": {
@@ -146,11 +147,13 @@
     "检测点击创建队伍按钮": {
         "recognition": {"type": "OCR", "param": {"roi": [1002, 606, 140, 40], "expected": "创建队伍"}},
         "action": "Click",
+        "post_delay": 1000,
         "focus": {"Node.Recognition.Succeeded": "[color:blue]同心队-副本选择完成，创建队伍[/color]"}
     },
     "检测点击创建按钮": {
         "recognition": {"type": "OCR", "param": {"roi": [835, 572, 84, 39], "expected": "创建"}},
-        "action": "Click"
+        "action": "Click",
+        "post_delay": 1000
     },
     "8-检测已经处于组好队伍的界面": {
         "recognition": {"type": "OCR", "param": {"roi": [85, 16, 138, 50], "expected": "队伍"}},

@@ -64,7 +64,7 @@
     "HD-检测挑战次数是否超过设置的次数": {
         "recognition": {
             "type": "Custom",
-            "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 1000}}
+            "param": {"custom_recognition": "Count", "custom_recognition_param": {"target": 200}}
         },
         "action": {"type": "DoNothing"},
         "next": [
@@ -128,7 +128,7 @@
                     "target": 10,
                     "recognition": {
                         "type": "OCR",
-                        "param": {"roi": [543, 669, 194, 48], "expected": "点击屏幕继续", "only_rec": true}
+                        "param": {"roi": [543, 669, 194, 48], "expected": "点击屏幕继续"}
                     }
                 }
             }
@@ -143,7 +143,6 @@
         "recognition": "OCR",
         "roi": [759, 11, 90, 41],
         "expected": "^0|o|O$",
-        "only_rec": true,
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],
         "focus": {"succeeded": "[color:green]刷活动爬塔，没有门票了，任务完成[/color]"}
@@ -152,7 +151,6 @@
         "recognition": "OCR",
         "roi": [560, 11, 101, 42],
         "expected": "^0|o|O$",
-        "only_rec": true,
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],
         "focus": {"succeeded": "[color:green]刷活动爬塔，没有体力次数了，任务完成[/color]"}
@@ -164,7 +162,7 @@
         "action": "Click",
         "target": [1109, 169, 137, 138],
         "post_delay": 800,
-        "next": ["检测处于活动爬塔界面"]
+        "next": ["REC-截个图记录一下爬塔状态"]
     },
     "REC-截个图记录一下爬塔状态": {
         "action": "Custom",
