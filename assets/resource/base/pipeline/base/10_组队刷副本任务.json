@@ -180,8 +180,11 @@
             {
                 "recognition": "TemplateMatch",
                 "roi": [0, 0, 70, 70],
-                "template": ["通用界面按钮/左上角U形退出按钮.png", "通用界面按钮/左上角U形退出按钮-1.png"],
-                "threshold": [0.5, 0.5]
+                "template": [
+                    "通用界面按钮/左上角U形退出按钮.png",
+                    "通用界面按钮/左上角U形退出按钮-1.png",
+                    "通用界面按钮/左上角U形退出按钮-2.png"
+                ]
             },
             {
                 "recognition": "TemplateMatch",
@@ -203,8 +206,8 @@
         "post_delay": 500,
         "timeout": 5000,
         "next": [
-            "检测已经开始战斗等待X秒-组队",
             "[JumpBack]ACT-检测到悬赏协作并处理",
+            "检测已经开始战斗等待X秒-组队",
             "[JumpBack]ACT-检测右下角有准备按钮就点击一下"
         ],
         "on_error": []
@@ -230,7 +233,7 @@
             "[JumpBack]ACT-检测到贪吃鬼或者战斗统计按钮点击屏幕",
             "[JumpBack]ACT-检测到屏幕中间下方有点击屏幕继续文字点击一下屏幕-每局最多10次",
             "[JumpBack]ACT-检测到自动接受组队邀请按钮就点击",
-            "[JumpBack]检测到在探索地图界面什么都不做",
+            "[JumpBack]检测到在探索地图界面或者庭院什么都不做",
             "[JumpBack]ACT-检测不到左上角返回按钮之后就模拟点击一下屏幕-每局最多10次"
         ],
         "on_error": []
@@ -260,11 +263,16 @@
         "repeat_delay": 200,
         "post_delay": 300
     },
-    "检测到在探索地图界面什么都不做": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {"roi": [31, 617, 1076, 94], "template": "突破/探索界面下栏结界突破按钮.png"}
-        },
+    "检测到在探索地图界面或者庭院什么都不做": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [31, 617, 1076, 94],
+                "template": "突破/探索界面下栏结界突破按钮.png"
+            },
+            {"recognition": "TemplateMatch", "roi": [1112, 0, 95, 72], "template": "签到/邮件图标.png"}
+        ],
         "post_delay": 1000
     },
     "ACT-检测到默认邀请队友弹窗点击选项再点确定": {
