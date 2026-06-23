@@ -7,7 +7,8 @@
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表1",
-                "是否查看神秘商店"
+                "是否查看神秘商店",
+                "是否查看悬赏封印1"
             ]
         },
         {
@@ -31,7 +32,8 @@
             "entry": "ENTRY-多角色任务模板",
             "group": ["multi_role"],
             "option": [
-                "输入角色名列表4"
+                "输入角色名列表4",
+                "是否查看悬赏封印2"
             ]
         },
         {
@@ -119,6 +121,15 @@
                 {"name": "No", "pipeline_override": {"10-查看神秘商店并截图记录": {"enabled": false}}}
             ]
         },
+        "是否查看悬赏封印1": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "是否查看悬赏封印",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {"7-查看悬赏": {"enabled": true}}},
+                {"name": "No", "pipeline_override": {"7-查看悬赏": {"enabled": false}}}
+            ]
+        },
         "输入角色名列表2": {
             "type": "input",
             "label": "输入角色名列表2",
@@ -196,8 +207,8 @@
                                 "rolenames": "{角色名列表}",
                                 "tasks": [
                                     {"taskname": "ENTRY-登录某角色", "wait": 0.5},
-                                    {"taskname": "4-领取体力", "wait": 0.5},
                                     {"taskname": "7-查看悬赏", "wait": 0.5},
+                                    {"taskname": "12-一键完成庭院事务", "wait": 0.3},
                                     {"taskname": "ENTRY-逢魔任务", "wait": 0.5},
                                     {"taskname": "ENTRY-退出登录某角色", "wait": 0.5}
                                 ]
@@ -206,6 +217,15 @@
                     }
                 }
             }
+        },
+        "是否查看悬赏封印2": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "是否查看悬赏封印",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {"7-查看悬赏": {"enabled": true}}},
+                {"name": "No", "pipeline_override": {"7-查看悬赏": {"enabled": false}}}
+            ]
         },
         "输入角色名列表5": {
             "type": "input",

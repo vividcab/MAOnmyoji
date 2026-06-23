@@ -624,7 +624,14 @@
     "11-5检测点击480勋章购买按钮": {
         "recognition": {"type": "OCR", "param": {"roi": [587, 462, 160, 143], "expected": "480"}},
         "action": {"type": "Click"},
-        "post_delay": 800,
+        "post_delay": 1200,
+        "next": ["REC-截图记录一下购买勋章黑蛋"]
+    },
+    "REC-截图记录一下购买勋章黑蛋": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/每周购买"}}
+        },
         "next": ["11-6检测点击寄售屋"]
     },
     "11-6检测点击寄售屋": {
@@ -688,7 +695,14 @@
             "param": {"roi": [543, 480, 149, 143], "template": "签到/购买按钮上的勾玉.png"}
         },
         "action": {"type": "Click"},
-        "post_delay": 1000,
+        "post_delay": 1200,
+        "next": ["REC-截图记录一下购买寄售券"]
+    },
+    "REC-截图记录一下购买寄售券": {
+        "action": {
+            "type": "Custom",
+            "param": {"custom_action": "Screenshot", "custom_action_param": {"save_dir": "user_data/每周购买"}}
+        },
         "next": ["TASK-尝试从任意界面回到庭院"]
     },
 

@@ -235,7 +235,11 @@
         "recognition": {"type": "Custom", "param": {"custom_recognition": "GetNextTuPo"}},
         "action": {"type": "Click"},
         "post_delay": 1000,
-        "next": ["TASK-T-11挑战结界直到挑战结束", "TASK-T-12检测到进入战斗并加载完毕"]
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "TASK-T-11挑战结界直到挑战结束",
+            "TASK-T-12检测到进入战斗并加载完毕"
+        ]
     },
     "RCO-检测突破成功": {
         "recognition": {
