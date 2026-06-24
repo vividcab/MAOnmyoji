@@ -21,6 +21,7 @@
                     "tasks": [
                         {"taskname": "ENTRY-摸一下麒麟", "wait": 0.3},
                         {"taskname": "A-进入阴阳寮大厅做寮30捐觉醒材料", "wait": 0.3},
+                        {"taskname": "J-捐勾玉任务", "wait": 0.3},
                         {"taskname": "B-从阴阳寮大厅进入结界", "wait": 0.3},
                         {"taskname": "C-检测收取寄养", "wait": 0.3},
                         {"taskname": "D-检测是否可以好友寄养", "wait": 0.3},
@@ -34,13 +35,17 @@
     },
     "A-进入阴阳寮大厅做寮30捐觉醒材料": {
         "timeout": 3000,
-        "next": ["检测到达了寮大厅", "检测点击寮图标进入寮大厅", "[JumpBack]检测处于庭院点右下角打开底部卷轴"]
+        "next": [
+            "检测到达了寮大厅",
+            "[JumpBack]检测点击寮图标进入寮大厅",
+            "[JumpBack]检测处于庭院点右下角打开底部卷轴",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒"
+        ]
     },
     "检测点击寮图标进入寮大厅": {
         "recognition": {"type": "OCR", "param": {"roi": [511, 649, 116, 43], "expected": "阴阳"}},
         "action": {"type": "Click"},
-        "post_delay": 3000,
-        "next": ["检测到达了寮大厅", "[JumpBack]ACT-检测到当前界面是加载插画等待3秒"]
+        "post_delay": 3000
     },
     "检测到达了寮大厅": {
         "recognition": {
@@ -51,9 +56,73 @@
         "post_delay": 2000,
         "next": [
             "[JumpBack]ACT-检测到寮大厅的种树活动弹窗点击关闭",
+            "[JumpBack]检测到有每日工资可以领就领取",
+            "[JumpBack]检测到有体力补给可以领取就领取",
+            "[JumpBack]检测到有同心奖箱可以抽奖",
             "OPT-检测到可以做寮30就捐一下",
             "如果不做寮三十则进入此节点任务结束"
         ]
+    },
+    "检测到有同心奖箱可以抽奖": {
+        "recognition": "TemplateMatch",
+        "roi": [234, 282, 619, 182],
+        "template": "阴阳寮/同心奖箱.png",
+        "action": "Click",
+        "post_delay": 2000,
+        "timeout": 5000,
+        "next": ["检测打开了抽奖箱界面"],
+        "on_error": []
+    },
+    "检测打开了抽奖箱界面": {
+        "recognition": "OCR",
+        "roi": [150, 15, 106, 50],
+        "expected": "抽奖",
+        "action": "Swipe",
+        "begin": [582, 153, 30, 30],
+        "end": [646, 349, 30, 30],
+        "duration": 1000,
+        "post_delay": 5000,
+        "next": [
+            "检测返回到了寮大厅",
+            "[JumpBack]检测到领取奖励弹窗点击一下空白处",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
+    },
+    "检测返回到了寮大厅": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
+        },
+        "action": {"type": "DoNothing"}
+    },
+    "检测到有体力补给可以领取就领取": {
+        "recognition": "TemplateMatch",
+        "roi": [234, 282, 619, 182],
+        "template": "阴阳寮/体力补给.png",
+        "action": "Click",
+        "post_delay": 900,
+        "next": ["在阴阳寮大厅点击一下空白处"]
+    },
+    "检测到有每日工资可以领就领取": {
+        "recognition": "TemplateMatch",
+        "roi": [234, 282, 619, 182],
+        "template": "阴阳寮/每日工资.png",
+        "action": "Click",
+        "post_delay": 900,
+        "next": ["检测领取工资按钮并点击", "在阴阳寮大厅点击一下空白处"]
+    },
+    "检测领取工资按钮并点击": {
+        "recognition": "OCR",
+        "roi": [480, 375, 386, 200],
+        "expected": "领取",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["在阴阳寮大厅点击一下空白处"]
+    },
+    "在阴阳寮大厅点击一下空白处": {
+        "action": "Click",
+        "target": [340, 4, 592, 73],
+        "post_delay": 800
     },
     "如果不做寮三十则进入此节点任务结束": {
         "recognition": {"type": "DirectHit"},
@@ -184,6 +253,54 @@
             "param": {"roi": [1061, 619, 68, 53], "template": "阴阳寮/结界按钮.png"}
         },
         "next": []
+    },
+
+    "J-捐勾玉任务": {
+        "timeout": 3000,
+        "next": [
+            "检测处于寮大厅-捐勾玉",
+            "[JumpBack]检测点击寮图标进入寮大厅",
+            "[JumpBack]检测处于庭院点右下角打开底部卷轴",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒"
+        ]
+    },
+    "检测处于寮大厅-捐勾玉": {
+        "recognition": "TemplateMatch",
+        "roi": [1137, 559, 143, 153],
+        "template": "阴阳寮/大厅寮信息按钮.png",
+        "action": "Click",
+        "post_delay": 2000,
+        "next": ["检测捐赠勾玉按钮"]
+    },
+    "检测捐赠勾玉按钮": {
+        "recognition": "TemplateMatch",
+        "roi": [256, 480, 55, 54],
+        "template": "阴阳寮/捐勾玉按钮.png",
+        "action": "Click",
+        "post_delay": 800,
+        "next": ["检测打开了捐赠弹窗点击加号"]
+    },
+    "检测打开了捐赠弹窗点击加号": {
+        "recognition": "OCR",
+        "roi": [493, 217, 299, 146],
+        "expected": "今日可捐",
+        "action": "Click",
+        "target": [787, 283, 48, 44],
+        "repeat": 5,
+        "repeat_delay": 300,
+        "next": ["确定捐赠勾玉"]
+    },
+    "确定捐赠勾玉": {
+        "recognition": "TemplateMatch",
+        "roi": [521, 477, 157, 143],
+        "template": "阴阳寮/确定捐勾玉按钮.png",
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "检测返回到了寮大厅",
+            "[JumpBack]检测到领取奖励弹窗点击一下空白处",
+            "[JumpBack]ACT-检测左上角方框折线返回按钮并点一下"
+        ]
     },
 
     "B-从阴阳寮大厅进入结界": {

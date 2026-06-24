@@ -43,7 +43,8 @@
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表5",
-                "是否捐寮三十材料"
+                "是否捐寮三十材料",
+                "是否捐勾玉"
             ]
         },
         {
@@ -264,6 +265,15 @@
             "cases": [
                 {"name": "Yes", "pipeline_override": {}},
                 {"name": "No", "pipeline_override": {"OPT-检测到可以做寮30就捐一下": {"enabled": false}}}
+            ]
+        },
+        "是否捐勾玉": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "是否捐勾玉",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {}},
+                {"name": "No", "pipeline_override": {"J-捐勾玉任务": {"enabled": false}}}
             ]
         },
         "输入角色名列表6": {
