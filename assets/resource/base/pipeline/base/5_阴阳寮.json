@@ -278,7 +278,9 @@
         "template": "阴阳寮/捐勾玉按钮.png",
         "action": "Click",
         "post_delay": 800,
-        "next": ["检测打开了捐赠弹窗点击加号"]
+        "timeout": 2000,
+        "next": ["检测打开了捐赠弹窗点击加号"],
+        "on_error": ["ACT-检测左上角方框折线返回按钮并点一下"]
     },
     "检测打开了捐赠弹窗点击加号": {
         "recognition": "OCR",
