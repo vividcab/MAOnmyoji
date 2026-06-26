@@ -12,6 +12,7 @@
         "next": [
             "[JumpBack]检测庭院里的活动入口然后点击进入",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测确认跳过按钮然后点击",
             "[JumpBack]ACT-检测活动剧情跳过按钮然后点击",
             "[JumpBack]检测活动探索按钮然后点击进入",
             "检测处于活动爬塔界面"
@@ -19,8 +20,24 @@
     },
     "检测庭院里的活动入口然后点击进入": {
         "recognition": "TemplateMatch",
-        "roi": [199, 196, 590, 238],
+        "roi": [1138, 95, 136, 136],
         "template": "活动爬塔/庭院中活动快捷入口.png",
+        "action": "Click",
+        "post_delay": 1200,
+        "next": ["检测打开了活动总览界面查找点击版本活动"]
+    },
+    "检测打开了活动总览界面查找点击版本活动": {
+        "recognition": "OCR",
+        "roi": [42, 91, 122, 208],
+        "expected": "版本活动",
+        "action": "Click",
+        "post_delay": 500,
+        "next": ["检测前往活动按钮并点击"]
+    },
+    "检测前往活动按钮并点击": {
+        "recognition": "OCR",
+        "roi": [1035, 605, 218, 108],
+        "expected": "前往活动",
         "action": "Click",
         "post_delay": 3000
     },
@@ -31,16 +48,23 @@
         "action": "Click",
         "post_delay": 1000
     },
+    "ACT-检测确认跳过按钮然后点击": {
+        "recognition": "OCR",
+        "roi": [654, 373, 246, 177],
+        "expected": "确认跳过",
+        "action": "Click",
+        "post_delay": 1000
+    },
     "检测活动探索按钮然后点击进入": {
         "recognition": "TemplateMatch",
-        "roi": [356, 260, 130, 230],
+        "roi": [192, 246, 138, 232],
         "template": "活动爬塔/活动探索入口.png",
         "action": "Click",
         "post_delay": 1500
     },
 
     "检测处于活动爬塔界面": {
-        "recognition": {"type": "OCR", "param": {"roi": [96, 0, 247, 146], "expected": "火拾"}},
+        "recognition": {"type": "OCR", "param": {"roi": [96, 0, 247, 146], "expected": "擂台"}},
         "action": {
             "type": "Custom",
             "param": {
@@ -79,7 +103,7 @@
     },
     "HD-ACT-检测到阵容没锁定锁一下": {
         "recognition": "TemplateMatch",
-        "roi": [750, 602, 123, 118],
+        "roi": [788, 645, 47, 47],
         "template": "活动爬塔/阵容没锁定按钮.png",
         "action": "Click",
         "post_delay": 800
@@ -141,7 +165,7 @@
 
     "HD-END检测没有门票了停止任务": {
         "recognition": "OCR",
-        "roi": [759, 11, 90, 41],
+        "roi": [573, 18, 84, 28],
         "expected": "^0|o|O$",
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],
@@ -149,7 +173,7 @@
     },
     "HD-END检测没有体力次数了停止任务": {
         "recognition": "OCR",
-        "roi": [560, 11, 101, 42],
+        "roi": [749, 16, 103, 32],
         "expected": "^0|o|O$",
         "action": "DoNothing",
         "next": ["REC-截个图记录一下爬塔状态"],
@@ -157,7 +181,7 @@
     },
     "HD-检测到购买门票弹窗关闭弹窗": {
         "recognition": "TemplateMatch",
-        "roi": [822, 595, 71, 52],
+        "roi": [781, 580, 166, 87],
         "template": "活动爬塔/购买门票按钮.png",
         "action": "Click",
         "target": [1109, 169, 137, 138],
