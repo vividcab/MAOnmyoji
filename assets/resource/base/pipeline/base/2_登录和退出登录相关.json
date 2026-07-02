@@ -267,13 +267,20 @@
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
-            "TASK-A-7-0识别到当前区服就是要登录的区服",
+            "[JumpBack]识别到欢迎进入游戏小白弹窗还没消失就等等",
             "TASK-A-7-2检测切换区服按钮并点击",
             "TASK-A-6检测平台按钮并点击",
             "[JumpBack]TASK-A-7-INT检测协议弹窗并接受",
             "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下"
         ]
+    },
+    "识别到欢迎进入游戏小白弹窗还没消失就等等": {
+        "recognition": "OCR",
+        "roi": [514, 0, 357, 161],
+        "expected": "欢迎进入游戏",
+        "action": "DoNothing",
+        "post_delay": 1200
     },
     "TASK-A-7-0识别到当前区服就是要登录的区服": {
         "recognition": {

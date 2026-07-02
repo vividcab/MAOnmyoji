@@ -136,14 +136,14 @@
         "on_error": []
     },
     "OPT-检测到可以做寮30就捐一下2": {
-        "recognition": {"type": "OCR", "param": {"roi": [31, 253, 87, 28], "expected": "集体任务", "only_rec": true}},
+        "recognition": {"type": "OCR", "param": {"roi": [31, 253, 87, 28], "expected": "集体任务"}},
         "action": {"type": "Click"},
         "post_delay": 2000,
         "next": ["检测到打开了集体任务弹窗", "[JumpBack]OPT-检测到可以做寮30就捐一下2"],
         "on_error": []
     },
     "检测到打开了集体任务弹窗": {
-        "recognition": {"type": "OCR", "param": {"roi": [611, 41, 86, 52], "expected": "任务", "only_rec": true}},
+        "recognition": {"type": "OCR", "param": {"roi": [933, 558, 174, 41], "expected": "今日已完成"}},
         "action": {"type": "DoNothing"},
         "timeout": 2000,
         "next": [

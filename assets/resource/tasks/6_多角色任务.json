@@ -43,6 +43,7 @@
             "group": ["multi_role"],
             "option": [
                 "输入角色名列表5",
+                "是否查看悬赏封印3",
                 "是否捐寮三十材料",
                 "是否捐勾玉"
             ]
@@ -257,6 +258,15 @@
                     }
                 }
             }
+        },
+        "是否查看悬赏封印3": {
+            "type": "switch",
+            "default_case": "No",
+            "label": "是否查看悬赏封印",
+            "cases": [
+                {"name": "Yes", "pipeline_override": {"7-查看悬赏": {"enabled": true}}},
+                {"name": "No", "pipeline_override": {"7-查看悬赏": {"enabled": false}}}
+            ]
         },
         "是否捐寮三十材料": {
             "type": "switch",
