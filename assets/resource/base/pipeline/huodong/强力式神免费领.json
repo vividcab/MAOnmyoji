@@ -1,0 +1,67 @@
+{
+    "ENTRY-强力式神免费领活动": {
+        "timeout": 2000,
+        "next": ["检测识别右边栏活动集合图标"]
+    },
+    "检测识别右边栏活动集合图标": {
+        "recognition": "TemplateMatch",
+        "roi": [1138, 95, 136, 136],
+        "template": "活动爬塔/庭院中活动快捷入口.png",
+        "action": "Click",
+        "post_delay": 1200,
+        "next": ["检测打开了活动总览界面"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测打开了活动总览界面": {
+        "recognition": "OCR",
+        "roi": [146, 11, 146, 49],
+        "expected": "活动",
+        "action": "DoNothing",
+        "timeout": 3000,
+        "next": [
+            "检测到强力式神免费领活动并点击",
+            "[JumpBack]ACT-在左边栏上划看看下面的活动"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "检测到强力式神免费领活动并点击": {
+        "recognition": "OCR",
+        "roi": [49, 103, 162, 569],
+        "expected": "强力式神免费",
+        "action": "Click",
+        "post_delay": 500,
+        "timeout": 2000,
+        "next": ["点击右侧第一个待领取的宝箱图标"],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "点击右侧第一个待领取的宝箱图标": {
+        "recognition": "TemplateMatch",
+        "roi": [269, 425, 944, 119],
+        "template": "活动/强力式神免费领.png",
+        "action": "Click",
+        "post_delay": 6000,
+        "timeout": 2000,
+        "rate_limit": 1500,
+        "next": [
+            "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
+            "[JumpBack]ACT-点击一下右侧空白处"
+        ],
+        "on_error": ["TASK-尝试从任意界面回到庭院"]
+    },
+    "ACT-在左边栏上划看看下面的活动": {
+        "max_hit": 3,
+        "action": "Swipe",
+        "begin": [97, 626, 20, 20],
+        "end": [121, 125, 20, 20],
+        "duration": 1500,
+        "post_delay": 500
+    },
+    "ACT-点击一下右侧空白处": {
+        "max_hit": 5,
+        "action": "Click",
+        "target": [1162, 152, 93, 102],
+        "post_delay": 500
+    }
+}

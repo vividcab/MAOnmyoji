@@ -263,7 +263,11 @@
             "type": "Or",
             "param": {
                 "any_of": [
-                    {"recognition": "TemplateMatch", "roi": [35, 596, 77, 59], "template": "庭院/闲庭图标.png"},
+                    {
+                        "recognition": "TemplateMatch",
+                        "roi": [1138, 95, 136, 136],
+                        "template": "活动爬塔/庭院中活动快捷入口.png"
+                    },
                     {
                         "recognition": "TemplateMatch",
                         "roi": [680, 220, 240, 100],
@@ -500,7 +504,7 @@
 
     "10-查看神秘商店并截图记录": {
         "enabled": false,
-        "timeout": 2000,
+        "timeout": 3000,
         "next": [
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "10-1检测点击商店图标之后打开神秘商店",

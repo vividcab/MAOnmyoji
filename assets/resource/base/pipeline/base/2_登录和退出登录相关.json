@@ -247,10 +247,7 @@
         "desc": "处理少见的情况，模拟器卡的话可能导致前面的弹窗没关闭，在这手动关掉它",
         "recognition": {
             "type": "OCR",
-            "param": {
-                "roi": [940, 184, 127, 49],
-                "expected": "切换账号"
-            }
+            "param": {"roi": [940, 184, 127, 49], "expected": "切换账号"}
         },
         "action": {"type": "Click", "param": {"target": [1053, 114, 20, 20]}},
         "post_delay": 1200
@@ -258,16 +255,13 @@
     "TASK-A-6检测平台按钮并点击": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {
-                "roi": [527, 373, 226, 64],
-                "template": ["平台区服/安卓端.png"]
-            }
+            "param": {"roi": [527, 373, 226, 64], "template": ["平台区服/安卓端.png"]}
         },
         "action": {"type": "Click"},
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
-            "[JumpBack]识别到欢迎进入游戏小白弹窗还没消失就等等",
+            "[JumpBack]识别到欢迎进入游戏小白弹窗还没消失就等等-最多等3次",
             "TASK-A-7-2检测切换区服按钮并点击",
             "TASK-A-6检测平台按钮并点击",
             "[JumpBack]TASK-A-7-INT检测协议弹窗并接受",
@@ -275,10 +269,20 @@
             "[JumpBack]ACT-检测各类右上部分叉号并点一下"
         ]
     },
-    "识别到欢迎进入游戏小白弹窗还没消失就等等": {
-        "recognition": "OCR",
-        "roi": [514, 0, 357, 161],
-        "expected": "欢迎进入游戏",
+    "识别到欢迎进入游戏小白弹窗还没消失就等等-最多等3次": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "Count",
+                "custom_recognition_param": {
+                    "target": 3,
+                    "recognition": {
+                        "type": "OCR",
+                        "param": {"roi": [514, 0, 357, 161], "expected": "欢迎进入游戏"}
+                    }
+                }
+            }
+        },
         "action": "DoNothing",
         "post_delay": 1200
     },
