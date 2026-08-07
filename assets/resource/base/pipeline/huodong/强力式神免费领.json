@@ -44,6 +44,8 @@
         "rate_limit": 1500,
         "next": [
             "STATUS-处于庭院初始状态",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]检测跳过按钮并点击",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下",
             "[JumpBack]ACT-点击一下右侧空白处"
@@ -55,7 +57,7 @@
         "action": "Swipe",
         "begin": [97, 626, 20, 20],
         "end": [121, 125, 20, 20],
-        "duration": 1500,
+        "duration": 3500,
         "post_delay": 500
     },
     "ACT-点击一下右侧空白处": {

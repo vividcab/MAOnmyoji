@@ -49,7 +49,18 @@
         "recognition": {"type": "TemplateMatch", "param": {"roi": [13, 572, 114, 96], "template": "同心队/同心队.png"}},
         "action": "Click",
         "post_delay": 1000,
-        "next": ["[JumpBack]检测预存体力按钮并点击", "2-检测打开预存界面识别一键预存按钮并点击"]
+        "next": [
+            "检测到目前预存体力是满的就不再预存了",
+            "[JumpBack]检测预存体力按钮并点击",
+            "2-检测打开预存界面识别一键预存按钮并点击"
+        ]
+    },
+    "检测到目前预存体力是满的就不再预存了": {
+        "recognition": "OCR",
+        "roi": [535, 272, 57, 35],
+        "expected": "400",
+        "action": "DoNothing",
+        "next": ["3-检测回到同心队界面识别集结按钮并点击"]
     },
     "检测预存体力按钮并点击": {
         "recognition": {
@@ -84,27 +95,86 @@
     },
     "4-检测打开了集结弹窗": {
         "recognition": {"type": "OCR", "param": {"roi": [534, 104, 221, 58], "expected": "集结口号"}},
+        "timeout": 8000,
         "next": [
-            "[JumpBack]检测到有没勾选的队友勾一下-最多2次",
+            "[JumpBack]检测到有没勾选的队友勾一下-位置1",
+            "[JumpBack]检测到有没勾选的队友勾一下-位置2",
+            "[JumpBack]检测到有没勾选的队友勾一下-位置3",
             "[JumpBack]检测点击觉醒副本集结",
             "5-检测到已经集结完成"
         ]
     },
-    "检测到有没勾选的队友勾一下-最多2次": {
+    "检测到有没勾选的队友勾一下-位置1": {
         "recognition": {
-            "type": "Custom",
+            "type": "ColorMatch",
             "param": {
-                "custom_recognition": "Count",
-                "custom_recognition_param": {
-                    "target": 3,
-                    "recognition": {
-                        "type": "TemplateMatch",
-                        "param": {"roi": [450, 249, 398, 28], "template": "同心队/未勾选队友.png"}
-                    }
-                }
+                "roi": [599, 251, 28, 26],
+                "method": 4,
+                "lower": [43, 29, 9],
+                "upper": [64, 47, 17],
+                "count": 64
             }
         },
-        "action": "Click"
+        "action": "Click",
+        "post_delay": 500
+    },
+    "检测到有没勾选的队友勾一下-位置2": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [646, 249, 28, 27],
+                "method": 4,
+                "lower": [43, 29, 9],
+                "upper": [64, 47, 17],
+                "count": 64
+            }
+        },
+        "action": "Click",
+        "post_delay": 500
+    },
+    "检测到有没勾选的队友勾一下-位置3": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [693, 249, 31, 28],
+                "method": 4,
+                "lower": [43, 29, 9],
+                "upper": [64, 47, 17],
+                "count": 64
+            }
+        },
+        "action": "Click",
+        "post_delay": 500
+    },
+    "没检测到勾选队友标志点一下-位置1": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [599, 251, 28, 26], "template": "同心队/已经勾选集结队友标志.png"}
+        },
+        "inverse": true,
+        "action": "Click",
+        "target": [564, 222, 45, 41],
+        "post_delay": 500
+    },
+    "没检测到勾选队友标志点一下-位置2": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [646, 249, 28, 27], "template": "同心队/已经勾选集结队友标志.png"}
+        },
+        "inverse": true,
+        "action": "Click",
+        "target": [661, 224, 33, 33],
+        "post_delay": 500
+    },
+    "没检测到勾选队友标志点一下-位置3": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {"roi": [693, 249, 31, 28], "template": "同心队/已经勾选集结队友标志.png"}
+        },
+        "inverse": true,
+        "action": "Click",
+        "target": [632, 227, 15, 28],
+        "post_delay": 500
     },
     "检测点击觉醒副本集结": {
         "recognition": {"type": "OCR", "param": {"roi": [519, 483, 224, 48], "expected": "觉醒"}},
@@ -112,7 +182,15 @@
         "post_delay": 1000
     },
     "5-检测到已经集结完成": {
-        "recognition": {"type": "OCR", "param": {"roi": [420, 17, 88, 37], "expected": "同心队"}},
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    {"recognition": "OCR", "roi": [519, 483, 224, 48], "expected": "觉醒"},
+                    {"recognition": "OCR", "roi": [613, 601, 98, 30], "expected": "退出集结"}
+                ]
+            }
+        },
         "next": ["[JumpBack]检测点击副本按钮", "6-检测打开了副本选择界面"]
     },
     "检测点击副本按钮": {

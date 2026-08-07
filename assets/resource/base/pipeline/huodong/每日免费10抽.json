@@ -74,7 +74,7 @@
     },
     "检测跳过按钮并点击": {
         "recognition": "OCR",
-        "roi": [1108, 56, 69, 47],
+        "roi": [1096, 32, 156, 91],
         "expected": "跳过",
         "only_rec": true,
         "action": "Click",

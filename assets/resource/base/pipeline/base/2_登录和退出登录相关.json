@@ -238,10 +238,48 @@
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
+            "检测到登录过期任务结束",
             "TASK-A-6检测平台按钮并点击",
             "TASK-A-5检测登录按钮并点击",
             "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号"
         ]
+    },
+    "检测到登录过期任务结束": {
+        "recognition": "OCR",
+        "roi": [390, 321, 117, 56],
+        "expected": "请输入",
+        "action": "DoNothing",
+        "next": []
+    },
+    "检测到登录过期需要输入密码": {
+        "recognition": "OCR",
+        "roi": [390, 321, 117, 56],
+        "expected": "请输入",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["输入登录密码"]
+    },
+    "输入登录密码": {
+        "recognition": "ColorMatch",
+        "roi": [1138, 654, 105, 52],
+        "method": 40,
+        "lower": [0, 64, 251],
+        "upper": [0, 175, 254],
+        "count": 800,
+        "action": "InputText",
+        "input_text": "Password123.",
+        "post_delay": 1000,
+        "next": ["检测点击下一步按钮"]
+    },
+    "检测点击下一步按钮": {
+        "recognition": "ColorMatch",
+        "roi": [1138, 654, 105, 52],
+        "method": 40,
+        "lower": [0, 64, 251],
+        "upper": [0, 175, 254],
+        "count": 800,
+        "action": "Click",
+        "post_delay": 1000
     },
     "TASK-A-6-INT检测到切换账号弹窗点击叉号": {
         "desc": "处理少见的情况，模拟器卡的话可能导致前面的弹窗没关闭，在这手动关掉它",
@@ -262,6 +300,7 @@
         "rate_limit": 3000,
         "next": [
             "[JumpBack]识别到欢迎进入游戏小白弹窗还没消失就等等-最多等3次",
+            "等待3次后小白条依旧没消失则重启游戏重新开始登录角色",
             "TASK-A-7-2检测切换区服按钮并点击",
             "TASK-A-6检测平台按钮并点击",
             "[JumpBack]TASK-A-7-INT检测协议弹窗并接受",
@@ -284,7 +323,18 @@
             }
         },
         "action": "DoNothing",
-        "post_delay": 1200
+        "post_delay": 2500
+    },
+    "等待3次后小白条依旧没消失则重启游戏重新开始登录角色": {
+        "recognition": "OCR",
+        "roi": [514, 0, 357, 161],
+        "expected": "欢迎进入游戏",
+        "action": {
+            "type": "StopApp",
+            "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
+        },
+        "post_delay": 4000,
+        "next": ["ENTRY-登录某角色"]
     },
     "TASK-A-7-0识别到当前区服就是要登录的区服": {
         "recognition": {
