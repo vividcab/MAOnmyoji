@@ -187,7 +187,7 @@
             "param": {
                 "any_of": [
                     {"recognition": "OCR", "roi": [519, 483, 224, 48], "expected": "觉醒"},
-                    {"recognition": "OCR", "roi": [613, 601, 98, 30], "expected": "退出集结"}
+                    {"recognition": "TemplateMatch", "roi": [706, 594, 52, 49], "template": "同心队/退出集结按钮.png"}
                 ]
             }
         },

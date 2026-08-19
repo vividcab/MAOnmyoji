@@ -238,11 +238,19 @@
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
+            "[JumpBack]ACT-检测到引擎更新提醒点击暂不更新",
             "检测到登录过期任务结束",
             "TASK-A-6检测平台按钮并点击",
             "TASK-A-5检测登录按钮并点击",
             "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号"
         ]
+    },
+    "ACT-检测到引擎更新提醒点击暂不更新": {
+        "recognition": "OCR",
+        "roi": [472, 434, 122, 38],
+        "expected": "不更新",
+        "action": "Click",
+        "post_delay": 1000
     },
     "检测到登录过期任务结束": {
         "recognition": "OCR",
@@ -299,6 +307,7 @@
         "post_delay": 2000,
         "rate_limit": 3000,
         "next": [
+            "[JumpBack]ACT-检测到引擎更新提醒点击暂不更新",
             "[JumpBack]识别到欢迎进入游戏小白弹窗还没消失就等等-最多等3次",
             "等待3次后小白条依旧没消失则重启游戏重新开始登录角色",
             "TASK-A-7-2检测切换区服按钮并点击",

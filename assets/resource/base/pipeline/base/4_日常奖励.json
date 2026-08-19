@@ -37,7 +37,11 @@
     "1-每日签到": {
         "recognition": {
             "type": "TemplateMatch",
-            "param": {"roi": [290, 508, 36, 42], "roi_offset": [-60, -20, 80, 40], "template": "签到/签到.png"}
+            "param": {
+                "roi": [290, 508, 36, 42],
+                "roi_offset": [-60, -20, 80, 40],
+                "template": ["签到/签到.png", "签到/签到-2.png"]
+            }
         },
         "action": {"type": "Click"},
         "post_delay": 1000,
