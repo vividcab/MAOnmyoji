@@ -148,6 +148,7 @@
         "rate_limit": 1000,
         "next": [
             "STATUS-处于庭院初始状态",
+            "[JumpBack]TASK-A-ACT-检测绑定手机弹窗并关闭",
             "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测各类左上角返回按钮并点一下"
@@ -247,7 +248,7 @@
         "recognition": "Or",
         "any_of": [
             {"recognition": "OCR", "roi": [674, 388, 224, 139], "expected": "一键领取"},
-            {"recognition": "OCR", "roi": [338, 614, 88, 43], "expected": "选择"}
+            {"recognition": "TemplateMatch", "roi": [261, 598, 745, 74], "template": "活动/皮肤折扣券选择按钮.png"}
         ],
         "action": {"type": "Click"},
         "post_delay": 1000

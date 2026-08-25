@@ -326,7 +326,7 @@
                     "target": 3,
                     "recognition": {
                         "type": "OCR",
-                        "param": {"roi": [514, 0, 357, 161], "expected": "欢迎进入游戏"}
+                        "param": {"roi": [511, 40, 346, 72], "expected": "欢|迎|进|入"}
                     }
                 }
             }
@@ -336,8 +336,22 @@
     },
     "等待3次后小白条依旧没消失则重启游戏重新开始登录角色": {
         "recognition": "OCR",
-        "roi": [514, 0, 357, 161],
+        "roi": [511, 40, 346, 72],
         "expected": "欢迎进入游戏",
+        "action": "DoNothing",
+        "post_delay": 8000,
+        "next": [
+            "又等了几秒后小白条还在则重启游戏重新登录",
+            "TASK-A-7-2检测切换区服按钮并点击",
+            "[JumpBack]TASK-A-7-INT检测协议弹窗并接受",
+            "[JumpBack]TASK-A-6-INT检测到切换账号弹窗点击叉号",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下"
+        ]
+    },
+    "又等了几秒后小白条还在则重启游戏重新登录": {
+        "recognition": "OCR",
+        "roi": [514, 0, 357, 161],
+        "expected": "欢迎进入",
         "action": {
             "type": "StopApp",
             "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}

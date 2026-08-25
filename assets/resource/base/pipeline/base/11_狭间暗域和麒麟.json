@@ -154,6 +154,7 @@
         "timeout": 40000,
         "rate_limit": 3000,
         "next": [
+            "[JumpBack]ACT-检测到断线期间战斗已经结束弹窗点击确定",
             "检测到已经开始进攻中-在暗域地图中",
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",

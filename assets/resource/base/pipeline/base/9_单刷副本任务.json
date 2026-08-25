@@ -113,6 +113,7 @@
         "timeout": 20000,
         "rate_limit": 500,
         "next": [
+            "[JumpBack]ACT-检测到断线期间战斗已经结束弹窗点击确定",
             "[JumpBack]ACT-检测到结契设置弹窗点击取消",
             "TASK-检测副本界面",
             "检测处于契灵之境确认一下是选择的地域",
@@ -135,6 +136,14 @@
         ],
         "on_error": []
     },
+    "ACT-检测到断线期间战斗已经结束弹窗点击确定": {
+        "recognition": "OCR",
+        "roi": [445, 277, 388, 46],
+        "expected": "断线期间",
+        "only_rec": true,
+        "action": "DoNothing",
+        "next": ["ACT-检测带确定按钮的弹窗并点击确定"]
+    },
     "检测到战斗结束结算界面": {
         "recognition": "Or",
         "any_of": [
@@ -143,6 +152,7 @@
         "timeout": 20000,
         "rate_limit": 500,
         "next": [
+            "[JumpBack]ACT-检测到断线期间战斗已经结束弹窗点击确定",
             "TASK-检测副本界面",
             "检测处于契灵之境确认一下是选择的地域",
             "[JumpBack]ACT-检测到断网则等待5秒",
