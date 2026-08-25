@@ -21,6 +21,16 @@
             "group": ["standalone"]
         },
         {
+            "name": "单刷僵尸寮道馆",
+            "label": "单刷僵尸寮道馆",
+            "description": "刷鑫鑫子福利道馆，自己设置好队伍。开始战斗就杀后台，等待10分钟后再上游戏",
+            "entry": "单刷僵尸寮道馆任务入口",
+            "group": ["standalone"],
+            "option": [
+                "队伍预设配置"
+            ]
+        },
+        {
             "name": "SP铃彦姬活动爬塔",
             "label": "SP铃彦姬活动爬塔",
             "description": "如果想直接刷直到没次数，可以把次数设置成很大的数字",
@@ -135,6 +145,29 @@
                     }
                 }
             ]
+        },
+        "队伍预设配置": {
+            "type": "input",
+            "label": "队伍预设配置",
+            "description": "输入完整名称或者其中一部分部分均可",
+            "inputs": [
+                {
+                    "name": "预设分组名称",
+                    "label": "预设分组名称",
+                    "pipeline_type": "string",
+                    "default": "道馆"
+                },
+                {
+                    "name": "预设队伍名称",
+                    "label": "预设队伍名称",
+                    "pipeline_type": "string",
+                    "default": "速刷人民道馆"
+                }
+            ],
+            "pipeline_override": {
+                "检测分组名称并点击": {"expected": "{预设分组名称}"},
+                "检测队伍名称并点击": {"expected": "{预设队伍名称}"}
+            }
         },
         "输入爬塔挑战次数": {
             "type": "input",

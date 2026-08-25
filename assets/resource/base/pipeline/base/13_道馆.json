@@ -1,0 +1,129 @@
+{
+    "单刷僵尸寮道馆任务入口": {
+        "recognition": "OCR",
+        "roi": [564, 14, 156, 47],
+        "expected": "道馆突破",
+        "only_rec": true,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]检测到还没开战等待X秒",
+            "检测到道馆挑战按钮并点击"
+        ]
+    },
+    "检测到还没开战等待X秒": {
+        "recognition": "OCR",
+        "roi": [565, 74, 147, 32],
+        "expected": "后开战",
+        "only_rec": true,
+        "action": "DoNothing",
+        "post_delay": 10000
+    },
+    "检测到道馆挑战按钮并点击": {
+        "recognition": "OCR",
+        "roi": [1123, 566, 105, 56],
+        "expected": "挑战",
+        "only_rec": true,
+        "action": "Click",
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "检测到已经进入到战斗界面",
+            "单刷僵尸寮道馆任务入口"
+        ]
+    },
+    "检测到已经进入到战斗界面": {
+        "recognition": "OCR",
+        "roi": [1127, 560, 103, 56],
+        "expected": "准备",
+        "only_rec": true,
+        "action": "DoNothing",
+        "post_delay": 1000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]检测到预设灯笼切换出战队伍",
+            "检测到战斗准备按钮并点击-道馆"
+        ]
+    },
+    "检测到战斗准备按钮并点击-道馆": {
+        "recognition": "OCR",
+        "roi": [1127, 560, 103, 56],
+        "expected": "准备",
+        "only_rec": true,
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["检测到开始自动战斗-关闭游戏-等待10分钟-再启动游戏"]
+    },
+    "检测到开始自动战斗-关闭游戏-等待10分钟-再启动游戏": {
+        "recognition": "OCR",
+        "roi": [17, 630, 85, 62],
+        "expected": "自动",
+        "only_rec": true,
+        "action": {
+            "type": "StopApp",
+            "param": {"package": "com.netease.onmyoji.wyzymnqsd_cps"}
+        },
+        "post_delay": 600000,
+        "next": ["TASK-启动游戏到登录界面"]
+    },
+
+    "检测到预设灯笼切换出战队伍": {
+        "max_hit": 1,
+        "recognition": "OCR",
+        "roi": [44, 658, 34, 52],
+        "expected": "预|设",
+        "threshold": 0.15,
+        "action": "Click",
+        "post_delay": 800,
+        "timeout": 3000,
+        "next": ["检测分组名称并点击", "[JumpBack]在分组栏向上滑动一次"]
+    },
+    "检测分组名称并点击": {
+        "recognition": "OCR",
+        "roi": [35, 242, 127, 428],
+        "expected": "道馆",
+        "action": "Click",
+        "post_delay": 800,
+        "timeout": 3000,
+        "next": ["检测队伍名称并点击", "[JumpBack]在队伍栏向上滑动一次"]
+    },
+    "在分组栏向上滑动一次": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [60, 620, 87, 48],
+        "end": [53, 264, 99, 53],
+        "duration": 2500,
+        "post_delay": 500
+    },
+    "检测队伍名称并点击": {
+        "recognition": "OCR",
+        "roi": [242, 232, 279, 401],
+        "expected": "速刷人民",
+        "action": "Click",
+        "post_delay": 800,
+        "next": ["检测出战按钮并点击"]
+    },
+    "在队伍栏向上滑动一次": {
+        "max_hit": 3,
+        "action": "Swipe",
+        "begin": [280, 539, 134, 81],
+        "end": [272, 182, 149, 85],
+        "duration": 2500,
+        "post_delay": 500
+    },
+    "检测出战按钮并点击": {
+        "recognition": "OCR",
+        "roi": [369, 645, 112, 44],
+        "expected": "出战",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["[JumpBack]ACT-检测带确定按钮的弹窗并点击确定", "检测到战斗准备按钮"]
+    },
+    "检测到战斗准备按钮": {
+        "recognition": "OCR",
+        "roi": [1127, 560, 103, 56],
+        "expected": "准备",
+        "only_rec": true,
+        "action": "DoNothing",
+        "post_delay": 1000
+    }
+}
