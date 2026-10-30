@@ -7,6 +7,8 @@
         "next": [
             "[JumpBack]ACT-检测到悬赏协作并处理",
             "[JumpBack]检测到还没开战等待X秒",
+            "检测到开始自动战斗-关闭游戏-等待10分钟-再启动游戏",
+            "检测到已经进入到战斗界面",
             "检测到道馆挑战按钮并点击"
         ]
     },
@@ -16,7 +18,7 @@
         "expected": "后开战",
         "only_rec": true,
         "action": "DoNothing",
-        "post_delay": 10000
+        "post_delay": 20000
     },
     "检测到道馆挑战按钮并点击": {
         "recognition": "OCR",

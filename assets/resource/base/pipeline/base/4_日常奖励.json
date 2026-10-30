@@ -229,7 +229,7 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [178, 497, 968, 97],
+                "roi": [108, 513, 1078, 122],
                 "template": ["签到/检测协作金币.png", "签到/检测协作觉醒.png", "签到/勾协.png"]
             }
         },
@@ -241,9 +241,9 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [140, 260, 1000, 100],
-                "template": ["通用界面按钮/检测悬赏协作弹窗.png", "通用界面按钮/现世悬赏协作弹窗.png"],
-                "threshold": [0.8, 0.8]
+                "roi": [108, 513, 1078, 122],
+                "template": ["签到/勾协.png", "签到/检测协作猫粮.png", "签到/检测协作狗粮.png"],
+                "threshold": [0.8, 0.8, 0.8]
             }
         },
         "action": {
