@@ -41,6 +41,16 @@
                 "使用门票还是体力",
                 "任务完成后是否返回庭院"
             ]
+        },
+        {
+            "name": "单刷觉醒刷超鬼王门票",
+            "label": "单刷觉醒刷超鬼王门票",
+            "description": "单刷觉醒刷超鬼王每日50门票",
+            "entry": "ENTRY-单刷觉醒刷票",
+            "group": ["standalone"],
+            "option": [
+                "单刷觉醒超鬼王门票设置项目"
+            ]
         }
     ],
     "option": {
@@ -80,7 +90,7 @@
             "type": "switch",
             "default_case": "No",
             "label": "是否使用随机等待",
-            "description": "模拟手动刷副本过程中，玩家可能中途离开去做别的事情：大部分时候等待间隔较短，有小概率情况间隔很久。不开启此选项也问题不大，由于任务过程有等待，每局通关时间本身也是不固定的。",
+            "description": "原理是检测到还在自动战斗中则等待3+随机秒。模拟手动刷副本过程中，玩家可能中途离开去做别的事情：大部分时候等待间隔较短，有小概率情况间隔很久。不开启此选项也问题不大，由于任务过程有等待，每局通关时间本身也是不固定的。",
             "cases": [
                 {
                     "name": "Yes",
@@ -220,6 +230,55 @@
                 {"name": "Yes", "pipeline_override": {}},
                 {"name": "No", "pipeline_override": {"活动爬塔任务出口": {"next": []}}}
             ]
+        },
+        "单刷觉醒超鬼王门票设置项目": {
+            "type": "input",
+            "label": "单刷觉醒超鬼王门票设置项目-label",
+            "description": "单刷觉醒超鬼王门票设置项目-des",
+            "inputs": [
+                {
+                    "name": "刷到多少张门票就停",
+                    "label": "刷到多少张门票就停",
+                    "description": "输入0到50之间的整数",
+                    "pipeline_type": "string",
+                    "verify": "^([0-9]|[1234][0-9]|50)$",
+                    "default": "50"
+                },
+                {
+                    "name": "刷觉醒哪一层",
+                    "label": "刷觉醒哪一层",
+                    "pipeline_type": "string",
+                    "verify": "^壹|贰|叁|肆|伍|陆|柒|捌|玖|拾层$",
+                    "default": "陆层"
+                }
+            ],
+            "pipeline_override": {
+                "TASK-C-1从探索界面确认是否刷满门票": {
+                    "recognition": {
+                        "expected": "^{刷到多少张门票就停}$"
+                    }
+                },
+                "检测到超鬼王门票图标并且刷满50了": {
+                    "all_of": [
+                        {
+                            "recognition": "TemplateMatch",
+                            "roi": [1069, 0, 53, 48],
+                            "template": "探索和副本/超鬼王门票材料.png"
+                        },
+                        {
+                            "recognition": "OCR",
+                            "roi": [1127, 4, 92, 39],
+                            "expected": "^{刷到多少张门票就停}",
+                            "only_rec": true
+                        }
+                    ]
+                },
+                "选择层数-查找第X层": {
+                    "recognition": {
+                        "expected": "{刷觉醒哪一层}"
+                    }
+                }
+            }
         }
     }
 }

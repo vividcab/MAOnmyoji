@@ -1,0 +1,265 @@
+{
+    "ENTRY-单刷觉醒刷票": {
+        "next": [
+            "TASK-C-2检测打开了觉醒之塔界面",
+            "TASK-C-3检测到觉醒副本（材料）界面",
+            "TASK-C-0检测到已经到了探索地图界面",
+            "TASK-C-0从庭院到探索界面-初始庭院",
+            "TASK-C-0从庭院到探索界面-枫色秋庭"
+        ],
+        "_doc": "执行此任务的时候，游戏应当已经在庭院了；要考虑其他情况，做异常处理"
+    },
+    "TASK-C-0从庭院到探索界面-初始庭院": {
+        "recognition": "OCR",
+        "roi": [653, 132, 48, 49],
+        "expected": "索",
+        "only_rec": true,
+        "action": "Click",
+        "post_delay": 3000,
+        "next": ["TASK-C-0检测到已经到了探索地图界面"]
+    },
+    "TASK-C-0从庭院到探索界面-枫色秋庭": {
+        "recognition": "OCR",
+        "roi": [630, 130, 48, 46],
+        "expected": "索",
+        "only_rec": true,
+        "action": "Click",
+        "post_delay": 3000,
+        "next": ["TASK-C-0检测到已经到了探索地图界面"]
+    },
+    "TASK-C-0检测到已经到了探索地图界面": {
+        "recognition": "TemplateMatch",
+        "roi": [37, 618, 684, 91],
+        "template": "探索和副本/探索界面觉醒副本图标.png",
+        "action": "DoNothing",
+        "next": ["TASK-C-1从探索界面确认是否刷满门票", "TASK-C-2重置计数器然后开始刷N次觉醒"]
+    },
+    "TASK-C-1从探索界面确认是否刷满门票": {
+        "recognition": "OCR",
+        "roi": [920, 18, 103, 27],
+        "expected": "^50",
+        "only_rec": true,
+        "action": "DoNothing",
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "TASK-C-END刷满门票了结束任务返回庭院"
+        ]
+    },
+    "TASK-C-2重置计数器然后开始刷N次觉醒": {
+        "action": "Custom",
+        "custom_action": "ResetCount",
+        "next": ["TASK-C-2检测打开了觉醒之塔界面", "[JumpBack]INT-检测点击觉醒副本图标"]
+    },
+    "TASK-C-2检测打开了觉醒之塔界面": {
+        "recognition": "OCR",
+        "roi": [150, 13, 140, 48],
+        "expected": "觉醒之塔",
+        "only_rec": true,
+        "next": ["TASK-C-3检测到觉醒副本（材料）界面", "[JumpBack]INT-检测点击雷麒麟插画"]
+    },
+    "INT-检测点击觉醒副本图标": {
+        "recognition": "TemplateMatch",
+        "roi": [37, 618, 684, 91],
+        "template": "探索和副本/探索界面觉醒副本图标.png",
+        "action": "Click",
+        "post_delay": 1500
+    },
+
+    "TASK-C-3检测到觉醒副本（材料）界面": {
+        "recognition": "OCR",
+        "roi": [150, 13, 140, 48],
+        "expected": "觉醒材料",
+        "only_rec": true,
+        "next": ["TASK-C-OPT检测到加成图标点击一下", "开始循环刷觉醒-计次"]
+    },
+    "INT-检测点击雷麒麟插画": {
+        "recognition": "TemplateMatch",
+        "roi": [1018, 154, 168, 192],
+        "template": "探索和副本/雷麒麟插画.png",
+        "action": "Click",
+        "post_delay": 1000
+    },
+
+    "TASK-C-OPT检测到加成图标点击一下": {
+        "recognition": "TemplateMatch",
+        "roi": [509, 21, 71, 66],
+        "template": "探索和副本/加成灯笼.png",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["TASK-C-OPT检测觉醒加成如果是红色点击开启加成", "TASK-C-OPT点击一下空白处关闭弹窗"]
+    },
+    "TASK-C-OPT检测觉醒加成如果是红色点击开启加成": {
+        "recognition": "ColorMatch",
+        "roi": [778, 145, 23, 17],
+        "method": 4,
+        "lower": [177, 10, 33],
+        "upper": [184, 13, 48],
+        "count": 200,
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["TASK-C-OPT点击一下空白处关闭弹窗"]
+    },
+    "TASK-C-OPT点击一下空白处关闭弹窗": {
+        "action": "Click",
+        "target": [1052, 377, 128, 123],
+        "post_delay": 1000,
+        "next": ["选择层数-查找第X层", "[JumpBack]检测到已经到了最下面则下划", "[JumpBack]上划看看下面的层数"]
+    },
+    "开始循环刷觉醒-计次": {
+        "recognition": "OCR",
+        "roi": [146, 12, 142, 49],
+        "expected": "觉醒",
+        "action": "DoNothing",
+        "timeout": 300,
+        "next": ["检测挑战次数是否达到N次", "点击左上角返回到探索界面查看门票数量"],
+        "on_error": []
+    },
+    "检测挑战次数是否达到N次": {
+        "recognition": "Custom",
+        "custom_recognition": "Count",
+        "custom_recognition_param": {
+            "target": 25
+        },
+        "next": ["检测挑战按钮然后点击-刷票"]
+    },
+    "检测到已经到了最下面则下划": {
+        "recognition": "OCR",
+        "roi": [126, 596, 73, 104],
+        "expected": "拾层",
+        "action": "Swipe",
+        "begin": [105, 122, 81, 62],
+        "end": [105, 601, 73, 70],
+        "duration": 1500,
+        "post_delay": 500
+    },
+    "上划看看下面的层数": {
+        "action": "Swipe",
+        "begin": [105, 601, 73, 70],
+        "end": [105, 122, 81, 62],
+        "duration": 1500,
+        "post_delay": 500
+    },
+    "选择层数-查找第X层": {
+        "recognition": "OCR",
+        "roi": [126, 83, 73, 616],
+        "expected": "陆层",
+        "action": "Click",
+        "post_delay": 500,
+        "next": ["开始循环刷觉醒-计次"]
+    },
+    "检测挑战按钮然后点击-刷票": {
+        "recognition": "OCR",
+        "roi": [1133, 587, 114, 59],
+        "expected": "挑战|准备",
+        "only_rec": true,
+        "action": "Click",
+        "post_delay": 2000,
+        "timeout": 20000,
+        "rate_limit": 2500,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "END-检测到购买体力弹窗就结束任务",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
+            "[JumpBack]ACT-检测还在战斗中再等3秒",
+            "检测到超鬼王门票图标并且刷满50了",
+            "[JumpBack]检测到点击屏幕并继续然后点击一下屏幕",
+            "开始循环刷觉醒-计次"
+        ],
+        "on_error": []
+    },
+    "检测到点击屏幕并继续然后点击一下屏幕": {
+        "recognition": "OCR",
+        "roi": [532, 652, 212, 65],
+        "expected": "点击|屏幕|继续",
+        "action": "Click",
+        "target": [1044, 389, 188, 147],
+        "post_delay": 1000
+    },
+    "检测到超鬼王门票图标并且刷满50了": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [1069, 0, 53, 48],
+                "template": "探索和副本/超鬼王门票材料.png"
+            },
+            {
+                "recognition": "OCR",
+                "roi": [1127, 4, 92, 39],
+                "expected": "^50",
+                "only_rec": true
+            }
+        ],
+        "pre_delay": 2000,
+        "action": "Click",
+        "target": [1044, 389, 188, 147],
+        "post_delay": 3000,
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]检测到点击屏幕并继续然后点击一下屏幕",
+            "TASK-C-END刷满门票了结束任务返回庭院"
+        ]
+    },
+    "点击左上角返回到探索界面查看门票数量": {
+        "action": "Click",
+        "target": [35, 40, 39, 41],
+        "post_delay": 2000,
+        "next": ["TASK-C-0检测到已经到了探索地图界面"]
+    },
+    "TASK-C-END刷满门票了结束任务返回庭院": {
+        "recognition": "TemplateMatch",
+        "roi": [67, 0, 97, 76],
+        "template": "庭院/左上角返回庭院按钮.png",
+        "action": "DoNothing",
+        "next": ["TASK-C-OPT检测到加成图标点击一下-关闭加成", "检测直接回到庭院按钮返回庭院"],
+        "focus": {"succeeded": "[color:green]这个角色刷满今天的50张门票了[/color]"}
+    },
+    "END-检测到购买体力弹窗就结束任务": {
+        "recognition": "OCR",
+        "roi": [231, 126, 338, 167],
+        "expected": "体力补给",
+        "next": [
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "TASK-C-END刷满门票了结束任务返回庭院"
+        ],
+        "focus": {"succeeded": "[color:blue]这个角色没有体力了[/color]"}
+    },
+
+    "TASK-C-OPT检测到加成图标点击一下-关闭加成": {
+        "recognition": "TemplateMatch",
+        "roi": [509, 21, 71, 66],
+        "template": "探索和副本/加成灯笼.png",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["TASK-C-OPT检测觉醒加成如果是黄色点击关闭加成", "TASK-C-OPT点击一下空白处关闭弹窗-2"]
+    },
+    "TASK-C-OPT检测觉醒加成如果是黄色点击关闭加成": {
+        "recognition": "ColorMatch",
+        "roi": [778, 145, 23, 17],
+        "method": 4,
+        "lower": [222, 135, 0],
+        "upper": [234, 178, 3],
+        "count": 200,
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["TASK-C-OPT点击一下空白处关闭弹窗-2"]
+    },
+    "TASK-C-OPT点击一下空白处关闭弹窗-2": {
+        "action": "Click",
+        "target": [1052, 377, 128, 123],
+        "post_delay": 1000,
+        "next": ["检测直接回到庭院按钮返回庭院"]
+    },
+    "检测直接回到庭院按钮返回庭院": {
+        "recognition": "TemplateMatch",
+        "roi": [67, 0, 97, 76],
+        "template": "庭院/左上角返回庭院按钮.png",
+        "action": "Click",
+        "post_delay": 3000
+    }
+}

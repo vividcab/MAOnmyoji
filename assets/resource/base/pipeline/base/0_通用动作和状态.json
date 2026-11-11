@@ -173,7 +173,7 @@
         "recognition": {
             "type": "TemplateMatch",
             "param": {
-                "roi": [553, 485, 199, 108],
+                "roi": [513, 419, 281, 201],
                 "template": ["签到/勾协.png", "签到/检测协作狗粮.png", "签到/检测协作猫粮.png"]
             }
         },

@@ -404,7 +404,7 @@
             "type": "OCR",
             "param": {
                 "roi": [242, 142, 120, 39],
-                "expected": "已有角色",
+                "expected": "有角色",
                 "only_rec": true
             }
         },
