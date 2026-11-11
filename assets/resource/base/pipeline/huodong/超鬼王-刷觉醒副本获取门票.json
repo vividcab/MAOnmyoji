@@ -71,7 +71,7 @@
         "roi": [150, 13, 140, 48],
         "expected": "觉醒材料",
         "only_rec": true,
-        "next": ["TASK-C-OPT检测到加成图标点击一下", "开始循环刷觉醒-计次"]
+        "next": ["TASK-C-OPT检测到加成图标点击一下", "处于觉醒材料界面-循环刷觉醒-计次"]
     },
     "INT-检测点击雷麒麟插画": {
         "recognition": "TemplateMatch",
@@ -104,25 +104,21 @@
         "action": "Click",
         "target": [1052, 377, 128, 123],
         "post_delay": 1000,
-        "next": ["选择层数-查找第X层", "[JumpBack]检测到已经到了最下面则下划", "[JumpBack]上划看看下面的层数"]
+        "next": [
+            "[JumpBack]检测到阵容没锁定则点一下",
+            "选择层数-查找第X层",
+            "[JumpBack]检测到已经到了最下面则下划",
+            "[JumpBack]上划看看下面的层数"
+        ]
     },
-    "开始循环刷觉醒-计次": {
-        "recognition": "OCR",
-        "roi": [146, 12, 142, 49],
-        "expected": "觉醒",
-        "action": "DoNothing",
-        "timeout": 300,
-        "next": ["检测挑战次数是否达到N次", "点击左上角返回到探索界面查看门票数量"],
-        "on_error": []
+    "检测到阵容没锁定则点一下": {
+        "recognition": "TemplateMatch",
+        "roi": [686, 647, 55, 49],
+        "template": "探索和副本/没锁定阵容.png",
+        "action": "Click",
+        "post_delay": 300
     },
-    "检测挑战次数是否达到N次": {
-        "recognition": "Custom",
-        "custom_recognition": "Count",
-        "custom_recognition_param": {
-            "target": 25
-        },
-        "next": ["检测挑战按钮然后点击-刷票"]
-    },
+
     "检测到已经到了最下面则下划": {
         "recognition": "OCR",
         "roi": [126, 596, 73, 104],
@@ -146,27 +142,65 @@
         "expected": "陆层",
         "action": "Click",
         "post_delay": 500,
-        "next": ["开始循环刷觉醒-计次"]
+        "next": ["处于觉醒材料界面-循环刷觉醒-计次"]
     },
-    "检测挑战按钮然后点击-刷票": {
+
+    "处于觉醒材料界面-循环刷觉醒-计次": {
+        "recognition": "OCR",
+        "roi": [146, 12, 142, 49],
+        "expected": "觉醒材料",
+        "pre_delay": 0,
+        "action": "DoNothing",
+        "post_delay": 0,
+        "timeout": 300,
+        "next": ["检测挑战次数是否达到N次", "点击左上角返回到探索界面查看门票数量"],
+        "on_error": []
+    },
+    "检测挑战次数是否达到N次": {
+        "recognition": "Custom",
+        "custom_recognition": "Count",
+        "custom_recognition_param": {
+            "target": 25
+        },
+        "next": [
+            "[JumpBack]ACT-检测到断网则等待5秒",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]检测挑战或者准备按钮然后点击",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "已经处于副本内战斗或者结算状态"
+        ]
+    },
+    "检测挑战或者准备按钮然后点击": {
         "recognition": "OCR",
         "roi": [1133, 587, 114, 59],
         "expected": "挑战|准备",
-        "only_rec": true,
+        "action": "Click",
+        "post_delay": 2000
+    },
+    "已经处于副本内战斗或者结算状态": {
+        "recognition": "Or",
+        "any_of": [
+            {"recognition": "OCR", "roi": [17, 630, 85, 62], "expected": "自|手动", "only_rec": true},
+            {"recognition": "OCR", "roi": [532, 652, 212, 65], "expected": "点击|屏幕|继续"}
+        ],
         "action": "Click",
         "post_delay": 2000,
         "timeout": 20000,
         "rate_limit": 2500,
         "next": [
+            "[JumpBack]ACT-检测到断网则等待5秒",
             "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
             "[JumpBack]ACT-检测各类右上部分叉号并点一下",
             "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
             "END-检测到购买体力弹窗就结束任务",
             "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
+            "[JumpBack]ACT-检测到手动战斗则切换成自动",
             "[JumpBack]ACT-检测还在战斗中再等3秒",
             "检测到超鬼王门票图标并且刷满50了",
             "[JumpBack]检测到点击屏幕并继续然后点击一下屏幕",
-            "开始循环刷觉醒-计次"
+            "处于觉醒材料界面-循环刷觉醒-计次"
         ],
         "on_error": []
     },

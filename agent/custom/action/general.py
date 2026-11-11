@@ -193,11 +193,14 @@ class RandomSleep(CustomAction):
 
         param = json.loads(argv.custom_action_param)
         t = random.gauss(2, 0.5)
-        if t < 0.5:
-            t = 30
+
         if t < 0.8:
-            t = 20
+            t = 120
+        if t < 0.9:
+            t = 30
         if t < 1:
+            t = 20
+        if t < 1.1:
             t = 10
         # print("sleep: ", t)
         sleep(t)

@@ -26,7 +26,9 @@
                 {
                     "name": "SP铃彦姬活动爬塔",
                     "enabled": false
-                }
+                },
+                {"name": "单刷觉醒刷超鬼王门票", "enabled": false},
+                {"name": "超鬼王-清1到4星鬼王", "enabled": false}
             ]
         }
     ]

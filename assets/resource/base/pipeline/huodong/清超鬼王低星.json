@@ -1,0 +1,92 @@
+{
+    "检测已经处于超鬼王界面": {
+        "recognition": "OCR",
+        "roi": [147, 11, 142, 50],
+        "expected": "祸主",
+        "action": "Click",
+        "next": [
+            "[JumpBack]ACT-检测到断网则等待5秒",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测带取消按钮的弹窗并点击取消",
+            "[JumpBack]ACT-检测带确定按钮的弹窗并点击确定",
+            "检测打开了召唤队列弹窗",
+            "[JumpBack]ACT-检测各类右上部分叉号并点一下",
+            "[JumpBack]检测到还在结算积分等待3秒",
+            "[JumpBack]检测全部队列并点击",
+            "检测开启挑战按钮并点击"
+        ]
+    },
+    "检测到还在结算积分等待3秒": {
+        "recognition": "OCR",
+        "roi": [710, 438, 108, 42],
+        "expected": "结算中",
+        "post_delay": 3000
+    },
+    "检测全部队列并点击": {
+        "recognition": "OCR",
+        "roi": [1113, 499, 104, 37],
+        "expected": "全部队列",
+        "action": "Click",
+        "post_delay": 300
+    },
+    "检测打开了召唤队列弹窗": {
+        "recognition": "OCR",
+        "roi": [615, 139, 191, 67],
+        "expected": "召唤队列",
+        "action": "DoNothing",
+        "next": ["检测还有低星鬼王召唤材料点击一下", "END-清鬼王任务结束"]
+    },
+    "END-清鬼王任务结束": {
+        "next": []
+    },
+    "检测还有低星鬼王召唤材料点击一下": {
+        "recognition": "TemplateMatch",
+        "roi": [348, 303, 585, 96],
+        "template": ["活动/超鬼王低星材料.png", "活动/超鬼王中星材料.png"],
+        "action": "Click",
+        "next": ["[JumpBack]检测点击立即召唤", "检测开启挑战按钮并点击"]
+    },
+    "检测点击立即召唤": {
+        "recognition": "OCR",
+        "roi": [581, 452, 123, 37],
+        "expected": "立即召唤",
+        "action": "Click",
+        "post_delay": 3000,
+        "focus": {"succeeded": "已召唤一只中低星鬼王"}
+    },
+    "检测开启挑战按钮并点击": {
+        "recognition": "OCR",
+        "roi": [1124, 561, 117, 100],
+        "expected": "(挑战)|(继续)",
+        "action": "Click",
+        "post_delay": 2000,
+        "rate_limit": 2000,
+        "next": [
+            "检测到喝茶弹窗就停止",
+            "[JumpBack]ACT-检测到当前界面是加载插画等待3秒",
+            "[JumpBack]ACT-检测到悬赏协作并处理",
+            "[JumpBack]ACT-检测右下角有准备按钮就点击一下",
+            "[JumpBack]ACT-检测还在战斗中再等8秒",
+            "[JumpBack]ACT-检测到伤害结算界面点击一下屏幕",
+            "检测已经处于超鬼王界面"
+        ]
+    },
+    "ACT-检测到伤害结算界面点击一下屏幕": {
+        "recognition": "OCR",
+        "roi": [549, 297, 173, 61],
+        "expected": "本次伤害",
+        "action": "Click",
+        "target": [580, 590, 164, 89],
+        "repeat": 2,
+        "repeat_delay": 600,
+        "post_delay": 1000
+    },
+    "检测到喝茶弹窗就停止": {
+        "recognition": "OCR",
+        "roi": [547, 192, 178, 58],
+        "expected": "购买清酿",
+        "post_delay": 3000,
+        "next": [],
+        "focus": {"succeeded": "疲劳值不够了，检测到购买喝茶弹窗"}
+    }
+}
